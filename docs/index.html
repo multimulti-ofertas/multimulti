@@ -62,8 +62,10 @@ const fmtDia = iso => {
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function render(){
   const q = $("#q").value.trim().toLowerCase().replace(/^n[ºo°]?\s*/, "");
-  const lista = itens.filter(x => !q || String(x.n) === q || x.titulo.toLowerCase().includes(q));
-  if (!lista.length){ $("#lista").innerHTML = '<div class="vazio">Nenhum produto encontrado.</div>'; return; }
+  if (!itens.length){ $("#lista").innerHTML = '<div class="vazio"><b style="color:var(--tx);font-size:17px">🔥 As primeiras ofertas chegam em breve!</b><br><br>Todo dia tem achadinho novo por aqui.<br>Siga <a href="https://instagram.com/multimulti.ofertas" style="color:var(--or)">@multimulti.ofertas</a> pra não perder.</div>'; return; }
+  const soNumero = /^\d+$/.test(q);
+  const lista = itens.filter(x => !q || (soNumero ? String(x.n) === q : x.titulo.toLowerCase().includes(q)));
+  if (!lista.length){ $("#lista").innerHTML = `<div class="vazio">${soNumero ? `Não achei o produto nº ${esc(q)}.<br>Ele pode ter saído da vitrine. Apague a busca para ver todos.` : "Nenhum produto encontrado."}</div>`; return; }
   let html = "", dia = "";
   for (const x of lista){
     if (x.data !== dia){ dia = x.data; html += `<div class="dia">${esc(fmtDia(dia))}</div>`; }
