@@ -17,9 +17,14 @@ class InstagramErro(RuntimeError):
 
 
 def _cred():
-    uid, tok = os.environ.get("IG_USER_ID"), os.environ.get("IG_TOKEN")
-    if not uid or not tok:
-        raise InstagramErro("Faltam IG_USER_ID / IG_TOKEN nos Secrets do GitHub.")
+    uid, tok = (os.environ.get("IG_USER_ID") or "").strip(), (os.environ.get("IG_TOKEN") or "").strip()
+    if not tok:
+        raise InstagramErro("Falta o IGTOKEN nos Secrets do GitHub.")
+    if not uid:  # descobre o ID da conta pelo próprio token
+        r = requests.get(f"{BASE}/me", params={"fields": "user_id", "access_token": tok}, timeout=30)
+        if r.status_code >= 400:
+            raise InstagramErro(f"Token recusado: {r.text[:300]}")
+        uid = str(r.json()["user_id"])
     return uid, tok
 
 
