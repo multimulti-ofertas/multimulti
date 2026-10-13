@@ -23,9 +23,14 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Verificação em duas etapas no GitHub; acesso do Claude limitado a este repositório
 
 - Link da vitrine já está na bio do Instagram
+- Vitrine com visual futurista (v2) e aviso "ofertas chegam em breve" quando vazia
 
 ## Falta
-1. Shopee aprovar o cadastro de afiliado (enviado em 13/out; resposta no Outlook)
+1. ~~Shopee aprovar o cadastro de afiliado~~ APROVADO em 13/out. Instagram multimulti.ofertas verificado no painel
+   (categorias: Automóveis, Roupas/Sapatos Masculinos, Acessórios de Moda, Cupons, Peças para Veículos)
+   - Informações fiscais enviadas em 13/out, "Avaliação Pendente"
+   - "Abrir API" ainda sem acesso (AppID/Senha vazios, botão Aplicar apagado): esperar a aprovação fiscal
+     e/ou pedir acesso pelo "entre em contato"
 2. Pegar AppID e Secret da Open API da Shopee e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome)
 3. Depois da Shopee: no ManyChat, religar "Auto-DM de links dos comentários" (está STOPPED) e configurar "Instagram Default Reply" para mandar o link da vitrine no direct
