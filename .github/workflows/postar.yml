@@ -26,8 +26,8 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Publicar
         env:
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IGUSERID || secrets.IG_USER_ID }}
+          IG_TOKEN: ${{ secrets.IGTOKEN || secrets.IG_TOKEN }}
         run: |
           TIPO="${{ inputs.tipo }}"
           if [ -z "$TIPO" ]; then

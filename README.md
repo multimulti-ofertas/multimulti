@@ -24,10 +24,10 @@ Settings → Secrets and variables → Actions → **New repository secret**:
 
 | Nome | De onde vem |
 |---|---|
-| `SHOPEE_APP_ID` | Painel de afiliados Shopee → Open API |
-| `SHOPEE_SECRET` | Painel de afiliados Shopee → Open API |
-| `IG_USER_ID` | App da Meta → Instagram → ID da conta |
-| `IG_TOKEN` | App da Meta → Instagram → gerar token |
+| `SHOPEEAPPID` | Painel de afiliados Shopee → Open API |
+| `SHOPEESECRET` | Painel de afiliados Shopee → Open API |
+| `IGUSERID` | App da Meta → Instagram → ID da conta |
+| `IGTOKEN` | App da Meta → Instagram → gerar token |
 | `GH_PAT` (opcional) | Token do GitHub com permissão de Secrets, para renovar o `IG_TOKEN` sozinho |
 | `ANTHROPIC_API_KEY` (opcional) | Para títulos e legendas escritos por IA |
 

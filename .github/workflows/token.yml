@@ -14,13 +14,13 @@ jobs:
         with: { python-version: "3.12" }
       - run: pip install -r requirements.txt
       - env:
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IGUSERID || secrets.IG_USER_ID }}
+          IG_TOKEN: ${{ secrets.IGTOKEN || secrets.IG_TOKEN }}
         run: python -m robo.token
       - name: Salvar token novo nos Secrets
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           if [ -z "$GH_TOKEN" ]; then echo "Sem GH_PAT: renove o token manualmente a cada 60 dias."; exit 0; fi
-          gh secret set IG_TOKEN --repo "${{ github.repository }}" < novo_token.txt
+          gh secret set IGTOKEN --repo "${{ github.repository }}" < novo_token.txt
           rm -f novo_token.txt
