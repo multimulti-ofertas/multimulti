@@ -30,7 +30,9 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
    (categorias: Automóveis, Roupas/Sapatos Masculinos, Acessórios de Moda, Cupons, Peças para Veículos)
    - Informações fiscais enviadas em 13/out, "Avaliação Pendente"
    - "Abrir API" ainda sem acesso (AppID/Senha vazios, botão Aplicar apagado): esperar a aprovação fiscal
-     e/ou pedir acesso pelo "entre em contato"
+     - Pedido "Quero ativar a API" enviado em 13/out pela Central de Ajuda do Afiliado
+       (help.shopee.com.br → Acesso rápido → E-mail). Prazo: até 3 dias úteis, resposta no Outlook
+     - Plano B se demorar: artigo "Saiba Como Obter Link em Massa" na Central de Ajuda
 2. Pegar AppID e Secret da Open API da Shopee e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome)
 3. Depois da Shopee: no ManyChat, religar "Auto-DM de links dos comentários" (está STOPPED) e configurar "Instagram Default Reply" para mandar o link da vitrine no direct
