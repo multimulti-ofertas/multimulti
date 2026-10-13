@@ -22,13 +22,14 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - O ID da conta do Instagram é descoberto pelo próprio token (não precisa de IGUSERID)
 - Verificação em duas etapas no GitHub; acesso do Claude limitado a este repositório
 
+- Link da vitrine já está na bio do Instagram
+
 ## Falta
 1. Shopee aprovar o cadastro de afiliado (enviado em 13/out; resposta no Outlook)
 2. Pegar AppID e Secret da Open API da Shopee e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome)
-3. Colocar o link da vitrine na bio do Instagram
-4. Depois da Shopee: no ManyChat, religar "Auto-DM de links dos comentários" (está STOPPED) e configurar "Instagram Default Reply" para mandar o link da vitrine no direct
-5. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO para responder em qualquer post
+3. Depois da Shopee: no ManyChat, religar "Auto-DM de links dos comentários" (está STOPPED) e configurar "Instagram Default Reply" para mandar o link da vitrine no direct
+4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO para responder em qualquer post
 
 ## Contas e e-mails
 - GitHub: usuário multimulti-ofertas, entra com o Google ([e-mail removido], que está cheio); reserva: Outlook
