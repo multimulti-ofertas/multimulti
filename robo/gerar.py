@@ -178,9 +178,9 @@ def montar(cat, p, n, d, papel, demo):
         "cta": ["LINK NA BIO", f"Nº {n}"], "hook": " · ".join(item["gancho"][:2]),
     }
     feed(cfg, str(pasta / "feed.jpg"))
-    story(cfg, str(pasta / "story.png"))
+    story(cfg, str(pasta / "story.jpg"))
     item["feed"] = f"media/{n}/feed.jpg"
-    item["story"] = f"media/{n}/story.png"
+    item["story"] = f"media/{n}/story.jpg"
     if papel == "reel":
         reel(dict(cfg, hook=item["gancho"], numero=n, extra=extra.replace("⭐ ", "NOTA ").upper()),
              str(pasta / "reel.mp4"))
@@ -222,7 +222,7 @@ def main():
         raise SystemExit("Nenhum produto passou nos filtros hoje. Veja robo/config.py.")
 
     prox = max([x["n"] for x in lista], default=0) + 1
-    papeis = ["feed", "reel"] + [None] * 10
+    papeis = ["feed", "reel", "reel"] + [None] * 10  # 1 feed + 2 Reels por dia
     if len(escolhidos) == 1:
         papeis = ["feed"]
     novos = []

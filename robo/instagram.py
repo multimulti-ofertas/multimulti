@@ -84,6 +84,14 @@ def postar_reels(url_mp4, legenda, capa_url=None):
     return _publicar(uid, tok, c["id"])
 
 
+def postar_story(url_jpg):
+    uid, tok = _cred()
+    esperar_url(url_jpg)
+    c = _req("POST", f"{BASE}/{uid}/media", data={"media_type": "STORIES", "image_url": url_jpg, "access_token": tok})
+    _esperar_container(c["id"], tok, limite=120)
+    return _publicar(uid, tok, c["id"])
+
+
 def renovar_token():
     """Renova o token de longa duração (vale mais 60 dias). Retorna o token novo."""
     _, tok = _cred()

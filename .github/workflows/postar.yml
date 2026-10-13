@@ -1,16 +1,20 @@
 name: Postar no Instagram
 on:
   schedule:
+    - cron: "0 12 * * *"   # 08:00 em Cuiabá → stories
     - cron: "0 16 * * *"   # 12:00 em Cuiabá → feed
-    - cron: "0 23 * * *"   # 19:00 em Cuiabá → Reels
+    - cron: "0 19 * * *"   # 15:00 em Cuiabá → stories
+    - cron: "0 22 * * *"   # 18:00 em Cuiabá → Reels 1
+    - cron: "0 0 * * *"    # 20:00 em Cuiabá → stories
+    - cron: "0 1 * * *"    # 21:00 em Cuiabá → Reels 2
   workflow_dispatch:
     inputs:
       tipo:
-        description: "feed ou reel"
+        description: "feed, reel ou story"
         required: true
         default: feed
         type: choice
-        options: [feed, reel]
+        options: [feed, reel, story]
 permissions:
   contents: write
 concurrency:
@@ -31,7 +35,11 @@ jobs:
         run: |
           TIPO="${{ inputs.tipo }}"
           if [ -z "$TIPO" ]; then
-            if [ "${{ github.event.schedule }}" = "0 23 * * *" ]; then TIPO=reel; else TIPO=feed; fi
+            case "${{ github.event.schedule }}" in
+              "0 16 * * *") TIPO=feed ;;
+              "0 22 * * *"|"0 1 * * *") TIPO=reel ;;
+              *) TIPO=story ;;
+            esac
           fi
           python -m robo.postar --tipo "$TIPO"
       - name: Marcar como postado

@@ -10,8 +10,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 
 ## Como funciona hoje
 - Robô neste repositório (GitHub Actions), horário de Cuiabá:
-  - 07:00 busca ofertas da Shopee do tema do dia, cria arte, story, Reels e legenda, atualiza a vitrine
-  - 12:00 posta o feed · 19:00 posta o Reels
+  - 07:00 busca 6 ofertas da Shopee do tema do dia, cria arte, story, Reels e legenda, atualiza a vitrine
+  - 12:00 posta 1 feed · 18:00 e 21:00 postam 2 Reels · 08:00, 15:00 e 20:00 postam 2 stories cada (6 por dia)
 - Vitrine (link da bio): https://multimulti-ofertas.github.io/multimulti
   Cada post diz "Link na bio → produto nº X".
 - ManyChat (grátis): "comenta EU QUERO" → manda o link no direct. No plano grátis vale para 1 post por automação.

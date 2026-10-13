@@ -170,9 +170,13 @@ def story(cfg, out):
     img.paste(f2, ((SW - fw) // 2, fy))
 
     by = fy + f2.height + 50
-    t = text_layer("TOQUE NO LINK", BOLD, 46, WH)
+    cta = cfg.get("cta") or ["LINK NA BIO"]
+    t = text_layer(" · ".join(cta), BOLD, 46, WH)
     img.paste(t, ((SW - t.width) // 2, by), t)
     ay = by + t.height + 18
     d.polygon([(SW // 2 - 34, ay), (SW // 2 + 34, ay), (SW // 2, ay + 38)], fill=OR)
-    img.save(out)
+    if out.lower().endswith((".jpg", ".jpeg")):  # o Instagram só aceita JPEG em stories
+        img.convert("RGB").save(out, quality=92)
+    else:
+        img.save(out)
     return img

@@ -4,9 +4,10 @@ Todo dia, sozinho:
 
 | Horário (Cuiabá) | O que acontece |
 |---|---|
-| 07:00 | Busca os mais vendidos da Shopee no tema do dia, escolhe 4, gera link de afiliado, arte, story, Reels e legenda, e atualiza a vitrine |
+| 07:00 | Busca os mais vendidos da Shopee no tema do dia, escolhe 6, gera link de afiliado, arte, story, Reels e legenda, e atualiza a vitrine |
+| 08:00 · 15:00 · 20:00 | Posta 2 stories por vez (os 6 produtos do dia) |
 | 12:00 | Posta no feed do Instagram a arte do produto principal |
-| 19:00 | Posta o Reels do segundo produto |
+| 18:00 · 21:00 | Posta um Reels por vez (2º e 3º produtos) |
 | Segunda 07:00 | Renova o token do Instagram |
 
 **Vitrine (link da bio):** https://multimulti-ofertas.github.io/multimulti/
@@ -36,7 +37,7 @@ Sem a Shopee configurada, o robô só pula o dia (não dá erro).
 ## Testar
 Actions → **Gerar ofertas do dia** → Run workflow → marque **demo**. Depois baixe o arquivo `teste-demo` no fim da página da execução.
 
-Postar na mão: Actions → **Postar no Instagram** → Run workflow → escolha feed ou reel.
+Postar na mão: Actions → **Postar no Instagram** → Run workflow → escolha feed, reel ou story.
 
 ## Mudar regras
 Tudo fica em `robo/config.py`: palavras buscadas, nota mínima, vendas mínimas, desconto mínimo, quantos produtos por dia.
