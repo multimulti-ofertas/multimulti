@@ -70,6 +70,100 @@ def frase(t):
     return s[:1].upper() + s[1:]
 
 
+# ---------- nome curto e limpo para artes, vitrine e legendas ----------
+
+_ACENTOS = {
+    "maquina": "máquina", "maquinas": "máquinas", "eletrico": "elétrico", "eletrica": "elétrica",
+    "eletricos": "elétricos", "laminas": "lâminas", "lamina": "lâmina", "pêlos": "pelos", "pêlo": "pelo",
+    "portatil": "portátil", "portateis": "portáteis", "agua": "água", "oculos": "óculos", "relogio": "relógio",
+    "tenis": "tênis", "higienica": "higiênica", "higienico": "higiênico", "automovel": "automóvel",
+    "veiculo": "veículo", "carregavel": "carregável", "recarregavel": "recarregável", "lavavel": "lavável",
+    "inox": "inox", "aco": "aço", "acessorio": "acessório", "acessorios": "acessórios", "tonico": "tônico",
+    "capilar": "capilar", "cadarco": "cadarço", "cadarcos": "cadarços", "bone": "boné", "bones": "bonés",
+    "calcado": "calçado", "calcados": "calçados", "mecanico": "mecânico", "magnetico": "magnético",
+    "ortopedica": "ortopédica", "anatomica": "anatômica", "termica": "térmica", "pratico": "prático",
+    "facil": "fácil", "camera": "câmera", "lampada": "lâmpada", "multimetro": "multímetro",
+}
+_RUIDO_NOME = {
+    "profissional", "profissionais", "original", "originais", "premium", "top", "novo", "nova", "lançamento",
+    "promoção", "promocao", "oferta", "envio", "imediato", "pronta", "entrega", "barato", "masculino",
+    "masculina", "masculinos", "masculinas", "homens", "homem", "unissex", "unisex", "qualidade", "superior",
+    "exclusivo", "alta", "aleatório", "aleatorio", "designer", "my", "importado", "importada", "fabricadas",
+    "fabricado", "brasil", "bivolt", "usb",
+}
+_CORTE = {"para", "pra", "com", "e", "de", "-", "–", "|", "+", "/"}  # onde o nome principal costuma acabar
+_SOLTAS_FIM = {"e", "de", "do", "da", "dos", "das", "com", "para", "pra", "em", "a", "o", "-", "–", "+", "sem", "c"}
+
+
+def _acentua(w):
+    base = w.lower()
+    if base in _ACENTOS:
+        novo = _ACENTOS[base]
+        return novo.capitalize() if w[:1].isupper() else novo
+    return w
+
+
+_COMUNS = {"kit", "de", "do", "da", "e", "com", "para", "max", "combo", "par", "pares", "gel", "super", "mini", "ultra"}
+_FRACAS = {"kit", "par", "pares", "combo", "unidades", "unidade", "peças", "pecas", "pacote", "c"}
+
+
+def nome_curto(nome, limite=32):
+    """"Maquina De Barbear e Aparador Pelos Elétrico 3 Em 1 Profissional" -> "Máquina de barbear 3 em 1"."""
+    r = _nome_curto(nome, limite, cortar_traco=True)
+    if len(r.split()) < 2:  # "cuidados masculinos - Barbeador e aparador..." -> usa o nome inteiro
+        r = _nome_curto(nome, limite, cortar_traco=False)
+    return r
+
+
+def _nome_curto(nome, limite, cortar_traco):
+    t = re.sub(r"[\[\(【].*?[\]\)】]", " ", nome or "")
+    t = re.sub(r"\b[cC]/\s?", " ", t)                               # "C/ 5 rolos"
+    t = re.sub(r"[|*#!•]+", " ", t)
+    if cortar_traco:
+        t = re.sub(r"\s[-–]\s.*$", "", t)
+    t = re.sub(r"\b[A-Za-z]{1,4}[- ]?\d{3,5}\b", " ", t)        # códigos de modelo (KM-6511, QP2510)
+    t = re.sub(r"\b\d+(,\d+)?\s?(ml|g|cm|mm|m|v|w)\b", lambda m: m.group(0), t, flags=re.I)
+    t = re.sub(r"\s+", " ", t).strip(" -–,.")
+    destaque = re.search(r"\b\d+\s?em\s?\d+\b", t, re.I)       # "3 em 1"
+    destaque = re.sub(r"\s+", " ", destaque.group(0)).lower() if destaque else ""
+
+    palavras = []
+    for w in t.split():
+        limpa = re.sub(r"[^\wÀ-ÿ'-]", "", w).strip("-–")
+        if not limpa or limpa.lower() in _RUIDO_NOME:
+            continue
+        if limpa.isupper() and limpa.lower() in _COMUNS:  # "KIT", "DE", "MAX" -> minúsculas
+            limpa = limpa.lower()
+        limpa = _acentua(limpa)
+        if palavras and palavras[-1].lower() == limpa.lower():  # "ortopédica ortopédica"
+            continue
+        palavras.append(limpa)
+    # corta onde o nome principal termina (depois de pelo menos 2 palavras "de verdade")
+    out, fortes = [], 0
+    for w in palavras:
+        if fortes >= 2 and len(out) >= 3 and w.lower() in _CORTE:
+            break
+        out.append(w)
+        if w.isalpha() and w.lower() not in _FRACAS and w.lower() not in _CORTE:
+            fortes += 1
+    while len(out) > 1 and (out[-1].lower() in _SOLTAS_FIM or out[-1].isdigit()):
+        out.pop()
+    texto_ = " ".join(out)
+    # tira o "3 em 1" do meio (volta no fim) e completa se não couber
+    if destaque:
+        texto_ = re.sub(r"\b\d+\s?em\s?\d+\b", "", texto_, flags=re.I).strip()
+    lim = limite - (len(destaque) + 1 if destaque else 0)
+    if len(texto_) > lim:
+        texto_ = texto_[:lim].rsplit(" ", 1)[0]
+    ws = texto_.split()
+    while len(ws) > 1 and (ws[-1].lower() in _SOLTAS_FIM or ws[-1].isdigit()):
+        ws.pop()
+    texto_ = " ".join(ws)
+    if destaque:
+        texto_ = f"{texto_} {destaque}"
+    return frase(re.sub(r"\s+", " ", texto_).strip(" -–,."))
+
+
 def dados_basicos(p):
     pmin = float(p["priceMin"])
     pmax = float(p.get("priceMax") or pmin)
