@@ -1,45 +1,78 @@
-"""Artes no padrão MultiMulti (laranja/preto).
+"""Artes MultiMulti, v3: o cartaz de oferta de supermercado vira o layout.
+
+Ideia: o preço gigante com os centavos pequenos no alto, como no cartaz pintado à mão do mercado,
+e o número da vitrine como etiqueta preta. Regras (taste-skill): poucos tamanhos de letra e bem
+diferentes, foto grande sem moldura, campos de cor chapada, nada de etiquetinha, contorno fino,
+listras, sombra ou degradê.
 
 feed(cfg, saida)  -> 1080x1350
 story(cfg, saida) -> 1080x1920
 
-cfg: photo (caminho), category, badge, title, new, old (opcional), extra (opcional),
-     cta ([linha1, linha2]), hook (story)
+cfg: photo (caminho), title, new ("R$ 48,47"), numero, extra (opcional, ex.: "+100 mil vendidos"),
+     badge (opcional, só aparece se for desconto, ex.: "45% OFF")
 """
 import os
-from PIL import Image, ImageDraw, ImageFont, ImageChops, ImageOps
+import re
+
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
 W, H = 1080, 1350
 OR = (255, 107, 26)
 BK = (17, 17, 17)
 WH = (255, 255, 255)
-_FONTS = "/usr/share/fonts/truetype/dejavu/"
-BOLD = os.path.join(_FONTS, "DejaVuSans-Bold.ttf")
-COND = os.path.join(_FONTS, "DejaVuSansCondensed-Bold.ttf")
+
+_AQUI = os.path.join(os.path.dirname(__file__), "fontes")
+DISPLAY = os.path.join(_AQUI, "BarlowCondensed-Black.ttf")      # preço, número, ganchos
+DISPLAY2 = os.path.join(_AQUI, "BarlowCondensed-ExtraBold.ttf")
+TEXTO = os.path.join(_AQUI, "Barlow-SemiBold.ttf")                # título e linhas pequenas
+TEXTO_B = os.path.join(_AQUI, "Barlow-Bold.ttf")
+# nomes antigos (usados em outros módulos)
+BOLD, COND = TEXTO_B, DISPLAY
+
+M = 56  # margem única de todas as artes
 
 
-def text_layer(text, path, size, color, sx=1.0):
-    f = ImageFont.truetype(path, size)
-    l, t, r, b = f.getbbox(text)
-    lay = Image.new("RGBA", (r - l + 4, b - t + 4), (0, 0, 0, 0))
-    ImageDraw.Draw(lay).text((-l + 2, -t + 2), text, font=f, fill=color)
+# ---------- texto ----------
+
+def fonte(path, size):
+    return ImageFont.truetype(path, size)
+
+
+def text_layer(text, path, size, color, sx=1.0, tracking=0.0):
+    """Uma linha de texto numa camada transparente justa (sem a folga de cima da fonte)."""
+    f = fonte(path, size)
+    if tracking:
+        larg = sum(f.getlength(c) for c in text) + tracking * size * (len(text) - 1)
+        asc, desc = f.getmetrics()
+        lay = Image.new("RGBA", (int(larg) + 8, asc + desc + 8), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        x = 4
+        for c in text:
+            d.text((x, 4), c, font=f, fill=color)
+            x += f.getlength(c) + tracking * size
+        box = lay.getbbox()
+        lay = lay.crop(box) if box else lay
+    else:
+        l, t, r, b = f.getbbox(text)
+        lay = Image.new("RGBA", (r - l + 4, b - t + 4), (0, 0, 0, 0))
+        ImageDraw.Draw(lay).text((-l + 2, -t + 2), text, font=f, fill=color)
     if sx != 1.0:
         lay = lay.resize((max(1, int(lay.width * sx)), lay.height), Image.LANCZOS)
     return lay
 
 
-def fit_layer(text, path, size, color, maxw, sx=1.0):
+def fit_layer(text, path, size, color, maxw, sx=1.0, tracking=0.0):
     """Texto numa linha, diminuindo a fonte até caber em maxw."""
     while size > 12:
-        lay = text_layer(text, path, size, color, sx)
+        lay = text_layer(text, path, size, color, sx, tracking)
         if lay.width <= maxw:
             return lay
         size -= 4
-    return text_layer(text, path, size, color, sx)
+    return text_layer(text, path, size, color, sx, tracking)
 
 
 def wrap(text, path, size, maxw, sx=1.0):
-    f = ImageFont.truetype(path, size)
+    f = fonte(path, size)
     lines, cur = [], ""
     for w in text.split():
         test = (cur + " " + w).strip()
@@ -52,6 +85,56 @@ def wrap(text, path, size, maxw, sx=1.0):
     lines.append(cur)
     return lines
 
+
+def bloco(text, path, size, color, maxw, linhas=2, entrelinha=1.12):
+    """Até `linhas` linhas; diminui a fonte até caber, e só corta palavras se ainda assim não couber."""
+    while True:
+        ls = wrap(text, path, size, maxw)
+        if len(ls) <= linhas or size <= 34:
+            break
+        size -= 2
+    if len(ls) > linhas:
+        ls = ls[:linhas]
+    f = fonte(path, size)
+    asc, desc = f.getmetrics()
+    passo = int(size * entrelinha)
+    lay = Image.new("RGBA", (maxw, passo * (len(ls) - 1) + asc + desc), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for i, l in enumerate(ls):
+        d.text((0, i * passo), l, font=f, fill=color)
+    box = lay.getbbox()
+    return lay.crop((0, box[1], lay.width, box[3])) if box else lay
+
+
+def preco_partes(valor):
+    """"R$ 1.299,90" -> ("1.299", "90")."""
+    m = re.search(r"([\d\.]+),(\d{2})", valor or "")
+    if not m:
+        return (re.sub(r"[^\d\.]", "", valor or "") or "0"), ""
+    return m.group(1), m.group(2)
+
+
+def preco_layer(valor, altura, color, maxw):
+    """Preço de cartaz: "R$" pequeno, reais gigantes, centavos pequenos no alto."""
+    reais, cent = preco_partes(valor)
+    while True:
+        big = text_layer(reais, DISPLAY, altura, color, tracking=-0.02)
+        rs = text_layer("R$", DISPLAY2, int(altura * 0.26), color)
+        ct = text_layer("," + cent, DISPLAY, int(altura * 0.42), color) if cent else None
+        gap = int(altura * 0.04)
+        larg = rs.width + gap + big.width + (gap + ct.width if ct else 0)
+        if larg <= maxw or altura < 60:
+            break
+        altura = int(altura * 0.92)
+    lay = Image.new("RGBA", (larg, big.height), (0, 0, 0, 0))
+    lay.paste(rs, (0, 0), rs)  # "R$" alinhado no alto, como no cartaz
+    lay.paste(big, (rs.width + gap, 0), big)
+    if ct:
+        lay.paste(ct, (rs.width + 2 * gap + big.width, 0), ct)
+    return lay
+
+
+# ---------- foto ----------
 
 def trim_white(im, thr=245):
     im = im.convert("RGB")
@@ -71,112 +154,132 @@ def load_photo(path):
     return trim_white(im.convert("RGB"))
 
 
-def feed(cfg, out):
-    img = Image.new("RGB", (W, H), OR)
-    d = ImageDraw.Draw(img)
+def campo_foto(path, w, h, pad=40):
+    """Campo branco do tamanho pedido com a foto o maior possível dentro dele."""
+    campo = Image.new("RGB", (w, h), WH)
+    ph = ImageOps.contain(load_photo(path), (w - 2 * pad, h - 2 * pad), Image.LANCZOS)
+    campo.paste(ph, ((w - ph.width) // 2, (h - ph.height) // 2))
+    return campo
 
-    # barra do topo
-    d.rectangle([0, 0, W, 110], fill=BK)
-    m1 = text_layer("MULTI", COND, 58, WH, 0.85)
-    m2 = text_layer("MULTI", COND, 58, OR, 0.85)
-    img.paste(m1, (48, 55 - m1.height // 2), m1)
-    img.paste(m2, (48 + m1.width, 55 - m2.height // 2), m2)
-    cat = text_layer(cfg["category"].upper(), BOLD, 26, OR)
-    cw, ch = cat.width + 44, 52
-    cx = W - 48 - cw
-    d.rectangle([cx, 55 - ch // 2, cx + cw, 55 + ch // 2], outline=OR, width=4)
-    img.paste(cat, (cx + 22, 55 - cat.height // 2), cat)
 
-    # foto
-    bx0, by0, bx1, by1 = 48, 150, W - 48, 830
-    d.rectangle([bx0, by0, bx1, by1], fill=WH, outline=BK, width=8)
-    ph = load_photo(cfg["photo"])
-    iw, ih = bx1 - bx0 - 60, by1 - by0 - 130
-    ph = ImageOps.contain(ph, (iw, ih), Image.LANCZOS)
-    img.paste(ph, (bx0 + 30 + (iw - ph.width) // 2, by0 + 100 + (ih - ph.height) // 2))
+def marca(altura, fundo_claro=True):
+    """Logotipo "multimulti": primeira metade na cor do texto, segunda em laranja."""
+    c1 = BK if fundo_claro else WH
+    a = text_layer("MULTI", DISPLAY, altura, c1, tracking=0.01)
+    b = text_layer("MULTI", DISPLAY, altura, OR, tracking=0.01)
+    lay = Image.new("RGBA", (a.width + b.width + 2, max(a.height, b.height)), (0, 0, 0, 0))
+    lay.paste(a, (0, 0), a)
+    lay.paste(b, (a.width + 2, 0), b)
+    return lay
 
-    # selo
-    bd = text_layer(cfg["badge"], COND, 44, WH, 0.85)
-    d.rectangle([bx0 + 24, by0 + 24, bx0 + 24 + bd.width + 36, by0 + 24 + bd.height + 28], fill=BK)
-    img.paste(bd, (bx0 + 42, by0 + 38), bd)
 
-    # título
-    y = 870
-    for line in wrap(cfg["title"], BOLD, 40, W - 96, 0.92)[:2]:
-        tl = text_layer(line, BOLD, 40, BK, 0.92)
-        img.paste(tl, (48, y), tl)
-        y += 54
+def etiqueta(numero, largura, cor_fundo=BK):
+    """Etiqueta preta com o número da vitrine e "link na bio" embaixo."""
+    num = fit_layer(f"nº {numero}", DISPLAY, 210, WH, largura - 60)
+    sub = text_layer("link na bio", TEXTO_B, 40, OR)
+    alt = 36 + num.height + 26 + sub.height + 36
+    lay = Image.new("RGBA", (largura, alt), cor_fundo + (255,))
+    lay.paste(num, ((largura - num.width) // 2, 36), num)
+    lay.paste(sub, ((largura - sub.width) // 2, 36 + num.height + 26), sub)
+    return lay
 
-    # preços
-    y += 26
-    if cfg.get("old"):
-        old = text_layer("De " + cfg["old"], BOLD, 30, BK, 0.95)
-        img.paste(old, (48, y), old)
-        d.line([46, y + old.height // 2 + 1, 50 + old.width, y + old.height // 2 + 1], fill=BK, width=4)
-        y += old.height + 14
-    else:
-        por = text_layer("POR APENAS", BOLD, 30, BK, 0.95)
-        img.paste(por, (48, y), por)
-        y += por.height + 14
-    new = fit_layer(cfg["new"], COND, 150, BK, 640, 0.85)
-    img.paste(new, (44, y), new)
-    if cfg.get("extra"):
-        ex = fit_layer(cfg["extra"], BOLD, 32, WH, 700, 0.95)
-        img.paste(ex, (48, y + new.height + 16), ex)
 
-    # caixa CTA
-    cta = cfg.get("cta", ["LINK NA", "BIO"])
-    l1 = text_layer(cta[0], BOLD, 28, WH)
-    l2 = text_layer(cta[1], BOLD, 28, WH)
-    bw = max(l1.width, l2.width) + 48
-    bh = l1.height + l2.height + 48
-    x0 = W - 48 - bw
-    yc = y + new.height // 2 - bh // 2
-    d.rectangle([x0, yc, x0 + bw, yc + bh], fill=BK)
-    img.paste(l1, (x0 + (bw - l1.width) // 2, yc + 18), l1)
-    img.paste(l2, (x0 + (bw - l2.width) // 2, yc + 18 + l1.height + 12), l2)
+def numero_de(cfg):
+    if cfg.get("numero"):
+        return cfg["numero"]
+    m = re.search(r"(\d+)", " ".join(cfg.get("cta") or []))
+    return m.group(1) if m else ""
 
-    if out.lower().endswith((".jpg", ".jpeg")):
-        img.save(out, quality=92)
+
+def desconto(cfg):
+    b = cfg.get("badge") or ""
+    return b if "%" in b else None
+
+
+def salvar(img, out):
+    if out.lower().endswith((".jpg", ".jpeg")):  # o Instagram só aceita JPEG
+        img.convert("RGB").save(out, quality=93)
     else:
         img.save(out)
+
+
+# ---------- feed ----------
+
+def feed(cfg, out):
+    img = Image.new("RGB", (W, H), OR)
+    TOPO = 760
+    ImageDraw.Draw(img).rectangle([0, 0, W, TOPO], fill=WH)
+    img.paste(campo_foto(cfg["photo"], W, TOPO - 90, pad=40), (0, 90))  # faixa de cima é da marca
+    mk = marca(40)
+    img.paste(mk, (M, 44), mk)
+
+    # título (até 2 linhas)
+    tit = bloco(cfg["title"], TEXTO, 50, BK, W - 2 * M, linhas=2)
+    img.paste(tit, (M, TOPO + 44), tit)
+
+    # etiqueta do número, à direita, encostada no pé
+    et = etiqueta(numero_de(cfg), 300)
+    img.paste(et, (W - M - et.width, H - M - et.height), et)
+
+    # preço de cartaz, à esquerda
+    area = W - 2 * M - et.width - 40
+    pr = preco_layer(cfg["new"], 320, BK, area)
+    linha = cfg.get("extra") or ""
+    if desconto(cfg):
+        linha = f"{desconto(cfg)} · {linha}" if linha else desconto(cfg)
+    ex = fit_layer(linha.replace("⭐ ", "nota "), TEXTO, 36, BK, area) if linha else None
+    # preço + linha de vendas terminam na mesma altura da etiqueta
+    fundo = H - M
+    if ex:
+        img.paste(ex, (M, fundo - ex.height), ex)
+        fundo -= ex.height + 30
+    img.paste(pr, (M - 6, fundo - pr.height), pr)
+
+    salvar(img, out)
     return img
 
 
-def stripes(w, h):
-    img = Image.new("RGB", (w, h), BK)
-    d = ImageDraw.Draw(img)
-    for x in range(-h, w, 80):
-        d.polygon([(x, h), (x + 26, h), (x + 26 + h, 0), (x + h, 0)], fill=(28, 28, 28))
-    return img
-
+# ---------- story ----------
 
 def story(cfg, out):
     SW, SH = 1080, 1920
-    tmp = out + ".tmp.png"
-    fimg = feed(cfg, tmp)
-    os.remove(tmp)
+    img = Image.new("RGB", (SW, SH), OR)
+    TOPO = 950
+    # o alto do story fica coberto pela barra do Instagram: a foto começa mais abaixo
+    ImageDraw.Draw(img).rectangle([0, 0, SW, TOPO], fill=WH)
+    img.paste(campo_foto(cfg["photo"], SW, TOPO - 300, pad=40), (0, 300))
+    mk = marca(46)
+    img.paste(mk, (M, 230), mk)
 
-    img = stripes(SW, SH)
-    d = ImageDraw.Draw(img)
-    y = 230
-    hk = fit_layer(cfg.get("hook", "ACHADINHO DO DIA"), COND, 84, OR, SW - 100, 0.85)
-    img.paste(hk, ((SW - hk.width) // 2, y), hk)
+    tit = bloco(cfg["title"], TEXTO, 56, BK, SW - 2 * M, linhas=2)
+    img.paste(tit, (M, TOPO + 50), tit)
+    y = TOPO + 50 + tit.height + 50
 
-    fw = 960
-    f2 = fimg.resize((fw, int(fimg.height * fw / fimg.width)), Image.LANCZOS)
-    fy = y + hk.height + 50
-    d.rectangle([(SW - fw) // 2 - 6, fy - 6, (SW + fw) // 2 + 6, fy + f2.height + 6], fill=OR)
-    img.paste(f2, ((SW - fw) // 2, fy))
+    # faixa preta da chamada, acima da área da caixa de resposta do Instagram
+    fy0, fy1 = 1580, 1740
+    linha = cfg.get("extra") or ""
+    if desconto(cfg):
+        linha = f"{desconto(cfg)} · {linha}" if linha else desconto(cfg)
+    ex = fit_layer(linha.replace("⭐ ", "nota "), TEXTO, 40, BK, SW - 2 * M) if linha else None
+    fundo = fy0 - 44
+    if ex:
+        img.paste(ex, (M, fundo - ex.height), ex)
+        fundo -= ex.height + 30
+    alt = 420
+    while True:  # o preço ocupa todo o espaço livre entre o título e as vendas
+        pr = preco_layer(cfg["new"], alt, BK, SW - 2 * M)
+        if pr.height <= fundo - y or alt < 120:
+            break
+        alt -= 10
+    img.paste(pr, (M - 8, fundo - pr.height), pr)
 
-    by = fy + f2.height + 50
-    cta = cfg.get("cta") or ["LINK NA BIO"]
-    t = text_layer(" · ".join(cta), BOLD, 46, WH)
-    img.paste(t, ((SW - t.width) // 2, by), t)
-    ay = by + t.height + 18
-    d.polygon([(SW // 2 - 34, ay), (SW // 2 + 34, ay), (SW // 2, ay + 38)], fill=OR)
-    if out.lower().endswith((".jpg", ".jpeg")):  # o Instagram só aceita JPEG em stories
-        img.convert("RGB").save(out, quality=92)
-    else:
-        img.save(out)
+    ImageDraw.Draw(img).rectangle([0, fy0, SW, fy1], fill=BK)
+    c1 = text_layer("Link na bio", DISPLAY, 92, WH)
+    c2 = text_layer(f"nº {numero_de(cfg)}", DISPLAY, 92, OR)
+    tot = c1.width + 30 + c2.width
+    cy = (fy0 + fy1) // 2
+    img.paste(c1, ((SW - tot) // 2, cy - c1.height // 2), c1)
+    img.paste(c2, ((SW - tot) // 2 + c1.width + 30, cy - c2.height // 2), c2)
+
+    salvar(img, out)
     return img

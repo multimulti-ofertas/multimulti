@@ -28,6 +28,9 @@ def vendidos(n):
     return f"+{n}"
 
 
+_SOLTAS = {"e", "de", "do", "da", "dos", "das", "com", "para", "pra", "em", "a", "o", "-", "–", "+", "sem"}
+
+
 def titulo_curto(nome, limite=60):
     t = re.sub(r"[\[\(【].*?[\]\)】]", " ", nome)
     t = _LIXO.sub(" ", t)
@@ -36,9 +39,35 @@ def titulo_curto(nome, limite=60):
     letras = [c for c in t if c.isalpha()]
     if letras and sum(c.isupper() for c in letras) / len(letras) > 0.6:
         t = t.lower().capitalize()
+    partes = re.split(r"\s[-–|]\s", t)
+    if len(partes) > 1 and len(partes[0].split()) >= 3:  # "Nome do produto - detalhes" -> só o nome
+        t = partes[0]
     if len(t) > limite:
         t = t[:limite].rsplit(" ", 1)[0]
-    return t.strip(" -–,.")
+    palavras = t.strip(" -–,.").split()
+    while len(palavras) > 2 and palavras[-1].lower().strip(",.-–") in _SOLTAS:
+        palavras.pop()
+    return " ".join(palavras).strip(" -–,.")
+
+
+_MARCAS = {"kemei", "gillette", "philips", "grecin", "oneblade", "fox", "mach", "lord", "daling", "jehnny"}
+
+
+def frase(t):
+    """Nome da Shopee Em Maiúsculas Assim -> frase normal: só a primeira letra e as marcas/siglas."""
+    out = []
+    for i, w in enumerate(t.split()):
+        limpa = re.sub(r"[^\w]", "", w)
+        if any(c.isdigit() for c in limpa) or (limpa.isupper() and 1 < len(limpa) <= 4):
+            out.append(w)  # KM-6511, USB, LCD, 3
+        elif any(c.isupper() for c in limpa[1:]) and not limpa.isupper():
+            out.append(w)  # OneBlade
+        elif limpa.lower() in _MARCAS:
+            out.append(w[:1].upper() + w[1:].lower())
+        else:
+            out.append(w.lower())
+    s = " ".join(out)
+    return s[:1].upper() + s[1:]
 
 
 def dados_basicos(p):

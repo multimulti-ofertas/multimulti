@@ -1,14 +1,27 @@
-"""Reels 1080x1920, 30fps, ~10s, sem música (a música entra pelo Instagram ou fica muda).
+"""Reels 1080x1920, 30fps, 10s, sem música (a música entra pelo Instagram ou fica muda).
+
+Quatro telas cheias, cada uma com uma coisa grande (taste-skill: nada de tela quase vazia):
+  1. gancho em letras enormes sobre laranja
+  2. o produto grande sobre branco, com o nome
+  3. o cartaz de preço sobre laranja
+  4. "Link na bio · nº X" sobre preto
+O conteúdo fica entre y=220 e y=1450 e longe da borda direita, fora da área que o Instagram
+cobre com a legenda e os botões.
 
 reel(cfg, saida.mp4)
-cfg: photo, hook (lista de até 4 linhas), badge, new, old (opcional), extra, numero
+cfg: photo, hook (lista de até 3 linhas), new, numero, extra (opcional), title (opcional)
 """
 import math
 import subprocess
-from PIL import Image, ImageDraw
-from .arte import text_layer, fit_layer, load_photo, stripes, BOLD, COND, OR, BK, WH
+
+from PIL import Image, ImageDraw, ImageOps
+
+from .arte import (BK, DISPLAY, OR, TEXTO, WH, bloco, fit_layer, load_photo, marca,
+                   preco_layer, text_layer)
 
 W, H, FPS = 1080, 1920, 30
+M = 72
+USO = W - 2 * M - 80  # largura útil (fica longe dos botões da direita)
 
 
 def _ease(t):
@@ -16,52 +29,39 @@ def _ease(t):
     return 1 - (1 - t) ** 3
 
 
-def _pop(t):
-    t = max(0.0, min(1.0, t))
-    if t < 0.6:
-        return _ease(t / 0.6) * 1.12
-    return 1.12 - 0.12 * _ease((t - 0.6) / 0.4)
-
-
-def _paste(img, layer, cx, cy, s):
-    if s <= 0.01:
+def _entra(img, layer, x, y, t, sobe=40):
+    """Entrada: sobe alguns pixels e aparece (só transparência e posição)."""
+    a = _ease(t)
+    if a <= 0.01:
         return
-    lay = layer.resize((max(1, int(layer.width * s)), max(1, int(layer.height * s))), Image.LANCZOS)
-    img.paste(lay, (int(cx - lay.width / 2), int(cy - lay.height / 2)), lay)
-
-
-def _box(layer, color, px=30, py=20):
-    b = Image.new("RGBA", (layer.width + 2 * px, layer.height + 2 * py), color + (255,))
-    b.paste(layer, (px, py), layer)
-    return b
+    lay = layer
+    if a < 1:
+        lay = layer.copy()
+        lay.putalpha(lay.getchannel("A").point(lambda v: int(v * a)))
+    img.paste(lay, (int(x), int(y + sobe * (1 - a))), lay)
 
 
 def reel(cfg, out, segundos=10.0):
-    bg = stripes(W, H)
-    m1 = text_layer("MULTI", COND, 54, WH, 0.85)
-    m2 = text_layer("MULTI", COND, 54, OR, 0.85)
-
-    hook = [fit_layer(l, COND, 120, c, W - 80, 0.85)
-            for l, c in zip(cfg["hook"], [WH, OR, WH, OR])]
-    badge = _box(text_layer(cfg["badge"], COND, 70, BK, 0.85), OR)
-    old = None
-    if cfg.get("old"):
-        old = text_layer("DE " + cfg["old"], BOLD, 64, WH)
-        ImageDraw.Draw(old).line([0, old.height // 2 + 2, old.width, old.height // 2 + 2], fill=OR, width=8)
-    por = text_layer("POR APENAS", BOLD, 50, WH)
-    new = fit_layer(cfg["new"], COND, 230, OR, W - 80, 0.85)
-    extra = _box(fit_layer(cfg.get("extra", ""), BOLD, 50, BK, W - 160), OR, 25, 17) if cfg.get("extra") else None
-    cta1 = text_layer("LINK NA BIO", COND, 130, OR, 0.85)
-    cta2 = text_layer(f"PRODUTO Nº {cfg['numero']}", BOLD, 64, WH)
-    cta3 = text_layer("@multimulti.ofertas", BOLD, 44, (200, 200, 200))
-
+    numero = cfg.get("numero", "")
+    # 1. gancho
+    linhas = [l.upper() for l in cfg["hook"][:3]]
+    tam_fonte = 230  # todas as linhas do mesmo tamanho
+    while tam_fonte > 60 and any(text_layer(l, DISPLAY, tam_fonte, BK).width > USO for l in linhas):
+        tam_fonte -= 6
+    hook = [text_layer(l, DISPLAY, tam_fonte, BK) for l in linhas]
+    # 2. produto
     ph = load_photo(cfg["photo"])
-    ph.thumbnail((900, 900), Image.LANCZOS)
-    card = Image.new("RGB", (ph.width + 60, ph.height + 60), WH)
-    card.paste(ph, (30, 30))
-    ImageDraw.Draw(card).rectangle([0, 0, card.width - 1, card.height - 1], outline=OR, width=10)
-    card = card.convert("RGBA")
-    small = card.resize((int(card.width * 0.5), int(card.height * 0.5)), Image.LANCZOS)
+    ph = ImageOps.contain(ph, (W - 2 * M, 860), Image.LANCZOS)
+    titulo = bloco(cfg.get("title") or "", TEXTO, 64, BK, USO, linhas=2) if cfg.get("title") else None
+    mk_claro = marca(52, fundo_claro=True)
+    mk_escuro = marca(52, fundo_claro=False)
+    # 3. preço
+    preco = preco_layer(cfg["new"], 520, BK, USO)
+    extra = fit_layer(cfg["extra"].replace("⭐ ", "nota "), TEXTO, 56, BK, USO) if cfg.get("extra") else None
+    # 4. chamada
+    c1 = fit_layer("Link na bio", DISPLAY, 230, WH, USO)
+    c2 = fit_layer(f"nº {numero}", DISPLAY, 420, OR, USO)
+    c3 = text_layer("@multimulti.ofertas", TEXTO, 52, (210, 210, 210))
 
     n = int(segundos * FPS)
     proc = subprocess.Popen(
@@ -74,41 +74,38 @@ def reel(cfg, out, segundos=10.0):
 
     for i in range(n):
         t = i / FPS
-        img = bg.copy()
-        x = (W - m1.width - m2.width) // 2
-        img.paste(m1, (x, 150), m1)
-        img.paste(m2, (x + m1.width, 150), m2)
-        if t < 2.2:  # gancho
-            y0 = 900 - (len(hook) - 1) * 82
+        if t < 2.0:  # 1. gancho
+            img = Image.new("RGB", (W, H), OR)
+            alt = sum(h.height for h in hook) + 40 * (len(hook) - 1)
+            y = 820 - alt // 2
             for k, hl in enumerate(hook):
-                _paste(img, hl, W / 2, y0 + k * 165, _pop((t - 0.15 * k) / 0.45))
-        elif t < 5.4:  # produto
-            lt = t - 2.2
-            s = _pop(lt / 0.4) * (1.0 + 0.06 * (lt / 3.2))
-            _paste(img, card, W / 2, 900, s * min(1.0, 940 / card.width))
-            _paste(img, badge, 300, 470, _pop((lt - 0.5) / 0.35))
-        elif t < 8.2:  # preço
-            lt = t - 5.4
-            img.paste(small, ((W - small.width) // 2, 300), small)
-            base = 300 + small.height + 70
-            if old is not None:
-                a = _ease(lt / 0.3)
-                _paste(img, old, W / 2, base + 40 - 20 * (1 - a), a)
-            if lt > 0.4:
-                _paste(img, por, W / 2, base + 140, _ease((lt - 0.4) / 0.25))
-            if lt > 0.6:
-                _paste(img, new, W / 2, base + 300, _pop((lt - 0.6) / 0.4))
-            if extra is not None and lt > 1.3:
-                _paste(img, extra, W / 2, base + 500, _pop((lt - 1.3) / 0.35))
-        else:  # chamada
-            lt = t - 8.2
-            pulse = 1 + 0.04 * math.sin(lt * 10)
-            _paste(img, cta1, W / 2, 760, _pop(lt / 0.4) * pulse)
-            _paste(img, cta2, W / 2, 920, _ease((lt - 0.3) / 0.3))
-            _paste(img, cta3, W / 2, 1020, _ease((lt - 0.5) / 0.3))
-            if lt > 0.6:
-                ay = 1110 + int(12 * math.sin(lt * 8))
-                ImageDraw.Draw(img).polygon([(W // 2 - 40, ay), (W // 2 + 40, ay), (W // 2, ay + 46)], fill=OR)
+                _entra(img, hl, M - 6, y, (t - 0.12 * k) / 0.35, sobe=60)
+                y += hl.height + 40
+        elif t < 5.2:  # 2. produto
+            lt = t - 2.0
+            img = Image.new("RGB", (W, H), WH)
+            img.paste(mk_claro, (M, 230), mk_claro)
+            z = 1.0 + 0.06 * (lt / 3.2)  # zoom lento na foto
+            fz = ph.resize((int(ph.width * z), int(ph.height * z)), Image.LANCZOS)
+            img.paste(fz, ((W - fz.width) // 2, 340 + (900 - fz.height) // 2))
+            if titulo is not None:
+                _entra(img, titulo, M, 1300, (lt - 0.3) / 0.4)
+        elif t < 8.0:  # 3. preço
+            lt = t - 5.2
+            img = Image.new("RGB", (W, H), OR)
+            yp = 820 - preco.height // 2
+            _entra(img, preco, M - 10, yp, lt / 0.4, sobe=80)
+            if extra is not None:
+                _entra(img, extra, M, yp + preco.height + 60, (lt - 0.5) / 0.35)
+        else:  # 4. chamada
+            lt = t - 8.0
+            img = Image.new("RGB", (W, H), BK)
+            img.paste(mk_escuro, (M, 230), mk_escuro)
+            _entra(img, c1, M - 6, 520, lt / 0.3)
+            pulso = 1 + 0.03 * math.sin(lt * 9) if lt > 0.5 else 1
+            c2p = c2.resize((int(c2.width * pulso), int(c2.height * pulso)), Image.LANCZOS)
+            _entra(img, c2p, M - 10, 520 + c1.height + 60, (lt - 0.15) / 0.3)
+            _entra(img, c3, M, 520 + c1.height + 60 + c2.height + 70, (lt - 0.35) / 0.3)
         proc.stdin.write(img.tobytes())
     proc.stdin.close()
     if proc.wait() != 0:

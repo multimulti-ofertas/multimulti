@@ -188,7 +188,7 @@ def montar(cat, p, n, d, papel, demo):
 
     item = {
         "n": n, "data": d.isoformat(), "categoria": cat, "itemId": str(p["itemId"]),
-        "nome": p["productName"], "titulo": texto.titulo_curto(p["productName"]),
+        "nome": p["productName"], "titulo": texto.frase(texto.titulo_curto(p["productName"])),
         "link": link, "imagem": p["imageUrl"] if not demo else f"media/{n}/foto.jpg",
         "agenda": papel, "postado": None,
     }
@@ -200,14 +200,14 @@ def montar(cat, p, n, d, papel, demo):
     cfg = {
         "photo": str(foto), "category": config.SELO.get(cat, "Achado"), "badge": selo,
         "title": item["titulo"], "new": item["preco_curto"], "extra": extra.replace("⭐ ", "Nota "),
-        "cta": ["LINK NA BIO", f"Nº {n}"], "hook": " · ".join(item["gancho"][:2]),
+        "cta": ["LINK NA BIO", f"Nº {n}"], "hook": " · ".join(item["gancho"][:2]), "numero": n,
     }
     feed(cfg, str(pasta / "feed.jpg"))
     story(cfg, str(pasta / "story.jpg"))
     item["feed"] = f"media/{n}/feed.jpg"
     item["story"] = f"media/{n}/story.jpg"
     if papel == "reel":
-        reel(dict(cfg, hook=item["gancho"], numero=n, extra=extra.replace("⭐ ", "NOTA ").upper()),
+        reel(dict(cfg, hook=item["gancho"], numero=n),
              str(pasta / "reel.mp4"))
         item["reel"] = f"media/{n}/reel.mp4"
     return item
@@ -279,8 +279,8 @@ def main():
     if len(novos) == 1:  # só 1 produto: ele também vira Reels
         it = novos[0]
         pasta = MIDIA / str(it["n"])
-        cfg = {"photo": str(pasta / "foto.jpg"), "hook": it["gancho"], "badge": f"{it['pct']}% OFF" if it["pct"] >= 15 else config.SELO.get(it["categoria"], "ACHADO").upper(),
-               "new": it["preco_curto"], "extra": extra_de(it).replace("⭐ ", "NOTA ").upper(), "numero": it["n"]}
+        cfg = {"photo": str(pasta / "foto.jpg"), "hook": it["gancho"], "title": it["titulo"],
+               "new": it["preco_curto"], "extra": extra_de(it), "numero": it["n"]}
         reel(cfg, str(pasta / "reel.mp4"))
         it["reel"] = f"media/{it['n']}/reel.mp4"
 
