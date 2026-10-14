@@ -39,10 +39,25 @@ def pendentes(lista, d, tipo):
 
 
 def hora_da_rotina(agora=None):
-    """A rotina dispara uns minutos antes da hora cheia; arredonda para a hora mais próxima."""
+    """A rotina dispara às xx:50 para a hora seguinte, mas o GitHub costuma atrasar 20-60 min.
+    +10 min: 19:50 (no horário) → 20h; 20:40 (50 min de atraso) → continua 20h."""
     from .gerar import FUSO
     agora = agora or dt.datetime.now(FUSO)
-    return (agora + dt.timedelta(minutes=30)).hour
+    return (agora + dt.timedelta(minutes=10)).hour
+
+
+def atrasados(lista, d, h, tipos):
+    """Feed/Reels de horários anteriores de hoje que não saíram (o GitHub às vezes pula uma execução)."""
+    extra = []
+    for tipo in ("feed", "reel"):
+        if tipo in tipos:
+            continue
+        previstos = sum(1 for hh, ts in config.ROTINA.items() if hh <= h and tipo in ts)
+        feitos = sum(1 for x in lista if x["data"] == d and ja_postado(x, tipo))
+        if feitos < previstos and pendentes(lista, d, tipo):
+            print(f"Recuperando {tipo} atrasado ({feitos} de {previstos} previstos até agora).")
+            extra.append(tipo)
+    return extra
 
 
 def main():
@@ -60,7 +75,8 @@ def main():
 
     if args.tipo == "auto":
         h = args.hora if args.hora is not None else hora_da_rotina()
-        tipos = config.ROTINA.get(h, [])
+        tipos = list(config.ROTINA.get(h, []))
+        tipos = atrasados(carregar(), hoje().isoformat(), h, tipos) + tipos
         print(f"Rotina das {h:02d}h: {', '.join(tipos) or 'nada'}")
     else:
         tipos = [args.tipo]

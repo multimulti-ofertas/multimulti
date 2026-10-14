@@ -88,6 +88,7 @@ def postar_story(url_jpg):
 def checar():
     """Retorna (nome da página, id) ou levanta erro."""
     pid, tok = _cred()
-    d = _req("GET", f"{BASE}/{pid}", params={"fields": "id,name", "access_token": tok})
-    return d.get("name"), d.get("id")
+    d = _req("GET", f"{BASE}/{pid}", params={"fields": "id,name,website,about,followers_count",
+                                             "access_token": tok})
+    return d.get("name"), d.get("id"), d
 
