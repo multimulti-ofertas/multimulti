@@ -86,7 +86,9 @@ def dados_basicos(p):
 def legenda_padrao(item):
     cat = item["categoria"]
     emoji = config.EMOJI.get(cat, "🔥")
-    linhas = [f"{emoji} {item['titulo']}", ""]
+    abre = ["Achei esse e lembrei de você", "Olha que achado bom", "Esse aqui tá valendo a pena",
+            "Achadinho do dia pra você"][item["n"] % 4]
+    linhas = [f"{emoji} {abre}: {item['titulo']}", ""]
     if item["pct"] >= 1:
         linhas.append(f"🔥 {item['pct']}% OFF → por {item['preco']}")
     else:
@@ -95,18 +97,19 @@ def legenda_padrao(item):
         linhas.append(f"⭐ Nota {item['nota']} · {item['vendidos']} vendidos na Shopee")
     else:
         linhas.append(f"🔥 {item['vendidos']} vendidos na Shopee")
-    linhas += ["", f"🛒 Link na bio → produto nº {item['n']}", "",
-               "Marca aquele amigo que precisa disso 👇", "",
+    linhas += ["", f"🛒 Link na bio → procura o produto nº {item['n']}", "",
+               "Salva pra não perder e marca aquele amigo que precisa disso 👇", "",
                "Preço sujeito a alteração.", "",
                f"{config.HASHTAGS_FIXAS} {config.HASHTAGS.get(cat, '')}".strip()]
     return "\n".join(linhas)
 
 
 def gancho_padrao(item):
-    cat = config.SELO.get(item["categoria"], "ACHADINHO").upper()
+    """Duas linhas em tom de conversa para abrir o Reels."""
     if item["pct"] >= 15:
-        return [f"{item['pct']}% OFF", f"EM {cat}", f"POR {item['preco_curto']}?!"]
-    return ["ACHADINHO", f"DE {cat}", f"POR {item['preco_curto']}?!"]
+        return [f"{item['pct']}% OFF nesse achado", f"por {item['preco_curto']}"]
+    abre = ["Olha esse achado", "Achei isso pra você", "Esse aqui tá valendo", "Achadinho do dia"]
+    return [abre[item["n"] % 4], f"por {item['preco_curto']}"]
 
 
 def com_ia(item):
@@ -126,7 +129,7 @@ def com_ia(item):
         f"Número na vitrine: {item['n']}\n\n"
         "Responda APENAS um JSON com as chaves:\n"
         '"titulo": nome curto e claro do produto (máx 55 caracteres),\n'
-        '"gancho": lista de 3 linhas curtas em MAIÚSCULAS para abrir o Reels (máx 16 caracteres cada),\n'
+        '"gancho": lista de 2 linhas curtas em tom de conversa, frase normal (não maiúsculas), para abrir o Reels; a 2ª é o preço, ex.: ["Olha esse achado", "por R$ 12,99"] (máx 26 caracteres cada),\n'
         '"legenda": legenda completa com emoji no início, 1 frase de benefício, preço (e % OFF só se for maior que 0), '
         f'a linha "🛒 Link na bio → produto nº {item["n"]}", um CTA de marcar amigo, '
         '"Preço sujeito a alteração." e no fim as hashtags: '
@@ -146,7 +149,7 @@ def com_ia(item):
         if js.get("titulo"):
             item["titulo"] = js["titulo"][:60]
         if isinstance(js.get("gancho"), list) and js["gancho"]:
-            item["gancho"] = [str(x)[:18] for x in js["gancho"][:3]]
+            item["gancho"] = [str(x)[:28] for x in js["gancho"][:2]]
         if js.get("legenda") and f"nº {item['n']}" in js["legenda"]:
             item["legenda"] = js["legenda"]
     except Exception as e:  # sem IA, segue com o padrão

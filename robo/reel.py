@@ -1,27 +1,25 @@
-"""Reels 1080x1920, 30fps, 10s, sem música (a música entra pelo Instagram ou fica muda).
+"""Reels 1080x1920, 30fps, 10s, no estilo cartão de oferta (DESIGN.md mydealz + laranja da marca).
 
-Quatro telas cheias, cada uma com uma coisa grande (taste-skill: nada de tela quase vazia):
-  1. gancho em letras enormes sobre laranja
-  2. o produto grande sobre branco, com o nome
-  3. o cartaz de preço sobre laranja
-  4. "Link na bio · nº X" sobre preto
-O conteúdo fica entre y=220 e y=1450 e longe da borda direita, fora da área que o Instagram
-cobre com a legenda e os botões.
+Três momentos, em tom de conversa:
+  1. (0–2,4s)  "Olha esse achado" / "por R$ 12,99" em letras grandes, com quem postou em cima
+  2. (2,4–8s)  o cartão da oferta sobe: foto, nome, preço e vendas aparecem em sequência
+  3. (8–10s)   "Gostou?" + botão "Link na bio · nº X" + "Salva pra não perder"
+O conteúdo fica entre y=220 e y=1450 e longe da borda direita (botões do Instagram).
 
 reel(cfg, saida.mp4)
-cfg: photo, hook (lista de até 3 linhas), new, numero, extra (opcional), title (opcional)
+cfg: photo, hook (lista de 2 linhas), title, new, numero, extra (opcional), badge, category
 """
-import math
 import subprocess
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image
 
-from .arte import (BK, DISPLAY, OR, TEXTO, WH, bloco, fit_layer, load_photo, marca,
-                   preco_layer, text_layer)
+from .arte import (CANVAS, CORPO, LARANJA, LARANJA_FORTE, LINHA, MEDIO, NEGRITO, PAD, TINTA,
+                   BRANCO, autor, bloco, cartao, linha_preco, moldura_foto, numero_de, pilula,
+                   subtitulo, text_layer, fit_layer, load_photo)
 
 W, H, FPS = 1080, 1920, 30
-M = 72
-USO = W - 2 * M - 80  # largura útil (fica longe dos botões da direita)
+M = 64
+USO = W - 2 * M - 60  # largura útil, longe dos botões da direita
 
 
 def _ease(t):
@@ -30,7 +28,7 @@ def _ease(t):
 
 
 def _entra(img, layer, x, y, t, sobe=40):
-    """Entrada: sobe alguns pixels e aparece (só transparência e posição)."""
+    """Entrada: sobe alguns pixels e aparece."""
     a = _ease(t)
     if a <= 0.01:
         return
@@ -41,27 +39,33 @@ def _entra(img, layer, x, y, t, sobe=40):
     img.paste(lay, (int(x), int(y + sobe * (1 - a))), lay)
 
 
+def _partes_cartao(cfg, cw):
+    """Peças do cartão separadas, para entrarem uma de cada vez."""
+    larg = cw - 2 * PAD
+    au = autor(subtitulo(cfg))
+    tit = bloco(cfg.get("title") or "", NEGRITO, 54, TINTA, larg, linhas=2)
+    lp = linha_preco(cfg, 120, larg)
+    foto = moldura_foto(cfg["photo"], larg, 640)
+    alt = PAD + au.height + 30 + foto.height + 34 + tit.height + 30 + lp.height + PAD
+    return au, foto, tit, lp, cartao(cw, alt)
+
+
 def reel(cfg, out, segundos=10.0):
-    numero = cfg.get("numero", "")
+    numero = numero_de(cfg)
+    linhas = (cfg.get("hook") or ["Olha esse achado", f"por {cfg['new']}"])[:2]
     # 1. gancho
-    linhas = [l.upper() for l in cfg["hook"][:3]]
-    tam_fonte = 230  # todas as linhas do mesmo tamanho
-    while tam_fonte > 60 and any(text_layer(l, DISPLAY, tam_fonte, BK).width > USO for l in linhas):
-        tam_fonte -= 6
-    hook = [text_layer(l, DISPLAY, tam_fonte, BK) for l in linhas]
-    # 2. produto
-    ph = load_photo(cfg["photo"])
-    ph = ImageOps.contain(ph, (W - 2 * M, 860), Image.LANCZOS)
-    titulo = bloco(cfg.get("title") or "", TEXTO, 64, BK, USO, linhas=2) if cfg.get("title") else None
-    mk_claro = marca(52, fundo_claro=True)
-    mk_escuro = marca(52, fundo_claro=False)
-    # 3. preço
-    preco = preco_layer(cfg["new"], 520, BK, USO)
-    extra = fit_layer(cfg["extra"].replace("⭐ ", "nota "), TEXTO, 56, BK, USO) if cfg.get("extra") else None
-    # 4. chamada
-    c1 = fit_layer("Link na bio", DISPLAY, 230, WH, USO)
-    c2 = fit_layer(f"nº {numero}", DISPLAY, 420, OR, USO)
-    c3 = text_layer("@multimulti.ofertas", TEXTO, 52, (210, 210, 210))
+    au_g = autor(subtitulo(cfg))
+    h1 = fit_layer(linhas[0], NEGRITO, 120, TINTA, USO)
+    h2 = fit_layer(linhas[1], NEGRITO, 120, LARANJA_FORTE, USO) if len(linhas) > 1 else None
+    # 2. cartão
+    cw = W - 2 * M
+    au, foto, tit, lp, card = _partes_cartao(cfg, cw)
+    cy = max(220, 840 - card.height // 2)
+    # 3. chamada
+    gostou = text_layer("Gostou?", NEGRITO, 130, TINTA)
+    btn = pilula(f"Link na bio · nº {numero}", 64, LARANJA, BRANCO, icone="seta", padx=70, pady=40)
+    perfil = text_layer("@multimulti.ofertas", MEDIO, 48, CORPO)
+    salva = pilula("Salva pra não perder", 46, BRANCO, TINTA, borda=LINHA, padx=50, pady=30)
 
     n = int(segundos * FPS)
     proc = subprocess.Popen(
@@ -74,38 +78,35 @@ def reel(cfg, out, segundos=10.0):
 
     for i in range(n):
         t = i / FPS
-        if t < 2.0:  # 1. gancho
-            img = Image.new("RGB", (W, H), OR)
-            alt = sum(h.height for h in hook) + 40 * (len(hook) - 1)
-            y = 820 - alt // 2
-            for k, hl in enumerate(hook):
-                _entra(img, hl, M - 6, y, (t - 0.12 * k) / 0.35, sobe=60)
-                y += hl.height + 40
-        elif t < 5.2:  # 2. produto
-            lt = t - 2.0
-            img = Image.new("RGB", (W, H), WH)
-            img.paste(mk_claro, (M, 230), mk_claro)
-            z = 1.0 + 0.06 * (lt / 3.2)  # zoom lento na foto
-            fz = ph.resize((int(ph.width * z), int(ph.height * z)), Image.LANCZOS)
-            img.paste(fz, ((W - fz.width) // 2, 340 + (900 - fz.height) // 2))
-            if titulo is not None:
-                _entra(img, titulo, M, 1300, (lt - 0.3) / 0.4)
-        elif t < 8.0:  # 3. preço
-            lt = t - 5.2
-            img = Image.new("RGB", (W, H), OR)
-            yp = 820 - preco.height // 2
-            _entra(img, preco, M - 10, yp, lt / 0.4, sobe=80)
-            if extra is not None:
-                _entra(img, extra, M, yp + preco.height + 60, (lt - 0.5) / 0.35)
-        else:  # 4. chamada
+        img = Image.new("RGB", (W, H), CANVAS)
+        if t < 2.4:  # 1. gancho
+            _entra(img, au_g, M, 660, t / 0.3)
+            _entra(img, h1, M - 4, 840, (t - 0.2) / 0.35, sobe=50)
+            if h2 is not None:
+                _entra(img, h2, M - 4, 840 + h1.height + 40, (t - 0.45) / 0.35, sobe=50)
+        elif t < 8.0:  # 2. cartão da oferta
+            lt = t - 2.4
+            a = _ease(lt / 0.45)
+            y0 = int(cy + 160 * (1 - a))
+            c = card if a >= 1 else card.copy()
+            if a < 1:
+                c.putalpha(c.getchannel("A").point(lambda v: int(v * a)))
+            img.paste(c, (M, y0), c)
+            x0, y = M + PAD, y0 + PAD
+            _entra(img, au, x0, y, (lt - 0.2) / 0.3, sobe=0)
+            y += au.height + 30
+            _entra(img, foto, x0, y, (lt - 0.3) / 0.4, sobe=20)
+            y += foto.height + 34
+            _entra(img, tit, x0, y, (lt - 0.9) / 0.35)
+            y += tit.height + 30
+            _entra(img, lp, x0, y, (lt - 1.4) / 0.35)
+        else:  # 3. chamada
             lt = t - 8.0
-            img = Image.new("RGB", (W, H), BK)
-            img.paste(mk_escuro, (M, 230), mk_escuro)
-            _entra(img, c1, M - 6, 520, lt / 0.3)
-            pulso = 1 + 0.03 * math.sin(lt * 9) if lt > 0.5 else 1
-            c2p = c2.resize((int(c2.width * pulso), int(c2.height * pulso)), Image.LANCZOS)
-            _entra(img, c2p, M - 10, 520 + c1.height + 60, (lt - 0.15) / 0.3)
-            _entra(img, c3, M, 520 + c1.height + 60 + c2.height + 70, (lt - 0.35) / 0.3)
+            _entra(img, gostou, M - 4, 680, lt / 0.3, sobe=50)
+            _entra(img, btn, M, 680 + gostou.height + 70, (lt - 0.15) / 0.3)
+            yb = 680 + gostou.height + 70 + btn.height
+            _entra(img, perfil, M + 6, yb + 40, (lt - 0.3) / 0.3)
+            _entra(img, salva, M, yb + 40 + perfil.height + 70, (lt - 0.45) / 0.3)
         proc.stdin.write(img.tobytes())
     proc.stdin.close()
     if proc.wait() != 0:

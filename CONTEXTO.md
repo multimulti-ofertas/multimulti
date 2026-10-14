@@ -18,7 +18,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Uma planilha de 83 produtos rendeu 40 produtos novos (~7 dias). Quando acabar, baixar outra.
   Quando a API sair, ela passa a ter prioridade sozinha.
 - Prévia sem publicar: Actions → Gerar ofertas do dia → marcar "previa" (resultado no ramo `previa`)
-- **Visual:** cartaz de oferta de supermercado, fonte Barlow, laranja/preto/branco (robo/arte.py)
+- **Visual:** estilo do DESIGN.md do mydealz (github.com/VoltAgent/awesome-design-md): cartão de oferta branco sobre cinza-claro, cantos arredondados, botões em pílula, laranja da marca, fonte Nunito Sans, tom de conversa ("achei pra você"). Código em robo/arte.py e robo/reel.py
 - Vitrine (link da bio): https://multimulti-ofertas.github.io/multimulti
   Cada post diz "Link na bio → produto nº X".
 - ManyChat (grátis): "comenta EU QUERO" → manda o link no direct. No plano grátis vale para 1 post por automação.

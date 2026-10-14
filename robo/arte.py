@@ -1,35 +1,50 @@
-"""Artes MultiMulti, v3: o cartaz de oferta de supermercado vira o layout.
+"""Artes MultiMulti no estilo do DESIGN.md do mydealz (comunidade de ofertas), com o laranja da marca.
 
-Ideia: o preço gigante com os centavos pequenos no alto, como no cartaz pintado à mão do mercado,
-e o número da vitrine como etiqueta preta. Regras (taste-skill): poucos tamanhos de letra e bem
-diferentes, foto grande sem moldura, campos de cor chapada, nada de etiquetinha, contorno fino,
-listras, sombra ou degradê.
+Cada arte é um "cartão de oferta" como num feed de promoções feito por gente: fundo cinza-claro,
+cartão branco de cantos arredondados com borda fininha, quem postou em cima ("MultiMulti Ofertas ·
+achei pra você"), foto em moldura arredondada, título em negrito, preço em laranja, pílula de
+vendas em vermelho "quente" e botões em pílula. Fonte Nunito Sans em dois pesos (500 e 700).
 
 feed(cfg, saida)  -> 1080x1350
 story(cfg, saida) -> 1080x1920
 
-cfg: photo (caminho), title, new ("R$ 48,47"), numero, extra (opcional, ex.: "+100 mil vendidos"),
-     badge (opcional, só aparece se for desconto, ex.: "45% OFF")
+cfg: photo (caminho), title, new ("R$ 48,47"), numero, extra (ex.: "+100 mil vendidos"),
+     badge (só aparece se for desconto, ex.: "45% OFF"), category (opcional)
 """
 import os
 import re
 
 from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
-W, H = 1080, 1350
-OR = (255, 107, 26)
-BK = (17, 17, 17)
-WH = (255, 255, 255)
+# ---------- tokens (DESIGN.md mydealz, cor principal trocada pelo laranja da marca) ----------
+LARANJA = (251, 96, 1)        # warm #fb6001 -> cor principal: preço e botão
+LARANJA_FORTE = (196, 72, 0)  # texto laranja sobre fundo claro
+QUENTE = (206, 23, 54)        # hot #ce1736 -> pílula de vendas
+FRIO = (3, 78, 177)           # cold #034eb1
+MENTA = (222, 253, 228)       # discount-surface
+VERDE_FORTE = (25, 126, 37)   # green-strong (texto do desconto)
+CANVAS = (243, 245, 247)      # fundo da página
+BRANCO = (255, 255, 255)      # cartão
+TINTA = (0, 0, 0)             # títulos
+CORPO = (107, 109, 112)       # texto secundário
+APAGADO = (167, 169, 172)
+LINHA = (223, 225, 228)       # hairline
+
+# nomes antigos usados por outros módulos
+OR, BK, WH = LARANJA, TINTA, BRANCO
 
 _AQUI = os.path.join(os.path.dirname(__file__), "fontes")
-DISPLAY = os.path.join(_AQUI, "BarlowCondensed-Black.ttf")      # preço, número, ganchos
-DISPLAY2 = os.path.join(_AQUI, "BarlowCondensed-ExtraBold.ttf")
-TEXTO = os.path.join(_AQUI, "Barlow-SemiBold.ttf")                # título e linhas pequenas
-TEXTO_B = os.path.join(_AQUI, "Barlow-Bold.ttf")
-# nomes antigos (usados em outros módulos)
-BOLD, COND = TEXTO_B, DISPLAY
+MEDIO = os.path.join(_AQUI, "NunitoSans-Medium.ttf")   # 500
+NEGRITO = os.path.join(_AQUI, "NunitoSans-Bold.ttf")   # 700
+BOLD = TEXTO = TEXTO_B = DISPLAY = DISPLAY2 = COND = NEGRITO
 
-M = 56  # margem única de todas as artes
+# escala: a arte tem 1080px, ~2,5x a tela de um celular (os tokens do guia são para 390-430px)
+X = 2.5
+R_MD = int(8 * X)      # cartões, molduras
+BORDA = 3              # hairline
+PAD = int(16 * X)      # respiro interno do cartão
+M = 44                 # margem da arte
+W, H = 1080, 1350
 
 
 # ---------- texto ----------
@@ -39,36 +54,20 @@ def fonte(path, size):
 
 
 def text_layer(text, path, size, color, sx=1.0, tracking=0.0):
-    """Uma linha de texto numa camada transparente justa (sem a folga de cima da fonte)."""
     f = fonte(path, size)
-    if tracking:
-        larg = sum(f.getlength(c) for c in text) + tracking * size * (len(text) - 1)
-        asc, desc = f.getmetrics()
-        lay = Image.new("RGBA", (int(larg) + 8, asc + desc + 8), (0, 0, 0, 0))
-        d = ImageDraw.Draw(lay)
-        x = 4
-        for c in text:
-            d.text((x, 4), c, font=f, fill=color)
-            x += f.getlength(c) + tracking * size
-        box = lay.getbbox()
-        lay = lay.crop(box) if box else lay
-    else:
-        l, t, r, b = f.getbbox(text)
-        lay = Image.new("RGBA", (r - l + 4, b - t + 4), (0, 0, 0, 0))
-        ImageDraw.Draw(lay).text((-l + 2, -t + 2), text, font=f, fill=color)
-    if sx != 1.0:
-        lay = lay.resize((max(1, int(lay.width * sx)), lay.height), Image.LANCZOS)
+    l, t, r, b = f.getbbox(text)
+    lay = Image.new("RGBA", (r - l + 4, b - t + 4), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).text((-l + 2, -t + 2), text, font=f, fill=color)
     return lay
 
 
 def fit_layer(text, path, size, color, maxw, sx=1.0, tracking=0.0):
-    """Texto numa linha, diminuindo a fonte até caber em maxw."""
     while size > 12:
-        lay = text_layer(text, path, size, color, sx, tracking)
+        lay = text_layer(text, path, size, color)
         if lay.width <= maxw:
             return lay
-        size -= 4
-    return text_layer(text, path, size, color, sx, tracking)
+        size -= 2
+    return text_layer(text, path, size, color)
 
 
 def wrap(text, path, size, maxw, sx=1.0):
@@ -76,7 +75,7 @@ def wrap(text, path, size, maxw, sx=1.0):
     lines, cur = [], ""
     for w in text.split():
         test = (cur + " " + w).strip()
-        if f.getlength(test) * sx <= maxw:
+        if f.getlength(test) <= maxw:
             cur = test
         else:
             if cur:
@@ -86,15 +85,13 @@ def wrap(text, path, size, maxw, sx=1.0):
     return lines
 
 
-def bloco(text, path, size, color, maxw, linhas=2, entrelinha=1.12):
-    """Até `linhas` linhas; diminui a fonte até caber, e só corta palavras se ainda assim não couber."""
+def bloco(text, path, size, color, maxw, linhas=2, entrelinha=1.2):
     while True:
         ls = wrap(text, path, size, maxw)
-        if len(ls) <= linhas or size <= 34:
+        if len(ls) <= linhas or size <= 30:
             break
         size -= 2
-    if len(ls) > linhas:
-        ls = ls[:linhas]
+    ls = ls[:linhas]
     f = fonte(path, size)
     asc, desc = f.getmetrics()
     passo = int(size * entrelinha)
@@ -106,31 +103,89 @@ def bloco(text, path, size, color, maxw, linhas=2, entrelinha=1.12):
     return lay.crop((0, box[1], lay.width, box[3])) if box else lay
 
 
-def preco_partes(valor):
-    """"R$ 1.299,90" -> ("1.299", "90")."""
-    m = re.search(r"([\d\.]+),(\d{2})", valor or "")
-    if not m:
-        return (re.sub(r"[^\d\.]", "", valor or "") or "0"), ""
-    return m.group(1), m.group(2)
-
-
 def preco_layer(valor, altura, color, maxw):
-    """Preço de cartaz: "R$" pequeno, reais gigantes, centavos pequenos no alto."""
-    reais, cent = preco_partes(valor)
-    while True:
-        big = text_layer(reais, DISPLAY, altura, color, tracking=-0.02)
-        rs = text_layer("R$", DISPLAY2, int(altura * 0.26), color)
-        ct = text_layer("," + cent, DISPLAY, int(altura * 0.42), color) if cent else None
-        gap = int(altura * 0.04)
-        larg = rs.width + gap + big.width + (gap + ct.width if ct else 0)
-        if larg <= maxw or altura < 60:
-            break
-        altura = int(altura * 0.92)
-    lay = Image.new("RGBA", (larg, big.height), (0, 0, 0, 0))
-    lay.paste(rs, (0, 0), rs)  # "R$" alinhado no alto, como no cartaz
-    lay.paste(big, (rs.width + gap, 0), big)
-    if ct:
-        lay.paste(ct, (rs.width + 2 * gap + big.width, 0), ct)
+    """Preço em negrito, numa linha só (diminui até caber)."""
+    return fit_layer(valor, NEGRITO, altura, color, maxw)
+
+
+# ---------- formas ----------
+
+def pilula(texto, size, fundo, cor, borda=None, padx=None, pady=None, icone=None, cor_icone=None):
+    """Botão/etiqueta totalmente arredondada (rounded.full do guia)."""
+    t = text_layer(texto, NEGRITO, size, cor)
+    ic = desenho(icone, int(size * 0.72), cor_icone or cor) if icone else None
+    padx = padx if padx is not None else int(size * 0.9)
+    pady = pady if pady is not None else int(size * 0.5)
+    gap = int(size * 0.35) if ic else 0
+    w = padx * 2 + t.width + (ic.width + gap if ic else 0)
+    h = pady * 2 + max(t.height, ic.height if ic else 0)
+    lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).rounded_rectangle(
+        [0, 0, w - 1, h - 1], radius=h // 2, fill=(fundo + (255,)) if fundo else None,
+        outline=(borda + (255,)) if borda else None, width=BORDA if borda else 0)
+    x = padx
+    if ic:
+        lay.paste(ic, (x, (h - ic.height) // 2), ic)
+        x += ic.width + gap
+    lay.paste(t, (x, (h - t.height) // 2), t)
+    return lay
+
+
+def desenho(nome, tam, cor):
+    """Ícones desenhados (a fonte não tem esses símbolos): "seta" (↗) e "sobe" (▲)."""
+    s = 4  # desenha grande e reduz, para a borda ficar lisa
+    T = tam * s
+    lay = Image.new("RGBA", (T, T), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    c = cor + (255,)
+    if nome == "sobe":
+        d.polygon([(T * 0.5, T * 0.12), (T * 0.95, T * 0.85), (T * 0.05, T * 0.85)], fill=c)
+    else:  # seta diagonal
+        e = int(T * 0.14)
+        d.line([(T * 0.18, T * 0.82), (T * 0.8, T * 0.2)], fill=c, width=e)
+        d.line([(T * 0.34, T * 0.2), (T * 0.82, T * 0.2)], fill=c, width=e)
+        d.line([(T * 0.8, T * 0.18), (T * 0.8, T * 0.66)], fill=c, width=e)
+    return lay.resize((tam, tam), Image.LANCZOS)
+
+
+def cartao(w, h):
+    """Cartão branco, cantos de 20px e borda fininha (deal-card)."""
+    lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).rounded_rectangle([0, 0, w - 1, h - 1], radius=R_MD, fill=BRANCO + (255,),
+                                          outline=LINHA + (255,), width=BORDA)
+    return lay
+
+
+def arredondar(im, raio):
+    mask = Image.new("L", im.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, im.width - 1, im.height - 1], radius=raio, fill=255)
+    out = im.convert("RGBA")
+    out.putalpha(mask)
+    return out
+
+
+def avatar(d):
+    """Bolinha laranja com "MM" (avatar de quem postou)."""
+    lay = Image.new("RGBA", (d, d), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).ellipse([0, 0, d - 1, d - 1], fill=LARANJA + (255,))
+    t = text_layer("MM", NEGRITO, int(d * 0.38), BRANCO)
+    lay.paste(t, ((d - t.width) // 2, (d - t.height) // 2), t)
+    return lay
+
+
+def autor(subtitulo, escala=1.0):
+    """Linha de quem postou: avatar + "MultiMulti Ofertas" + subtítulo."""
+    d = int(84 * escala)
+    av = avatar(d)
+    nome = text_layer("MultiMulti Ofertas", NEGRITO, int(34 * escala), TINTA)
+    sub = text_layer(subtitulo, MEDIO, int(28 * escala), CORPO)
+    w = d + 22 + max(nome.width, sub.width)
+    lay = Image.new("RGBA", (w, d), (0, 0, 0, 0))
+    lay.paste(av, (0, 0), av)
+    alt = nome.height + 10 + sub.height
+    y = (d - alt) // 2
+    lay.paste(nome, (d + 22, y), nome)
+    lay.paste(sub, (d + 22, y + nome.height + 10), sub)
     return lay
 
 
@@ -148,41 +203,23 @@ def load_photo(path):
     im = Image.open(path)
     if im.mode in ("RGBA", "LA", "P"):
         im = im.convert("RGBA")
-        base = Image.new("RGB", im.size, WH)
+        base = Image.new("RGB", im.size, BRANCO)
         base.paste(im, mask=im.split()[-1])
         im = base
     return trim_white(im.convert("RGB"))
 
 
-def campo_foto(path, w, h, pad=40):
-    """Campo branco do tamanho pedido com a foto o maior possível dentro dele."""
-    campo = Image.new("RGB", (w, h), WH)
+def moldura_foto(path, w, h, pad=30):
+    """Foto do produto dentro de uma moldura arredondada com borda fininha."""
+    campo = Image.new("RGB", (w, h), BRANCO)
     ph = ImageOps.contain(load_photo(path), (w - 2 * pad, h - 2 * pad), Image.LANCZOS)
     campo.paste(ph, ((w - ph.width) // 2, (h - ph.height) // 2))
-    return campo
-
-
-def marca(altura, fundo_claro=True):
-    """Logotipo "multimulti": primeira metade na cor do texto, segunda em laranja."""
-    c1 = BK if fundo_claro else WH
-    a = text_layer("MULTI", DISPLAY, altura, c1, tracking=0.01)
-    b = text_layer("MULTI", DISPLAY, altura, OR, tracking=0.01)
-    lay = Image.new("RGBA", (a.width + b.width + 2, max(a.height, b.height)), (0, 0, 0, 0))
-    lay.paste(a, (0, 0), a)
-    lay.paste(b, (a.width + 2, 0), b)
+    lay = arredondar(campo, R_MD)
+    ImageDraw.Draw(lay).rounded_rectangle([0, 0, w - 1, h - 1], radius=R_MD, outline=LINHA + (255,), width=BORDA)
     return lay
 
 
-def etiqueta(numero, largura, cor_fundo=BK):
-    """Etiqueta preta com o número da vitrine e "link na bio" embaixo."""
-    num = fit_layer(f"nº {numero}", DISPLAY, 210, WH, largura - 60)
-    sub = text_layer("link na bio", TEXTO_B, 40, OR)
-    alt = 36 + num.height + 26 + sub.height + 36
-    lay = Image.new("RGBA", (largura, alt), cor_fundo + (255,))
-    lay.paste(num, ((largura - num.width) // 2, 36), num)
-    lay.paste(sub, ((largura - sub.width) // 2, 36 + num.height + 26), sub)
-    return lay
-
+# ---------- partes do cartão ----------
 
 def numero_de(cfg):
     if cfg.get("numero"):
@@ -196,6 +233,40 @@ def desconto(cfg):
     return b if "%" in b else None
 
 
+def subtitulo(cfg):
+    cat = (cfg.get("category") or "").lower()
+    return f"achei pra você · {cat}" if cat and cat != "achado" else "achei pra você"
+
+
+def linha_preco(cfg, tam, maxw):
+    """Preço laranja + (desconto em menta) + pílula de vendas em vermelho."""
+    pr = preco_layer(cfg["new"], tam, LARANJA_FORTE, maxw)
+    pecas = [pr]
+    if desconto(cfg):
+        pecas.append(pilula(desconto(cfg), int(tam * 0.36), MENTA, VERDE_FORTE))
+    vendas = (cfg.get("extra") or "").replace("⭐ ", "nota ")
+    if vendas:
+        pecas.append(pilula(vendas, int(tam * 0.34), BRANCO, QUENTE, borda=LINHA, icone="sobe", cor_icone=QUENTE))
+    gap = 22
+
+    def linha(ps):
+        lay = Image.new("RGBA", (sum(p.width for p in ps) + gap * (len(ps) - 1), max(p.height for p in ps)), (0, 0, 0, 0))
+        x = 0
+        for p in ps:
+            lay.paste(p, (x, (lay.height - p.height) // 2), p)
+            x += p.width + gap
+        return lay
+
+    tudo = linha(pecas)
+    if tudo.width <= maxw or len(pecas) == 1:
+        return tudo
+    l1, l2 = linha(pecas[:-1]), pecas[-1]  # não coube: a pílula de vendas desce
+    lay = Image.new("RGBA", (max(l1.width, l2.width), l1.height + 18 + l2.height), (0, 0, 0, 0))
+    lay.paste(l1, (0, 0), l1)
+    lay.paste(l2, (0, l1.height + 18), l2)
+    return lay
+
+
 def salvar(img, out):
     if out.lower().endswith((".jpg", ".jpeg")):  # o Instagram só aceita JPEG
         img.convert("RGB").save(out, quality=93)
@@ -206,34 +277,34 @@ def salvar(img, out):
 # ---------- feed ----------
 
 def feed(cfg, out):
-    img = Image.new("RGB", (W, H), OR)
-    TOPO = 760
-    ImageDraw.Draw(img).rectangle([0, 0, W, TOPO], fill=WH)
-    img.paste(campo_foto(cfg["photo"], W, TOPO - 90, pad=40), (0, 90))  # faixa de cima é da marca
-    mk = marca(40)
-    img.paste(mk, (M, 44), mk)
+    img = Image.new("RGB", (W, H), CANVAS)
+    cw, ch = W - 2 * M, H - 2 * M
+    card = cartao(cw, ch)
+    img.paste(card, (M, M), card)
+    x0, y = M + PAD, M + PAD
+    larg = cw - 2 * PAD
 
-    # título (até 2 linhas)
-    tit = bloco(cfg["title"], TEXTO, 50, BK, W - 2 * M, linhas=2)
-    img.paste(tit, (M, TOPO + 44), tit)
+    au = autor(subtitulo(cfg))
+    img.paste(au, (x0, y), au)
+    y += au.height + 30
 
-    # etiqueta do número, à direita, encostada no pé
-    et = etiqueta(numero_de(cfg), 300)
-    img.paste(et, (W - M - et.width, H - M - et.height), et)
+    # de baixo para cima: botões, preço, título; a foto fica com o resto
+    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 40, LARANJA, BRANCO, icone="seta", padx=48, pady=24)
+    salva = pilula("Salva pra depois", 34, BRANCO, TINTA, borda=LINHA, padx=36, pady=24)
+    yb = M + ch - PAD - btn.height
+    img.paste(btn, (x0, yb), btn)
+    img.paste(salva, (x0 + larg - salva.width, yb + (btn.height - salva.height) // 2), salva)
 
-    # preço de cartaz, à esquerda
-    area = W - 2 * M - et.width - 40
-    pr = preco_layer(cfg["new"], 320, BK, area)
-    linha = cfg.get("extra") or ""
-    if desconto(cfg):
-        linha = f"{desconto(cfg)} · {linha}" if linha else desconto(cfg)
-    ex = fit_layer(linha.replace("⭐ ", "nota "), TEXTO, 36, BK, area) if linha else None
-    # preço + linha de vendas terminam na mesma altura da etiqueta
-    fundo = H - M
-    if ex:
-        img.paste(ex, (M, fundo - ex.height), ex)
-        fundo -= ex.height + 30
-    img.paste(pr, (M - 6, fundo - pr.height), pr)
+    lp = linha_preco(cfg, 104, larg)
+    yp = yb - 34 - lp.height
+    img.paste(lp, (x0, yp), lp)
+
+    tit = bloco(cfg["title"], NEGRITO, 46, TINTA, larg, linhas=2)
+    yt = yp - 26 - tit.height
+    img.paste(tit, (x0, yt), tit)
+
+    foto = moldura_foto(cfg["photo"], larg, yt - 34 - y)
+    img.paste(foto, (x0, y), foto)
 
     salvar(img, out)
     return img
@@ -243,43 +314,35 @@ def feed(cfg, out):
 
 def story(cfg, out):
     SW, SH = 1080, 1920
-    img = Image.new("RGB", (SW, SH), OR)
-    TOPO = 950
-    # o alto do story fica coberto pela barra do Instagram: a foto começa mais abaixo
-    ImageDraw.Draw(img).rectangle([0, 0, SW, TOPO], fill=WH)
-    img.paste(campo_foto(cfg["photo"], SW, TOPO - 300, pad=40), (0, 300))
-    mk = marca(46)
-    img.paste(mk, (M, 230), mk)
+    img = Image.new("RGB", (SW, SH), CANVAS)
+    # o Instagram cobre ~200px em cima e ~180px embaixo
+    topo = text_layer("Olha o que achei hoje", NEGRITO, 64, TINTA)
+    img.paste(topo, (M + 6, 250), topo)
+    sub = text_layer("Toca no link da bio e procura o número", MEDIO, 34, CORPO)
+    img.paste(sub, (M + 6, 250 + topo.height + 18), sub)
 
-    tit = bloco(cfg["title"], TEXTO, 56, BK, SW - 2 * M, linhas=2)
-    img.paste(tit, (M, TOPO + 50), tit)
-    y = TOPO + 50 + tit.height + 50
+    cy0 = 250 + topo.height + 18 + sub.height + 40
+    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 48, LARANJA, BRANCO, icone="seta", padx=56, pady=30)
+    yb = 1720 - btn.height
+    cy1 = yb - 36
+    cw = SW - 2 * M
+    card = cartao(cw, cy1 - cy0)
+    img.paste(card, (M, cy0), card)
+    img.paste(btn, ((SW - btn.width) // 2, yb), btn)
 
-    # faixa preta da chamada, acima da área da caixa de resposta do Instagram
-    fy0, fy1 = 1580, 1740
-    linha = cfg.get("extra") or ""
-    if desconto(cfg):
-        linha = f"{desconto(cfg)} · {linha}" if linha else desconto(cfg)
-    ex = fit_layer(linha.replace("⭐ ", "nota "), TEXTO, 40, BK, SW - 2 * M) if linha else None
-    fundo = fy0 - 44
-    if ex:
-        img.paste(ex, (M, fundo - ex.height), ex)
-        fundo -= ex.height + 30
-    alt = 420
-    while True:  # o preço ocupa todo o espaço livre entre o título e as vendas
-        pr = preco_layer(cfg["new"], alt, BK, SW - 2 * M)
-        if pr.height <= fundo - y or alt < 120:
-            break
-        alt -= 10
-    img.paste(pr, (M - 8, fundo - pr.height), pr)
+    x0, larg = M + PAD, cw - 2 * PAD
+    au = autor(subtitulo(cfg))
+    img.paste(au, (x0, cy0 + PAD), au)
+    y = cy0 + PAD + au.height + 30
 
-    ImageDraw.Draw(img).rectangle([0, fy0, SW, fy1], fill=BK)
-    c1 = text_layer("Link na bio", DISPLAY, 92, WH)
-    c2 = text_layer(f"nº {numero_de(cfg)}", DISPLAY, 92, OR)
-    tot = c1.width + 30 + c2.width
-    cy = (fy0 + fy1) // 2
-    img.paste(c1, ((SW - tot) // 2, cy - c1.height // 2), c1)
-    img.paste(c2, ((SW - tot) // 2 + c1.width + 30, cy - c2.height // 2), c2)
+    lp = linha_preco(cfg, 120, larg)
+    yp = cy1 - PAD - lp.height
+    img.paste(lp, (x0, yp), lp)
+    tit = bloco(cfg["title"], NEGRITO, 52, TINTA, larg, linhas=2)
+    yt = yp - 28 - tit.height
+    img.paste(tit, (x0, yt), tit)
+    foto = moldura_foto(cfg["photo"], larg, yt - 34 - y)
+    img.paste(foto, (x0, y), foto)
 
     salvar(img, out)
     return img
