@@ -68,7 +68,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 4. Resposta padrão (Configurações → Instagram) para qualquer outra mensagem
 - A antiga "Auto-DM de links dos comentários" continua parada (no grátis só vale para 1 post).
 - Mandar o link exato de cada produto no direct só com ManyChat PRO (~US$ 15/mês).
-- Falta testar: alguém de outra conta mandar "EU QUERO" no direct.
+- Testado em 14/out de outra conta: "eu quero" no direct → resposta + botão → vitrine abre certa no celular.
 
 ## Ferramentas para o Claude
 - Actions → "Gerar ofertas do dia" com opções: `previa` (monta e guarda no ramo `previa`, não publica),
@@ -102,7 +102,6 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
    pedido "Quero ativar a API" enviado em 13/out (resposta no Outlook, até 3 dias úteis).
    Depois: pegar AppID e Secret em "Abrir API" e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome).
-3. Testar o ManyChat com outra conta.
 4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
 5. Atenção ao tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias).
 
