@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 from PIL import Image, ImageDraw
 
 from . import config, planilha, texto
-from .arte import feed, story
+from .arte import feed, recorte, story
 from .reel import reel
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -207,6 +207,15 @@ def montar(cat, p, n, d, papel, demo):
     story(cfg, str(pasta / "story.jpg"))
     item["feed"] = f"media/{n}/feed.jpg"
     item["story"] = f"media/{n}/story.jpg"
+    # produto recortado (fundo transparente) para a vitrine mostrar flutuando no escuro
+    try:
+        rec, ok = recorte(str(foto))
+        if ok:
+            rec.thumbnail((900, 900))
+            rec.save(pasta / "produto.webp", quality=86)
+            item["recorte"] = f"media/{n}/produto.webp"
+    except Exception as e:
+        print(f"[aviso] recorte falhou: {e}")
     if papel == "reel":
         reel(dict(cfg, hook=item["gancho"], numero=n),
              str(pasta / "reel.mp4"))
@@ -219,7 +228,7 @@ def limpar_midia(lista, d):
     for x in lista:
         if dt.date.fromisoformat(x["data"]) < limite:
             shutil.rmtree(MIDIA / str(x["n"]), ignore_errors=True)
-            for k in ("feed", "story", "reel"):
+            for k in ("feed", "story", "reel", "recorte"):
                 x.pop(k, None)
 
 

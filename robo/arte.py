@@ -1,51 +1,42 @@
-"""Artes MultiMulti no estilo do DESIGN.md do mydealz (comunidade de ofertas), com o laranja da marca.
+"""Artes MultiMulti: vitrine de produto premium, no escuro.
 
-Cada arte é um "cartão de oferta" como num feed de promoções feito por gente: fundo cinza-claro,
-cartão branco de cantos arredondados com borda fininha, quem postou em cima ("MultiMulti Ofertas ·
-achei pra você"), foto em moldura arredondada, título em negrito, preço em laranja, pílula de
-vendas em vermelho "quente" e botões em pílula. Fonte Nunito Sans em dois pesos (500 e 700).
+Inspiração: sites de produto "2026" — fundo quase preto, o produto flutuando grande e inclinado com
+um brilho colorido atrás (aqui, o laranja da marca), o nome em maiúsculas grossas e condensadas,
+textos pequenos e elegantes, e um círculo com o número como a "seta" de um carrossel.
 
 feed(cfg, saida)  -> 1080x1350
 story(cfg, saida) -> 1080x1920
+recorte(foto)     -> (imagem RGBA sem o fundo branco, True) ou (foto, False) se o fundo não for branco
 
 cfg: photo (caminho), title, new ("R$ 48,47"), numero, extra (ex.: "+100 mil vendidos"),
-     badge (só aparece se for desconto, ex.: "45% OFF"), category (opcional)
+     badge (só aparece se for desconto, ex.: "45% OFF"), category (opcional), chamada (opcional)
 """
+import math
 import os
 import re
 
-from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
+import numpy as np
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
 
-# ---------- tokens (DESIGN.md mydealz, cor principal trocada pelo laranja da marca) ----------
-LARANJA = (251, 96, 1)        # warm #fb6001 -> cor principal: preço e botão
-LARANJA_FORTE = (196, 72, 0)  # texto laranja sobre fundo claro
-QUENTE = (206, 23, 54)        # hot #ce1736 -> pílula de vendas
-FRIO = (3, 78, 177)           # cold #034eb1
-MENTA = (222, 253, 228)       # discount-surface
-VERDE_FORTE = (25, 126, 37)   # green-strong (texto do desconto)
-CANVAS = (243, 245, 247)      # fundo da página
-BRANCO = (255, 255, 255)      # cartão
-TINTA = (0, 0, 0)             # títulos
-CORPO = (107, 109, 112)       # texto secundário
-APAGADO = (167, 169, 172)
-LINHA = (223, 225, 228)       # hairline
-
+# ---------- cores ----------
+FUNDO = (10, 10, 12)
+LARANJA = (255, 107, 26)
+LARANJA_CLARO = (255, 150, 80)
+BRANCO = (255, 255, 255)
+CINZA = (168, 168, 176)
+CINZA_ESCURO = (60, 60, 66)
 # nomes antigos usados por outros módulos
-OR, BK, WH = LARANJA, TINTA, BRANCO
+OR, BK, WH = LARANJA, FUNDO, BRANCO
 
 _AQUI = os.path.join(os.path.dirname(__file__), "fontes")
-MEDIO = os.path.join(_AQUI, "NunitoSans-Medium.ttf")   # 500
-NEGRITO = os.path.join(_AQUI, "NunitoSans-Bold.ttf")   # 700
-FORTE = os.path.join(_AQUI, "NunitoSans-Black.ttf")    # 900: só chamada, preço e número
-BOLD = TEXTO = TEXTO_B = DISPLAY = DISPLAY2 = COND = NEGRITO
+GROSSA = os.path.join(_AQUI, "BarlowCondensed-Black.ttf")     # nome, preço, chamadas
+GROSSA2 = os.path.join(_AQUI, "BarlowCondensed-Bold.ttf")     # rótulos em maiúsculas
+TEXTO = os.path.join(_AQUI, "Barlow-Medium.ttf")              # textos pequenos
+TEXTO_B = os.path.join(_AQUI, "Barlow-SemiBold.ttf")
+BOLD = COND = DISPLAY = GROSSA
 
-# escala: a arte tem 1080px, ~2,5x a tela de um celular (os tokens do guia são para 390-430px)
-X = 2.5
-R_MD = int(8 * X)      # cartões, molduras
-BORDA = 3              # hairline
-PAD = int(16 * X)      # respiro interno do cartão
-M = 44                 # margem da arte
 W, H = 1080, 1350
+M = 64
 
 
 # ---------- texto ----------
@@ -55,7 +46,19 @@ def fonte(path, size):
 
 
 def text_layer(text, path, size, color, sx=1.0, tracking=0.0):
+    """Uma linha de texto numa camada justa. tracking em fração do tamanho (0.12 = espaçado)."""
     f = fonte(path, size)
+    if tracking:
+        larg = sum(f.getlength(c) for c in text) + tracking * size * (len(text) - 1)
+        asc, desc = f.getmetrics()
+        lay = Image.new("RGBA", (int(larg) + 8, asc + desc + 8), (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        x = 4
+        for c in text:
+            d.text((x, 4), c, font=f, fill=color)
+            x += f.getlength(c) + tracking * size
+        box = lay.getbbox()
+        return lay.crop(box) if box else lay
     l, t, r, b = f.getbbox(text)
     lay = Image.new("RGBA", (r - l + 4, b - t + 4), (0, 0, 0, 0))
     ImageDraw.Draw(lay).text((-l + 2, -t + 2), text, font=f, fill=color)
@@ -64,11 +67,11 @@ def text_layer(text, path, size, color, sx=1.0, tracking=0.0):
 
 def fit_layer(text, path, size, color, maxw, sx=1.0, tracking=0.0):
     while size > 12:
-        lay = text_layer(text, path, size, color)
+        lay = text_layer(text, path, size, color, tracking=tracking)
         if lay.width <= maxw:
             return lay
         size -= 2
-    return text_layer(text, path, size, color)
+    return text_layer(text, path, size, color, tracking=tracking)
 
 
 def wrap(text, path, size, maxw, sx=1.0):
@@ -86,10 +89,10 @@ def wrap(text, path, size, maxw, sx=1.0):
     return lines
 
 
-def bloco(text, path, size, color, maxw, linhas=2, entrelinha=1.2):
+def bloco(text, path, size, color, maxw, linhas=2, entrelinha=0.98):
     while True:
         ls = wrap(text, path, size, maxw)
-        if len(ls) <= linhas or size <= 30:
+        if len(ls) <= linhas or size <= 34:
             break
         size -= 2
     ls = ls[:linhas]
@@ -101,96 +104,50 @@ def bloco(text, path, size, color, maxw, linhas=2, entrelinha=1.2):
     for i, l in enumerate(ls):
         d.text((0, i * passo), l, font=f, fill=color)
     box = lay.getbbox()
-    return lay.crop((0, box[1], lay.width, box[3])) if box else lay
+    return lay.crop((0, box[1], box[2], box[3])) if box else lay
 
 
 def preco_layer(valor, altura, color, maxw):
-    """Preço bem grosso, numa linha só (diminui até caber)."""
-    return fit_layer(valor, FORTE, altura, color, maxw)
+    """Preço: "R$" menor alinhado no alto, número grande."""
+    m = re.match(r"\s*R\$\s*(.+)", valor or "")
+    num = m.group(1) if m else (valor or "")
+    while True:
+        big = text_layer(num, GROSSA, altura, color)
+        rs = text_layer("R$", GROSSA2, int(altura * 0.34), color)
+        gap = int(altura * 0.06)
+        if rs.width + gap + big.width <= maxw or altura < 40:
+            break
+        altura = int(altura * 0.92)
+    lay = Image.new("RGBA", (rs.width + gap + big.width, big.height), (0, 0, 0, 0))
+    lay.paste(rs, (0, int(big.height * 0.04)), rs)
+    lay.paste(big, (rs.width + gap, 0), big)
+    return lay
 
 
-# ---------- formas ----------
+def titulo_caps(t):
+    return (t or "").upper()
 
-def pilula(texto, size, fundo, cor, borda=None, padx=None, pady=None, icone=None, cor_icone=None):
-    """Botão/etiqueta totalmente arredondada (rounded.full do guia)."""
-    t = text_layer(texto, NEGRITO, size, cor)
-    ic = desenho(icone, int(size * 0.72), cor_icone or cor) if icone else None
-    padx = padx if padx is not None else int(size * 0.9)
-    pady = pady if pady is not None else int(size * 0.5)
-    gap = int(size * 0.35) if ic else 0
-    w = padx * 2 + t.width + (ic.width + gap if ic else 0)
-    h = pady * 2 + max(t.height, ic.height if ic else 0)
+
+# ---------- luz e produto ----------
+
+def brilho(w, h, cx, cy, raio, cor=LARANJA, forca=0.85):
+    """Brilho radial colorido (o "holofote" atrás do produto), como camada RGBA."""
+    y, x = np.ogrid[:h, :w]
+    d = np.sqrt((x - cx) ** 2 + ((y - cy) * 1.05) ** 2) / raio
+    a = np.clip(1 - d, 0, 1) ** 2.2 * forca
+    lay = np.zeros((h, w, 4), dtype=np.uint8)
+    lay[..., 0], lay[..., 1], lay[..., 2] = cor
+    lay[..., 3] = (a * 255).astype(np.uint8)
+    return Image.fromarray(lay, "RGBA")
+
+
+def chao(w, h, cx, cy, larg, alt, cor=LARANJA, forca=0.55):
+    """Reflexo de luz no "chão", embaixo do produto."""
     lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ImageDraw.Draw(lay).rounded_rectangle(
-        [0, 0, w - 1, h - 1], radius=h // 2, fill=(fundo + (255,)) if fundo else None,
-        outline=(borda + (255,)) if borda else None, width=BORDA if borda else 0)
-    x = padx
-    if ic:
-        lay.paste(ic, (x, (h - ic.height) // 2), ic)
-        x += ic.width + gap
-    lay.paste(t, (x, (h - t.height) // 2), t)
-    return lay
+    ImageDraw.Draw(lay).ellipse([cx - larg // 2, cy - alt // 2, cx + larg // 2, cy + alt // 2],
+                                fill=cor + (int(255 * forca),))
+    return lay.filter(ImageFilter.GaussianBlur(alt * 0.6))
 
-
-def desenho(nome, tam, cor):
-    """Ícones desenhados (a fonte não tem esses símbolos): "seta" (↗) e "sobe" (▲)."""
-    s = 4  # desenha grande e reduz, para a borda ficar lisa
-    T = tam * s
-    lay = Image.new("RGBA", (T, T), (0, 0, 0, 0))
-    d = ImageDraw.Draw(lay)
-    c = cor + (255,)
-    if nome == "sobe":
-        d.polygon([(T * 0.5, T * 0.12), (T * 0.95, T * 0.85), (T * 0.05, T * 0.85)], fill=c)
-    else:  # seta diagonal
-        e = int(T * 0.14)
-        d.line([(T * 0.18, T * 0.82), (T * 0.8, T * 0.2)], fill=c, width=e)
-        d.line([(T * 0.34, T * 0.2), (T * 0.82, T * 0.2)], fill=c, width=e)
-        d.line([(T * 0.8, T * 0.18), (T * 0.8, T * 0.66)], fill=c, width=e)
-    return lay.resize((tam, tam), Image.LANCZOS)
-
-
-def cartao(w, h):
-    """Cartão branco, cantos de 20px e borda fininha (deal-card)."""
-    lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ImageDraw.Draw(lay).rounded_rectangle([0, 0, w - 1, h - 1], radius=R_MD, fill=BRANCO + (255,),
-                                          outline=LINHA + (255,), width=BORDA)
-    return lay
-
-
-def arredondar(im, raio):
-    mask = Image.new("L", im.size, 0)
-    ImageDraw.Draw(mask).rounded_rectangle([0, 0, im.width - 1, im.height - 1], radius=raio, fill=255)
-    out = im.convert("RGBA")
-    out.putalpha(mask)
-    return out
-
-
-def avatar(d):
-    """Bolinha laranja com "MM" (avatar de quem postou)."""
-    lay = Image.new("RGBA", (d, d), (0, 0, 0, 0))
-    ImageDraw.Draw(lay).ellipse([0, 0, d - 1, d - 1], fill=LARANJA + (255,))
-    t = text_layer("MM", NEGRITO, int(d * 0.38), BRANCO)
-    lay.paste(t, ((d - t.width) // 2, (d - t.height) // 2), t)
-    return lay
-
-
-def autor(subtitulo, escala=1.0):
-    """Linha de quem postou: avatar + "MultiMulti Ofertas" + subtítulo."""
-    d = int(84 * escala)
-    av = avatar(d)
-    nome = text_layer("MultiMulti Ofertas", NEGRITO, int(34 * escala), TINTA)
-    sub = text_layer(subtitulo, MEDIO, int(28 * escala), CORPO)
-    w = d + 22 + max(nome.width, sub.width)
-    lay = Image.new("RGBA", (w, d), (0, 0, 0, 0))
-    lay.paste(av, (0, 0), av)
-    alt = nome.height + 10 + sub.height
-    y = (d - alt) // 2
-    lay.paste(nome, (d + 22, y), nome)
-    lay.paste(sub, (d + 22, y + nome.height + 10), sub)
-    return lay
-
-
-# ---------- foto ----------
 
 def trim_white(im, thr=245):
     im = im.convert("RGB")
@@ -210,17 +167,91 @@ def load_photo(path):
     return trim_white(im.convert("RGB"))
 
 
-def moldura_foto(path, w, h, pad=30):
-    """Foto do produto dentro de uma moldura arredondada com borda fininha."""
-    campo = Image.new("RGB", (w, h), BRANCO)
-    ph = ImageOps.contain(load_photo(path), (w - 2 * pad, h - 2 * pad), Image.LANCZOS)
-    campo.paste(ph, ((w - ph.width) // 2, (h - ph.height) // 2))
-    lay = arredondar(campo, R_MD)
-    ImageDraw.Draw(lay).rounded_rectangle([0, 0, w - 1, h - 1], radius=R_MD, outline=LINHA + (255,), width=BORDA)
+def recorte(path):
+    """Tira o fundo branco da foto (só o branco que encosta na borda). Se a borda não for quase toda
+    branca (foto com cenário), devolve a foto inteira e False."""
+    from scipy import ndimage
+    im = Image.open(path).convert("RGB")
+    a = np.asarray(im).astype(int)
+    claro = (a.min(axis=2) > 232) & ((a.max(axis=2) - a.min(axis=2)) < 18)
+    borda = np.concatenate([claro[0], claro[-1], claro[:, 0], claro[:, -1]])
+    if borda.mean() < 0.85:
+        return load_photo(path), False
+    lab, _ = ndimage.label(claro)
+    ids = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
+    fundo = np.isin(lab, list(ids))
+    alpha = Image.fromarray(np.where(fundo, 0, 255).astype(np.uint8))
+    alpha = alpha.filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(1.2))
+    out = im.convert("RGBA")
+    out.putalpha(alpha)
+    box = alpha.getbbox()
+    return (out.crop(box) if box else out), True
+
+
+def produto(path, caixa_w, caixa_h, angulo=-7):
+    """O produto pronto para flutuar: recortado e inclinado, ou num quadro arredondado inclinado."""
+    im, ok = recorte(path)
+    if ok:
+        im = ImageOps.contain(im, (caixa_w, caixa_h), Image.LANCZOS)
+        return im.rotate(angulo, resample=Image.BICUBIC, expand=True)
+    im = ImageOps.contain(im, (int(caixa_w * 0.86), int(caixa_h * 0.86)), Image.LANCZOS).convert("RGBA")
+    mask = Image.new("L", im.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, im.width - 1, im.height - 1], radius=28, fill=255)
+    im.putalpha(mask)
+    return im.rotate(angulo * 0.5, resample=Image.BICUBIC, expand=True)
+
+
+def cena(w, h, path, cx, cy, caixa_w, caixa_h, raio_brilho, flutua=0.0, escala=1.0, angulo=-7, prod=None):
+    """Fundo escuro + brilho + reflexo + produto centrado em (cx, cy). Devolve RGB."""
+    img = Image.new("RGBA", (w, h), FUNDO + (255,))
+    img.alpha_composite(brilho(w, h, cx, cy, raio_brilho))
+    img.alpha_composite(brilho(w, h, cx, cy, raio_brilho * 0.45, LARANJA_CLARO, 0.35))
+    p = prod if prod is not None else produto(path, caixa_w, caixa_h, angulo)
+    if escala != 1.0:
+        p = p.resize((max(1, int(p.width * escala)), max(1, int(p.height * escala))), Image.LANCZOS)
+    py = int(cy - p.height / 2 + flutua)
+    img.alpha_composite(chao(w, h, cx, int(cy + p.height / 2 + 30), int(p.width * 0.8), 70))
+    img.alpha_composite(p, (int(cx - p.width / 2), py))
+    return img
+
+
+# ---------- peças ----------
+
+def marca(altura=40):
+    a = text_layer("MULTI", GROSSA, altura, BRANCO, tracking=0.06)
+    b = text_layer("MULTI", GROSSA, altura, LARANJA, tracking=0.06)
+    lay = Image.new("RGBA", (a.width + b.width + int(altura * 0.06), max(a.height, b.height)), (0, 0, 0, 0))
+    lay.paste(a, (0, 0), a)
+    lay.paste(b, (a.width + int(altura * 0.06), 0), b)
     return lay
 
 
-# ---------- partes do cartão ----------
+def circulo_numero(numero, d=150, cor=LARANJA):
+    """Círculo de contorno com o número, como a seta de um carrossel."""
+    s = 3
+    D = d * s
+    lay = Image.new("RGBA", (D, D), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).ellipse([4 * s, 4 * s, D - 4 * s, D - 4 * s], outline=cor + (255,), width=4 * s)
+    lay = lay.resize((d, d), Image.LANCZOS)
+    a = text_layer("Nº", GROSSA2, int(d * 0.17), CINZA, tracking=0.1)
+    b = fit_layer(str(numero), GROSSA, int(d * 0.44), BRANCO, int(d * 0.66))
+    alt = a.height + 8 + b.height
+    y = (d - alt) // 2
+    lay.paste(a, ((d - a.width) // 2, y), a)
+    lay.paste(b, ((d - b.width) // 2, y + a.height + 8), b)
+    return lay
+
+
+def seta(tam, cor=BRANCO):
+    s = 4
+    T = tam * s
+    lay = Image.new("RGBA", (T, T), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    e = int(T * 0.09)
+    d.line([(T * 0.12, T * 0.5), (T * 0.86, T * 0.5)], fill=cor + (255,), width=e)
+    d.line([(T * 0.58, T * 0.22), (T * 0.88, T * 0.5), (T * 0.58, T * 0.78)], fill=cor + (255,), width=e, joint="curve")
+    return lay.resize((tam, tam), Image.LANCZOS)
+
 
 def numero_de(cfg):
     if cfg.get("numero"):
@@ -234,38 +265,19 @@ def desconto(cfg):
     return b if "%" in b else None
 
 
-def subtitulo(cfg):
-    cat = (cfg.get("category") or "").lower()
-    return f"achei pra você · {cat}" if cat and cat != "achado" else "achei pra você"
+def rotulo(cfg):
+    cat = (cfg.get("category") or "").strip().upper()
+    base = "ACHADO DO DIA"
+    return f"{cat} · {base}" if cat and cat != "ACHADO" else base
 
 
-def linha_preco(cfg, tam, maxw):
-    """Preço laranja + (desconto em menta) + pílula de vendas em vermelho."""
-    pr = preco_layer(cfg["new"], tam, LARANJA_FORTE, maxw)
-    pecas = [pr]
+def linha_vendas(cfg):
+    partes = []
     if desconto(cfg):
-        pecas.append(pilula(desconto(cfg), int(tam * 0.36), MENTA, VERDE_FORTE))
-    vendas = (cfg.get("extra") or "").replace("⭐ ", "nota ")
-    if vendas:
-        pecas.append(pilula(vendas, int(tam * 0.34), BRANCO, QUENTE, borda=LINHA, icone="sobe", cor_icone=QUENTE))
-    gap = 22
-
-    def linha(ps):
-        lay = Image.new("RGBA", (sum(p.width for p in ps) + gap * (len(ps) - 1), max(p.height for p in ps)), (0, 0, 0, 0))
-        x = 0
-        for p in ps:
-            lay.paste(p, (x, (lay.height - p.height) // 2), p)
-            x += p.width + gap
-        return lay
-
-    tudo = linha(pecas)
-    if tudo.width <= maxw or len(pecas) == 1:
-        return tudo
-    l1, l2 = linha(pecas[:-1]), pecas[-1]  # não coube: a pílula de vendas desce
-    lay = Image.new("RGBA", (max(l1.width, l2.width), l1.height + 18 + l2.height), (0, 0, 0, 0))
-    lay.paste(l1, (0, 0), l1)
-    lay.paste(l2, (0, l1.height + 18), l2)
-    return lay
+        partes.append(desconto(cfg))
+    if cfg.get("extra"):
+        partes.append(cfg["extra"].replace("⭐ ", "nota "))
+    return " · ".join(partes)
 
 
 def salvar(img, out):
@@ -275,109 +287,56 @@ def salvar(img, out):
         img.save(out)
 
 
-# ---------- peças chamativas ----------
-
-def selo_numero(numero, d=170):
-    """Selo redondo laranja com o número da vitrine, colado no canto da foto."""
-    lay = Image.new("RGBA", (d, d), (0, 0, 0, 0))
-    ImageDraw.Draw(lay).ellipse([0, 0, d - 1, d - 1], fill=LARANJA + (255,), outline=BRANCO + (255,), width=8)
-    a = text_layer("nº", NEGRITO, int(d * 0.2), BRANCO)
-    b = fit_layer(str(numero), FORTE, int(d * 0.46), BRANCO, int(d * 0.7))
-    alt = a.height + 6 + b.height
-    y = (d - alt) // 2
-    lay.paste(a, ((d - a.width) // 2, y), a)
-    lay.paste(b, ((d - b.width) // 2, y + a.height + 6), b)
-    return lay
-
-
-def chamada_de(cfg):
-    return cfg.get("chamada") or "Olha esse achado"
-
-
-def topo_laranja(img, cfg, y, larg_util, tam=64):
-    """Chamada em branco à esquerda e pílula da categoria à direita, sobre o laranja."""
-    cat = (cfg.get("category") or "").strip()
-    pc = pilula(cat, 30, BRANCO, LARANJA_FORTE, padx=30, pady=14) if cat and cat.lower() != "achado" else None
-    maxw = larg_util - (pc.width + 24 if pc else 0)
-    ch = fit_layer(chamada_de(cfg), FORTE, tam, BRANCO, maxw)
-    img.paste(ch, (M + 6, y), ch)
-    if pc:
-        img.paste(pc, (M + larg_util - pc.width, y + (ch.height - pc.height) // 2), pc)
-    return ch.height
+def texto_oferta(img, cfg, x, y, larg, tam_nome=86, tam_preco=200):
+    """Rótulo laranja, nome em maiúsculas, preço grande e vendas. Devolve o y final."""
+    r = text_layer(rotulo(cfg), GROSSA2, 30, LARANJA, tracking=0.14)
+    img.alpha_composite(r, (x, y))
+    y += r.height + 22
+    nome = bloco(titulo_caps(cfg["title"]), GROSSA, tam_nome, BRANCO, larg, linhas=2)
+    img.alpha_composite(nome, (x - 3, y))
+    y += nome.height + 26
+    pr = preco_layer(cfg["new"], tam_preco, LARANJA, larg)
+    img.alpha_composite(pr, (x - 4, y))
+    vend = linha_vendas(cfg)
+    if vend:
+        v = text_layer(vend, TEXTO, 34, CINZA)
+        if pr.width + 36 + v.width <= larg:
+            img.alpha_composite(v, (x + pr.width + 36, y + pr.height - v.height - 6))
+        else:
+            img.alpha_composite(v, (x, y + pr.height + 18))
+            y += v.height + 18
+    return y + pr.height
 
 
-def miolo_cartao(img, cfg, x0, y0, larg, y_fim, tam_tit=48, tam_preco=128, selo=170):
-    """Foto + título + preço/vendas dentro do cartão, entre y0 e y_fim."""
-    lp = linha_preco_forte(cfg, tam_preco, larg)
-    yp = y_fim - lp.height
-    tit = bloco(cfg["title"], NEGRITO, tam_tit, TINTA, larg, linhas=2)
-    yt = yp - 24 - tit.height
-    foto = moldura_foto(cfg["photo"], larg, yt - 32 - y0)
-    img.paste(foto, (x0, y0), foto)
-    sl = selo_numero(numero_de(cfg), selo)
-    img.paste(sl, (x0 + larg - sl.width + 24, y0 - 24), sl)
-    img.paste(tit, (x0, yt), tit)
-    img.paste(lp, (x0, yp), lp)
-
-
-def linha_preco_forte(cfg, tam, maxw):
-    """Preço grande em laranja + desconto (menta) + vendas em pílula vermelha cheia."""
-    pr = preco_layer(cfg["new"], tam, LARANJA_FORTE, maxw)
-    pecas = [pr]
-    if desconto(cfg):
-        pecas.append(pilula(desconto(cfg), int(tam * 0.3), MENTA, VERDE_FORTE))
-    vendas = (cfg.get("extra") or "").replace("⭐ ", "nota ")
-    if vendas:
-        pecas.append(pilula(vendas, int(tam * 0.27), QUENTE, BRANCO, icone="sobe"))
-    gap = 22
-
-    def linha(ps):
-        lay = Image.new("RGBA", (sum(p.width for p in ps) + gap * (len(ps) - 1), max(p.height for p in ps)), (0, 0, 0, 0))
-        x = 0
-        for p in ps:
-            lay.paste(p, (x, (lay.height - p.height) // 2 + (6 if p is not pr else 0)), p)
-            x += p.width + gap
-        return lay
-
-    tudo = linha(pecas)
-    if tudo.width <= maxw or len(pecas) == 1:
-        return tudo
-    l1, l2 = linha(pecas[:-1]), pecas[-1]
-    lay = Image.new("RGBA", (max(l1.width, l2.width), l1.height + 16 + l2.height), (0, 0, 0, 0))
-    lay.paste(l1, (0, 0), l1)
-    lay.paste(l2, (0, l1.height + 16), l2)
-    return lay
-
-
-def cartao_liso(w, h, raio=None):
-    lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ImageDraw.Draw(lay).rounded_rectangle([0, 0, w - 1, h - 1], radius=raio or R_MD + 8, fill=BRANCO + (255,))
-    return lay
+def _ajusta(p, caixa_w, caixa_h):
+    """Garante que o produto (já inclinado) caiba na caixa."""
+    if p.width > caixa_w or p.height > caixa_h:
+        p = ImageOps.contain(p, (caixa_w, caixa_h), Image.LANCZOS)
+    return p
 
 
 # ---------- feed ----------
 
 def feed(cfg, out):
-    img = Image.new("RGB", (W, H), LARANJA)
-    larg_util = W - 2 * M
-    h_topo = topo_laranja(img, cfg, 50, larg_util)
+    larg = W - 2 * M
+    cn = circulo_numero(numero_de(cfg), 150)
+    yb = H - M - cn.height
+    tmp = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    fim = texto_oferta(tmp, cfg, M, 0, larg)
+    y0 = yb - 50 - fim                       # topo do bloco de texto
 
-    cy0 = 50 + h_topo + 34
-    cw, ch = W - 2 * M, H - M - cy0
-    card = cartao_liso(cw, ch)
-    img.paste(card, (M, cy0), card)
-    x0, larg = M + PAD, cw - 2 * PAD
+    topo, base = 120, y0 - 40                # espaço do produto
+    p = _ajusta(produto(cfg["photo"], 820, base - topo), 900, base - topo)
+    img = cena(W, H, None, 540, (topo + base) // 2, 0, 0, 720, prod=p)
+    mk = marca(40)
+    img.alpha_composite(mk, ((W - mk.width) // 2, 56))
 
-    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 44, LARANJA, BRANCO, icone="seta", padx=0, pady=28)
-    # botão de ponta a ponta do cartão
-    b = Image.new("RGBA", (larg, btn.height), (0, 0, 0, 0))
-    ImageDraw.Draw(b).rounded_rectangle([0, 0, larg - 1, btn.height - 1], radius=btn.height // 2, fill=LARANJA + (255,))
-    miolo = btn.crop((0, 0, btn.width, btn.height))
-    b.paste(miolo, ((larg - miolo.width) // 2, 0), miolo)
-    yb = cy0 + ch - PAD - b.height
-    img.paste(b, (x0, yb), b)
-
-    miolo_cartao(img, cfg, x0, cy0 + PAD, larg, yb - 30)
+    lb = text_layer("LINK NA BIO", GROSSA2, 40, BRANCO, tracking=0.12)
+    st = seta(40)
+    img.alpha_composite(lb, (M, yb + (cn.height - lb.height) // 2))
+    img.alpha_composite(st, (M + lb.width + 22, yb + (cn.height - st.height) // 2))
+    img.alpha_composite(cn, (W - M - cn.width, yb))
+    texto_oferta(img, cfg, M, y0, larg)
     salvar(img, out)
     return img
 
@@ -386,23 +345,24 @@ def feed(cfg, out):
 
 def story(cfg, out):
     SW, SH = 1080, 1920
-    img = Image.new("RGB", (SW, SH), LARANJA)
-    # o Instagram cobre ~200px em cima e ~180px embaixo
-    t1 = fit_layer("Olha o que achei hoje", FORTE, 84, BRANCO, SW - 2 * M)
-    img.paste(t1, (M + 6, 240), t1)
-    t2 = text_layer("Toca no link da bio e procura o número", MEDIO, 36, BRANCO)
-    img.paste(t2, (M + 6, 240 + t1.height + 20), t2)
+    larg = SW - 2 * M
+    cn = circulo_numero(numero_de(cfg), 170)
+    yb = 1720 - cn.height                    # acima da caixa de resposta do Instagram
+    tmp = Image.new("RGBA", (SW, SH), (0, 0, 0, 0))
+    fim = texto_oferta(tmp, cfg, M, 0, larg, tam_nome=96, tam_preco=230)
+    y0 = yb - 60 - fim
 
-    cy0 = 240 + t1.height + 20 + t2.height + 50
-    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 52, BRANCO, LARANJA_FORTE, icone="seta", padx=60, pady=32)
-    yb = 1730 - btn.height
-    cy1 = yb - 40
-    cw = SW - 2 * M
-    card = cartao_liso(cw, cy1 - cy0)
-    img.paste(card, (M, cy0), card)
-    img.paste(btn, ((SW - btn.width) // 2, yb), btn)
+    topo, base = 320, y0 - 50
+    p = _ajusta(produto(cfg["photo"], 880, base - topo), 940, base - topo)
+    img = cena(SW, SH, None, 540, (topo + base) // 2, 0, 0, 820, prod=p)
+    mk = marca(46)
+    img.alpha_composite(mk, ((SW - mk.width) // 2, 230))
 
-    x0, larg = M + PAD, cw - 2 * PAD
-    miolo_cartao(img, cfg, x0, cy0 + PAD, larg, cy1 - PAD, tam_tit=54, tam_preco=140, selo=190)
+    lb = text_layer("LINK NA BIO", GROSSA2, 50, BRANCO, tracking=0.12)
+    st = seta(50)
+    img.alpha_composite(lb, (M, yb + (cn.height - lb.height) // 2))
+    img.alpha_composite(st, (M + lb.width + 26, yb + (cn.height - st.height) // 2))
+    img.alpha_composite(cn, (SW - M - cn.width, yb))
+    texto_oferta(img, cfg, M, y0, larg, tam_nome=96, tam_preco=230)
     salvar(img, out)
     return img

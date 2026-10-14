@@ -3,178 +3,245 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MultiMulti Ofertas · achadinhos da Shopee</title>
+<title>MultiMulti · achadinhos masculinos da Shopee</title>
 <meta name="description" content="Achadinhos masculinos da Shopee escolhidos a dedo: carro, ferramentas, cuidado e estilo. Viu no Instagram? Procure pelo número do post.">
-<meta name="theme-color" content="#fb6001">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23fb6001'/><text x='50' y='63' font-size='38' text-anchor='middle' font-family='Arial' font-weight='bold' fill='white'>MM</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,500;6..12,700;6..12,900&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0a0c'/><circle cx='50' cy='50' r='34' fill='none' stroke='%23ff6b1a' stroke-width='7'/><text x='50' y='62' font-size='34' text-anchor='middle' font-family='Arial Black,Arial' font-weight='900' fill='white'>MM</text></svg>">
+<link rel="preload" href="fontes/BarlowCondensed-Black.ttf" as="font" type="font/ttf" crossorigin>
 <style>
+  @font-face{font-family:"Barlow Condensed";font-weight:900;font-display:swap;src:url(fontes/BarlowCondensed-Black.ttf) format("truetype")}
+  @font-face{font-family:"Barlow Condensed";font-weight:700;font-display:swap;src:url(fontes/BarlowCondensed-Bold.ttf) format("truetype")}
+  @font-face{font-family:"Barlow";font-weight:500;font-display:swap;src:url(fontes/Barlow-Medium.ttf) format("truetype")}
+  @font-face{font-family:"Barlow";font-weight:600;font-display:swap;src:url(fontes/Barlow-SemiBold.ttf) format("truetype")}
   :root{
-    --laranja:#fb6001; --laranja-forte:#c44800; --quente:#ce1736; --menta:#defde4; --verde:#197e25;
-    --canvas:#f3f5f7; --branco:#fff; --tinta:#000; --corpo:#6b6d70; --linha:#dfe1e4;
-    --r:12px; --pilula:999px;
+    --fundo:#0a0a0c; --superficie:#131316; --superficie2:#1b1b1f; --laranja:#ff6b1a; --laranja-claro:#ff9650;
+    --branco:#fff; --cinza:#a8a8b0; --cinza-escuro:#3c3c42;
+    --cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif; --texto:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   }
   *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--canvas);color:var(--tinta);
-    font-family:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:500;line-height:1.5}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;background:var(--fundo);color:var(--branco);font-family:var(--texto);font-weight:500;line-height:1.5;overflow-x:hidden}
   a{color:inherit}
+  .caps{font-family:var(--cond);font-weight:700;letter-spacing:.14em;text-transform:uppercase}
 
-  /* topo laranja */
-  header{background:var(--laranja);color:var(--branco);padding:22px 16px 26px}
-  .topo{max-width:1080px;margin:0 auto}
-  .quem{display:flex;align-items:center;gap:12px}
-  .av{width:48px;height:48px;border-radius:50%;background:var(--branco);color:var(--laranja);
-    display:grid;place-items:center;font-weight:900;font-size:18px;flex:none}
-  .quem b{display:block;font-size:18px;font-weight:900;line-height:1.2}
-  .quem span{font-size:14px;opacity:.92}
-  h1{font-weight:900;font-size:clamp(30px,7.5vw,52px);line-height:1.05;letter-spacing:-.01em;margin:22px 0 8px}
-  .lead{margin:0 0 18px;font-size:17px;max-width:46ch}
-  .busca{position:relative;max-width:560px}
-  .busca input{width:100%;height:54px;border:0;border-radius:var(--pilula);padding:0 22px 0 50px;
-    font:inherit;font-size:17px;font-weight:700;color:var(--tinta);background:var(--branco)}
-  .busca input::placeholder{color:var(--corpo);font-weight:500}
-  .busca input:focus{outline:3px solid var(--tinta);outline-offset:2px}
-  .busca svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px}
+  /* barra */
+  .barra{position:absolute;inset:0 0 auto;z-index:5;display:flex;justify-content:center;padding:20px 16px}
+  .marca{font-family:var(--cond);font-weight:900;font-size:24px;letter-spacing:.08em;text-decoration:none}
+  .marca span{color:var(--laranja)}
 
-  /* lista */
-  main{max-width:1080px;margin:0 auto;padding:8px 16px 8px}
-  .dia{font-weight:900;font-size:22px;margin:26px 2px 12px}
+  /* destaque: carrossel dos achados de hoje */
+  .destaque{position:relative}
+  .trilho{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .trilho::-webkit-scrollbar{display:none}
+  .slide{position:relative;flex:0 0 100%;scroll-snap-align:center;min-height:min(100svh,900px);
+    display:grid;grid-template-rows:1fr auto;padding:76px 20px 96px;isolation:isolate;overflow:hidden}
+  .slide::before{content:"";position:absolute;inset:0;z-index:-1;
+    background:radial-gradient(closest-side at 50% 42%,rgba(255,150,80,.55),rgba(255,107,26,.32) 38%,rgba(255,107,26,.08) 72%,transparent 100%)}
+  .palco{display:grid;place-items:center;min-height:300px;position:relative}
+  .palco img{max-width:min(86%,520px);max-height:46svh;object-fit:contain;transform:rotate(-7deg);
+    filter:drop-shadow(0 40px 40px rgba(0,0,0,.55));animation:flutua 5s ease-in-out infinite}
+  .palco img.quadro{border-radius:22px;background:#fff;transform:rotate(-3deg);max-width:min(78%,440px)}
+  .palco::after{content:"";position:absolute;bottom:4%;left:50%;width:56%;height:28px;transform:translateX(-50%);
+    background:rgba(255,107,26,.45);filter:blur(22px);border-radius:50%;z-index:-1}
+  @keyframes flutua{0%,100%{translate:0 0}50%{translate:0 -12px}}
+
+  .ficha{max-width:1080px;width:100%;margin:0 auto;display:grid;gap:10px;align-content:end}
+  .ficha .rot{color:var(--laranja);font-size:15px}
+  .ficha h2{margin:0;font-family:var(--cond);font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:.005em;
+    font-size:clamp(46px,12.5vw,104px);max-width:16ch;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .linha{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-top:6px}
+  .preco{font-family:var(--cond);font-weight:900;color:var(--laranja);line-height:.9;font-size:clamp(64px,17vw,150px)}
+  .preco small{font-size:.34em;vertical-align:.95em;margin-right:.08em}
+  .vend{color:var(--cinza);font-size:16px;padding-bottom:.7em}
+  .acoes{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}
+  .btn{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 28px;border-radius:999px;background:var(--laranja);
+    color:#0a0a0c;text-decoration:none;white-space:nowrap;font-family:var(--cond);font-weight:900;font-size:21px;letter-spacing:.08em;text-transform:uppercase;
+    transition:transform .18s ease,background .18s ease}
+  .btn:hover{background:var(--laranja-claro)}
+  .btn:active{transform:scale(.97)}
+  .btn svg{width:20px;height:20px;transition:transform .18s ease}
+  .btn:hover svg{transform:translateX(4px)}
+  .num{flex:none;width:76px;height:76px;border-radius:50%;border:3px solid var(--laranja);display:grid;place-items:center;text-align:center;line-height:1}
+  .num small{display:block;font-family:var(--cond);font-weight:700;font-size:12px;color:var(--cinza);letter-spacing:.12em}
+  .num b{font-family:var(--cond);font-weight:900;font-size:32px}
+
+  .nav{position:absolute;left:0;right:0;bottom:26px;display:flex;align-items:center;justify-content:center;gap:16px;z-index:4}
+  .seta{width:46px;height:46px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;
+    display:grid;place-items:center;cursor:pointer;transition:border-color .18s ease,background .18s ease}
+  .seta:hover{border-color:var(--laranja);background:rgba(255,107,26,.15)}
+  .seta:focus-visible,.btn:focus-visible,.card:focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .seta svg{width:18px;height:18px}
+  .pontos{display:flex;gap:8px}
+  .pontos button{width:8px;height:8px;border-radius:999px;border:0;padding:0;background:var(--cinza-escuro);cursor:pointer;transition:width .25s ease,background .25s ease}
+  .pontos button[aria-current="true"]{width:26px;background:var(--laranja)}
+
+  @media (min-width:900px){
+    .slide{grid-template-rows:none;grid-template-columns:1fr 1fr;align-items:center;padding:90px 64px 110px;column-gap:40px}
+    .slide::before{background:radial-gradient(closest-side at 68% 48%,rgba(255,150,80,.55),rgba(255,107,26,.3) 40%,rgba(255,107,26,.07) 74%,transparent 100%)}
+    .palco{order:2;min-height:70svh}
+    .palco img{max-height:62svh}
+    .ficha{order:1;align-content:center}
+    .ficha h2{font-size:clamp(56px,5.6vw,88px);max-width:none}
+  }
+
+  /* busca */
+  .busca{max-width:1080px;margin:0 auto;padding:44px 20px 6px}
+  .busca h3{margin:0 0 6px;font-family:var(--cond);font-weight:900;font-size:clamp(32px,7vw,54px);text-transform:uppercase;line-height:1}
+  .busca p{margin:0 0 18px;color:var(--cinza)}
+  .campo{position:relative;max-width:560px}
+  .campo input{width:100%;height:58px;border-radius:999px;border:2px solid var(--cinza-escuro);background:var(--superficie);
+    color:#fff;font:inherit;font-size:18px;font-weight:600;padding:0 22px 0 54px;transition:border-color .18s ease}
+  .campo input::placeholder{color:var(--cinza);font-weight:500}
+  .campo input:focus{outline:none;border-color:var(--laranja)}
+  .campo svg{position:absolute;left:20px;top:50%;transform:translateY(-50%);width:20px;height:20px}
+
+  /* grade */
+  main{max-width:1080px;margin:0 auto;padding:10px 20px 20px}
+  .dia{margin:34px 0 14px;font-size:15px;color:var(--laranja)}
   .grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   @media (min-width:720px){.grade{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
-  @media (min-width:980px){.grade{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  @media (min-width:1000px){.grade{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .card{position:relative;display:flex;flex-direction:column;text-decoration:none;background:var(--superficie);border-radius:18px;padding:12px;
+    border:2px solid transparent;transition:transform .2s ease,border-color .2s ease;animation:entra .5s ease both}
+  .card:hover{transform:translateY(-4px);border-color:rgba(255,107,26,.6)}
+  .card.alvo{border-color:var(--laranja)}
+  @keyframes entra{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .mini{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;display:grid;place-items:center;
+    background:radial-gradient(closest-side,rgba(255,107,26,.42),rgba(255,107,26,.08) 70%,transparent),var(--superficie2)}
+  .mini img{width:84%;height:84%;object-fit:contain;transform:rotate(-6deg);filter:drop-shadow(0 14px 14px rgba(0,0,0,.5))}
+  .mini img.quadro{width:72%;height:72%;border-radius:10px;background:#fff;transform:rotate(-3deg)}
+  .mini .n{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;border:2px solid var(--laranja);
+    display:grid;place-items:center;font-family:var(--cond);font-weight:900;font-size:18px;background:rgba(10,10,12,.6)}
+  .card h4{margin:12px 2px 4px;font-family:var(--cond);font-weight:900;text-transform:uppercase;font-size:20px;line-height:1;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2em}
+  .card .p{font-family:var(--cond);font-weight:900;color:var(--laranja);font-size:32px;line-height:1;margin:6px 2px 2px}
+  .card .v{color:var(--cinza);font-size:13px;margin:0 2px}
 
-  .card{position:relative;display:flex;flex-direction:column;background:var(--branco);border:1px solid var(--linha);
-    border-radius:var(--r);padding:10px;text-decoration:none;
-    transition:transform .18s ease,border-color .18s ease;animation:entra .4s ease both}
-  .card:hover{transform:translateY(-3px);border-color:var(--laranja)}
-  .card:focus-visible{outline:3px solid var(--tinta);outline-offset:2px}
-  .card.alvo{border:3px solid var(--laranja);padding:8px}
-  @keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .vazio{text-align:center;padding:40px 16px;color:var(--cinza)}
+  .vazio b{display:block;color:#fff;font-family:var(--cond);font-weight:900;font-size:30px;text-transform:uppercase;margin-bottom:6px}
+  .vazio a{color:var(--laranja);font-weight:600}
 
-  .foto{position:relative;aspect-ratio:1;border-radius:8px;border:1px solid var(--linha);background:var(--branco);overflow:hidden}
-  .foto img{width:100%;height:100%;object-fit:contain;padding:8px;display:block}
-  .selo{position:absolute;top:6px;right:6px;width:46px;height:46px;border-radius:50%;background:var(--laranja);
-    border:3px solid var(--branco);color:var(--branco);display:grid;place-items:center;text-align:center;line-height:1}
-  .selo small{display:block;font-size:10px;font-weight:700}
-  .selo b{font-size:18px;font-weight:900}
-
-  .tit{font-weight:700;font-size:15px;line-height:1.3;margin:10px 2px 6px;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
-  .preco{font-weight:900;font-size:26px;line-height:1.1;color:var(--laranja-forte);margin:0 2px;letter-spacing:-.01em}
-  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 2px 12px}
-  .tag{display:inline-flex;align-items:center;gap:5px;border-radius:var(--pilula);padding:3px 10px;font-size:12px;font-weight:700}
-  .tag.quente{background:var(--quente);color:var(--branco)}
-  .tag.quente::before{content:"";width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid currentColor}
-  .tag.off{background:var(--menta);color:var(--verde)}
-  .btn{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:var(--pilula);
-    background:var(--laranja);color:var(--branco);font-weight:700;font-size:15px}
-  .btn svg{width:14px;height:14px;transition:transform .18s ease}
-  .card:hover .btn svg{transform:translate(2px,-2px)}
-
-  .vazio{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:32px 22px;margin:22px 0;text-align:center}
-  .vazio b{display:block;font-size:22px;font-weight:900;margin-bottom:6px}
-  .vazio p{margin:0 auto;color:var(--corpo);max-width:38ch}
-  .vazio a{color:var(--laranja-forte);font-weight:700}
-
-  .como{max-width:1080px;margin:28px auto 0;padding:0 16px}
-  .como div{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:20px 22px}
-  .como b{font-size:18px;font-weight:900}
-  .como p{margin:6px 0 0;color:var(--corpo)}
-
-  footer{background:var(--tinta);color:var(--branco);margin-top:36px;padding:34px 16px 44px}
+  footer{margin-top:50px;padding:40px 20px 50px;border-top:1px solid var(--superficie2)}
   footer .in{max-width:1080px;margin:0 auto}
-  footer .marca{font-weight:900;font-size:clamp(34px,9vw,64px);line-height:1;letter-spacing:-.01em}
-  footer .marca span{color:var(--laranja)}
-  footer p{margin:14px 0 0;color:#cfd1d4;font-size:14px;max-width:52ch}
-  footer a{color:var(--branco);font-weight:700}
+  footer .grande{font-family:var(--cond);font-weight:900;font-size:clamp(56px,17vw,170px);line-height:.85;letter-spacing:.02em}
+  footer .grande span{color:var(--laranja)}
+  footer p{color:var(--cinza);font-size:14px;max-width:56ch;margin:18px 0 0}
+  footer a{color:#fff;font-weight:600}
 
-  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<header>
-  <div class="topo">
-    <div class="quem"><div class="av">MM</div><div><b>MultiMulti Ofertas</b><span>achadinhos masculinos da Shopee</span></div></div>
-    <h1>Achei pra você</h1>
-    <p class="lead">Viu no Instagram? Digita o número do post e vai direto no produto.</p>
-    <div class="busca">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg>
-      <input id="q" inputmode="search" placeholder="Número do post ou nome" autocomplete="off" aria-label="Buscar pelo número do post ou pelo nome do produto">
-    </div>
+<div class="barra"><a class="marca" href="./">MULTI<span>MULTI</span></a></div>
+
+<section class="destaque" aria-label="Achados de hoje">
+  <div class="trilho" id="trilho"><div class="slide"><div class="palco"></div><div class="ficha"><span class="rot caps">Carregando os achados…</span></div></div></div>
+  <div class="nav" id="nav" hidden>
+    <button class="seta" id="ant" aria-label="Achado anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="pontos" id="pontos"></div>
+    <button class="seta" id="prox" aria-label="Próximo achado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
   </div>
-</header>
+</section>
 
-<main id="lista"><div class="vazio"><b>Carregando os achados…</b></div></main>
+<section class="busca" id="busca">
+  <h3>Viu no Instagram?</h3>
+  <p>Digita o número do post e vai direto no produto.</p>
+  <div class="campo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#ff6b1a" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg>
+    <input id="q" inputmode="search" placeholder="Número do post ou nome" autocomplete="off" aria-label="Buscar pelo número do post ou pelo nome do produto">
+  </div>
+</section>
 
-<section class="como"><div>
-  <b>Como funciona</b>
-  <p>Todo dia separo achadinhos de carro, ferramentas, cuidado e estilo com muita venda e preço bom. Cada post tem um número: é só procurar aqui.</p>
-</div></section>
+<main id="lista"></main>
 
 <footer><div class="in">
-  <div class="marca">MULTI<span>MULTI</span></div>
-  <p>Os links são de afiliado: você paga o mesmo preço e ajuda o MultiMulti a continuar postando. Preço e estoque podem mudar a qualquer momento.</p>
-  <p><a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a> · achados novos todo dia</p>
+  <div class="grande">MULTI<span>MULTI</span></div>
+  <p>Achadinhos masculinos da Shopee, escolhidos a dedo todo dia: carro, ferramentas, cuidado e estilo. Os links são de afiliado: você paga o mesmo preço e ajuda o MultiMulti a continuar. Preço e estoque podem mudar a qualquer momento.</p>
+  <p><a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a></p>
 </div></footer>
 
 <script>
 const $ = s => document.querySelector(s);
 let itens = [];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const seta = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>';
 const fmtDia = iso => {
-  const d = new Date(iso + "T12:00:00");
-  const hoje = new Date(); hoje.setHours(12,0,0,0);
+  const d = new Date(iso + "T12:00:00"), hoje = new Date(); hoje.setHours(12,0,0,0);
   const diff = Math.round((hoje - d) / 864e5);
   if (diff === 0) return "Achados de hoje";
   if (diff === 1) return "Achados de ontem";
-  const t = d.toLocaleDateString("pt-BR", {weekday:"long", day:"2-digit", month:"2-digit"});
-  return t.charAt(0).toUpperCase() + t.slice(1);
+  return d.toLocaleDateString("pt-BR", {weekday:"long", day:"2-digit", month:"2-digit"});
 };
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const seta = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"/></svg>';
-function render(){
-  const q = $("#q").value.trim().toLowerCase().replace(/^(n[ºo°]?|#)\s*/, "");
+const precoHTML = p => { const m = String(p || "").match(/^(.*?)(R\$)\s*(.+)$/); return m ? `${esc(m[1])}<small>R$</small>${esc(m[3])}` : esc(p); };
+const imgHTML = (x, cls = "") => x.recorte
+  ? `<img src="${esc(x.recorte)}" alt="${esc(x.titulo)}" loading="lazy">`
+  : `<img class="quadro ${cls}" src="${esc(x.imagem)}" alt="${esc(x.titulo)}" loading="lazy">`;
+const rotulo = x => (x.categoria && x.categoria !== "top" ? x.categoria.toUpperCase() + " · " : "") + "ACHADO DO DIA";
+const vendas = x => [x.pct > 0 ? x.pct + "% OFF" : "", x.vendidos ? x.vendidos + " vendidos" : ""].filter(Boolean).join(" · ");
+
+function destaque(){
+  const trilho = $("#trilho");
   if (!itens.length){
-    $("#lista").innerHTML = `<div class="vazio"><b>Os primeiros achados chegam em breve</b>
-      <p>Todo dia tem coisa nova. Segue <a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a> pra não perder.</p></div>`;
+    trilho.innerHTML = `<div class="slide"><div class="palco"></div><div class="ficha"><span class="rot caps">Em breve</span>
+      <h2>Os primeiros achados chegam já</h2><p class="vend">Segue <a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a> pra não perder.</p></div></div>`;
     return;
   }
+  const dia = itens[0].data;
+  const hoje = itens.filter(x => x.data === dia).sort((a, b) => a.n - b.n);
+  trilho.innerHTML = hoje.map((x, i) => `<article class="slide" id="s${x.n}" aria-label="Achado nº ${x.n}">
+    <div class="palco">${imgHTML(x)}</div>
+    <div class="ficha">
+      <span class="rot caps">${esc(rotulo(x))}</span>
+      <h2>${esc(x.titulo)}</h2>
+      <div class="linha"><span class="preco">${precoHTML(x.preco)}</span><span class="vend">${esc(vendas(x))}</span></div>
+      <div class="acoes"><a class="btn" href="${esc(x.link)}" target="_blank" rel="noopener sponsored">Ver na Shopee ${seta}</a>
+        <span class="num" aria-label="Número ${x.n}"><span><small>Nº</small><b>${x.n}</b></span></span></div>
+    </div></article>`).join("");
+  if (hoje.length > 1){
+    $("#nav").hidden = false;
+    $("#pontos").innerHTML = hoje.map((x, i) => `<button aria-label="Ir para o achado nº ${x.n}" data-i="${i}"></button>`).join("");
+    const atual = () => Math.round(trilho.scrollLeft / trilho.clientWidth);
+    const marca = () => [...$("#pontos").children].forEach((b, i) => b.setAttribute("aria-current", i === atual()));
+    const vai = i => trilho.scrollTo({left: ((i + hoje.length) % hoje.length) * trilho.clientWidth, behavior: "smooth"});
+    $("#ant").onclick = () => vai(atual() - 1);
+    $("#prox").onclick = () => vai(atual() + 1);
+    $("#pontos").onclick = e => { if (e.target.dataset.i) vai(+e.target.dataset.i); };
+    trilho.addEventListener("scroll", () => requestAnimationFrame(marca), {passive:true});
+    marca();
+  }
+}
+
+function render(){
+  const q = $("#q").value.trim().toLowerCase().replace(/^(n[ºo°]?|#)\s*/, "");
+  if (!itens.length){ $("#lista").innerHTML = ""; return; }
   const soNumero = /^\d+$/.test(q);
   const lista = itens.filter(x => !q || (soNumero ? String(x.n) === String(Number(q)) : x.titulo.toLowerCase().includes(q)));
   if (!lista.length){
     $("#lista").innerHTML = soNumero
-      ? `<div class="vazio"><b>Não achei o nº ${esc(q)}</b><p>Ele pode ter saído da vitrine. Apaga a busca pra ver todos os achados.</p></div>`
-      : `<div class="vazio"><b>Nada por aqui</b><p>Tenta outra palavra ou o número do post.</p></div>`;
+      ? `<div class="vazio"><b>Não achei o nº ${esc(q)}</b>Ele pode ter saído da vitrine. Apaga a busca pra ver todos.</div>`
+      : `<div class="vazio"><b>Nada por aqui</b>Tenta outra palavra ou o número do post.</div>`;
     return;
   }
   let html = "", dia = "", i = 0;
   for (const x of lista){
-    if (x.data !== dia){
-      if (dia) html += "</div>";
-      dia = x.data; html += `<div class="dia">${esc(fmtDia(dia))}</div><div class="grade">`;
-    }
+    if (x.data !== dia){ if (dia) html += "</div>"; dia = x.data; html += `<div class="dia caps">${esc(fmtDia(dia))}</div><div class="grade">`; }
     const alvo = soNumero && String(x.n) === String(Number(q));
-    const off = x.pct > 0 ? `<span class="tag off">${esc(x.pct)}% OFF</span>` : "";
-    const vend = x.vendidos ? `<span class="tag quente">${esc(x.vendidos)} vendidos</span>` : "";
     html += `<a class="card${alvo ? " alvo" : ""}" style="animation-delay:${Math.min(i++, 10) * 50}ms" href="${esc(x.link)}" target="_blank" rel="noopener sponsored">
-      <div class="foto"><img src="${esc(x.imagem)}" alt="${esc(x.titulo)}" loading="lazy"><span class="selo"><span><small>nº</small><b>${esc(x.n)}</b></span></span></div>
-      <div class="tit">${esc(x.titulo)}</div>
-      <div class="preco">${esc(x.preco)}</div>
-      <div class="tags">${off}${vend}</div>
-      <span class="btn">Ver na Shopee ${seta}</span></a>`;
+      <div class="mini">${imgHTML(x)}<span class="n">${x.n}</span></div>
+      <h4>${esc(x.titulo)}</h4><div class="p">${esc(x.preco)}</div><div class="v">${esc(vendas(x))}</div></a>`;
   }
   $("#lista").innerHTML = html + "</div>";
   if (soNumero) document.querySelector(".card.alvo")?.scrollIntoView({block:"center"});
 }
+
 fetch("produtos.json?v=" + Date.now()).then(r => r.ok ? r.json() : []).then(j => {
-  itens = j; render();
-}).catch(() => { $("#lista").innerHTML = '<div class="vazio"><b>Não consegui carregar</b><p>Confere a internet e tenta de novo.</p></div>'; });
+  itens = j; destaque(); render();
+}).catch(() => { $("#lista").innerHTML = '<div class="vazio"><b>Não consegui carregar</b>Confere a internet e tenta de novo.</div>'; });
 $("#q").addEventListener("input", render);
 const p = new URLSearchParams(location.search).get("n");
-if (p) $("#q").value = p;
+if (p){ $("#q").value = p; }
 </script>
 </body>
 </html>
-<!-- v3 -->
+<!-- v4 -->
