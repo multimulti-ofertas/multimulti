@@ -191,7 +191,8 @@ def legenda_padrao(item):
         linhas.append(f"⭐ Nota {item['nota']} · {item['vendidos']} vendidos na Shopee")
     else:
         linhas.append(f"🔥 {item['vendidos']} vendidos na Shopee")
-    linhas += ["", f"🛒 Link na bio → procura o produto nº {item['n']}", "",
+    linhas += ["", f"🛒 Link na bio → procura o produto nº {item['n']}",
+               "📩 Ou manda EU QUERO no direct que eu te mando o link!", "",
                "Salva pra não perder e marca aquele amigo que precisa disso 👇", "",
                "Preço sujeito a alteração.", "",
                f"{config.HASHTAGS_FIXAS} {config.HASHTAGS.get(cat, '')}".strip()]
@@ -225,7 +226,7 @@ def com_ia(item):
         '"titulo": nome curto e claro do produto (máx 55 caracteres),\n'
         '"gancho": lista de 2 linhas curtas em tom de conversa, frase normal (não maiúsculas), para abrir o Reels; a 2ª é o preço, ex.: ["Olha esse achado", "por R$ 12,99"] (máx 26 caracteres cada),\n'
         '"legenda": legenda completa com emoji no início, 1 frase de benefício, preço (e % OFF só se for maior que 0), '
-        f'a linha "🛒 Link na bio → produto nº {item["n"]}", um CTA de marcar amigo, '
+        f'a linha "🛒 Link na bio → produto nº {item["n"]}", a linha "📩 Ou manda EU QUERO no direct que eu te mando o link!", um CTA de marcar amigo, '
         '"Preço sujeito a alteração." e no fim as hashtags: '
         f'{config.HASHTAGS_FIXAS} {config.HASHTAGS.get(item["categoria"], "")} + 1 hashtag do produto.'
     )

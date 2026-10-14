@@ -360,8 +360,12 @@ def story(cfg, out):
 
     lb = text_layer("LINK NA BIO", GROSSA2, 50, BRANCO, tracking=0.12)
     st = seta(50)
-    img.alpha_composite(lb, (M, yb + (cn.height - lb.height) // 2))
-    img.alpha_composite(st, (M + lb.width + 26, yb + (cn.height - st.height) // 2))
+    dm = text_layer("ou responde o story que eu te mando o link", TEXTO, 32, CINZA)
+    bloco_h = lb.height + 16 + dm.height
+    yl = yb + (cn.height - bloco_h) // 2
+    img.alpha_composite(lb, (M, yl))
+    img.alpha_composite(st, (M + lb.width + 26, yl + (lb.height - st.height) // 2))
+    img.alpha_composite(dm, (M, yl + lb.height + 16))
     img.alpha_composite(cn, (SW - M - cn.width, yb))
     texto_oferta(img, cfg, M, y0, larg, tam_nome=96, tam_preco=230)
     salvar(img, out)
