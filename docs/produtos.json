@@ -9,7 +9,16 @@
   "link": "https://s.shopee.com.br/113gfBWqLi",
   "imagem": "https://down-br.img.susercontent.com/file/br-11134207-7r98o-mcquyuu4qkn5b5",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "18001985003807009",
+    "em": "2026-10-14T23:11:14.535906"
+   },
+   "fb_story": {
+    "id": "1613558847173308",
+    "em": "2026-10-14T23:11:19.677459"
+   }
+  },
   "preco": "R$ 20,00",
   "preco_curto": "R$ 20,00",
   "pct": 0,
@@ -22,7 +31,8 @@
   ],
   "feed": "media/8/feed.jpg",
   "story": "media/8/story.jpg",
-  "recorte": "media/8/produto.webp"
+  "recorte": "media/8/produto.webp",
+  "stories": 1
  },
  {
   "n": 7,
