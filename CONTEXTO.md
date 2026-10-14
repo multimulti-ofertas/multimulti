@@ -11,7 +11,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 ## Como funciona hoje
 - Robô neste repositório (GitHub Actions), horário de Cuiabá:
   - 07:00 busca 6 ofertas da Shopee do tema do dia, cria arte, story, Reels e legenda, atualiza a vitrine
-  - 12:00 posta 1 feed · 18:00 e 21:00 postam 2 Reels · 08:00, 15:00 e 20:00 postam 2 stories cada (6 por dia)
+  - Rotina (desde 14/out): feed 08:00 e 20:00 · Reels 12:00 e 21:00 · 1 story por hora das 08:00 às 22:00 (19 por dia; limite do Instagram é 50). 8 produtos por dia. Horários em robo/config.py → ROTINA
 - **Sem a API da Shopee (ainda):** o robô lê as planilhas da pasta `ofertas/` (painel de afiliados →
   Oferta de produto → marcar tudo → "Obter Link em Massa" → baixa um .csv). Separa por tema, nunca
   repete produto nem um parecido, e só 1 de cada tipo por dia. A foto vem da página da Shopee.
@@ -25,7 +25,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - **Visual:** vitrine de produto premium no escuro (inspirado num Reels de referência de sites 2026): fundo quase preto, produto recortado flutuando com brilho laranja, nome em maiúsculas condensadas (Barlow Condensed), preço grande laranja, círculo com o número. Vale para feed, story, Reels e vitrine. Código: robo/arte.py, robo/reel.py, docs/index.html
 - Vitrine (link da bio): https://multimulti-ofertas.github.io/multimulti
   Cada post diz "Link na bio → produto nº X".
-- ManyChat (grátis): "comenta EU QUERO" → manda o link no direct. No plano grátis vale para 1 post por automação.
+- ManyChat (grátis), tudo leva para a vitrine: direct com EU QUERO/QUERO/LINK/EUQUERO; resposta a qualquer story; direct com preço/valor/oi/onde etc.; e resposta padrão para qualquer outra mensagem. A antiga "Auto-DM de links dos comentários" continua parada (no grátis só vale para 1 post).
 
 ## Já configurado
 - GitHub Pages ligado (Source: GitHub Actions)
@@ -46,7 +46,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
      - Plano B se demorar: artigo "Saiba Como Obter Link em Massa" na Central de Ajuda
 2. Pegar AppID e Secret da Open API da Shopee e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome)
-3. Depois da Shopee: no ManyChat, religar "Auto-DM de links dos comentários" (está STOPPED) e configurar "Instagram Default Reply" para mandar o link da vitrine no direct
+3. (feito em 14/out) ManyChat configurado. Para mandar o link exato de cada produto no direct, só com ManyChat PRO
 4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO para responder em qualquer post
 
 ## Contas e e-mails
