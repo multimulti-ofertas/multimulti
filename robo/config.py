@@ -49,8 +49,7 @@ PRODUTOS_POR_DIA = 8          # por dia: 2 no feed + 2 em Reels + 4 só nos stor
 STORIES_POR_VEZ = 1           # stories postados a cada horário da rotina
 
 # Chave geral: False = o robô continua montando os produtos e a vitrine, mas não publica nada no Instagram.
-# (Desligada em 14/out: a Meta pediu confirmação da conta de desenvolvedor e bloqueou a API.)
-POSTAR_NO_INSTAGRAM = False
+POSTAR_NO_INSTAGRAM = True
 
 # Rotina diária (horário de Cuiabá). O robô de postagem roda de hora em hora e publica o que estiver
 # marcado para aquela hora. Limite do Instagram: 50 publicações por 24h (aqui são 19 por dia).
