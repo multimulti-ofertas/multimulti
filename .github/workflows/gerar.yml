@@ -8,6 +8,10 @@ on:
         description: "Teste com produtos de mentira (não publica nada)"
         type: boolean
         default: false
+      so_vitrine:
+        description: "Coloca os produtos na vitrine sem postar no Instagram"
+        type: boolean
+        default: false
       previa:
         description: "Prévia com produtos de verdade (gera as artes para baixar, não publica nada)"
         type: boolean
@@ -33,7 +37,7 @@ jobs:
           SHOPEE_APP_ID: ${{ secrets.SHOPEEAPPID || secrets.SHOPEE_APP_ID }}
           SHOPEE_SECRET: ${{ secrets.SHOPEESECRET || secrets.SHOPEE_SECRET }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python -m robo.gerar ${{ inputs.demo && '--demo' || '' }}
+        run: python -m robo.gerar ${{ inputs.demo && '--demo' || '' }} ${{ inputs.so_vitrine && '--so-vitrine' || '' }}
       - name: Baixar resultado do teste
         if: ${{ inputs.demo || inputs.previa }}
         uses: actions/upload-artifact@v4

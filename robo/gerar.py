@@ -236,6 +236,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--demo", action="store_true")
     ap.add_argument("--data", help="AAAA-MM-DD (padrão: hoje em Cuiabá)")
+    ap.add_argument("--so-vitrine", action="store_true",
+                    help="coloca os produtos na vitrine mas não agenda nada no Instagram")
     args = ap.parse_args()
 
     usa_api = bool(os.environ.get("SHOPEE_APP_ID"))
@@ -294,6 +296,9 @@ def main():
         reel(cfg, str(pasta / "reel.mp4"))
         it["reel"] = f"media/{it['n']}/reel.mp4"
 
+    if args.so_vitrine:  # marca como já tratados para o robô de postagem pular
+        for it in novos:
+            it["postado"] = {k: {"pulado": "so-vitrine"} for k in ("feed", "reel", "story")}
     lista = novos[::-1] + lista
     limpar_midia(lista, d)
     salvar(lista)
