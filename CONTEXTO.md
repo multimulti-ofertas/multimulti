@@ -18,7 +18,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Uma planilha de 83 produtos rendeu 40 produtos novos (~7 dias). Quando acabar, baixar outra.
   Quando a API sair, ela passa a ter prioridade sozinha.
 - Prévia sem publicar: Actions → Gerar ofertas do dia → marcar "previa" (resultado no ramo `previa`)
-- **Visual:** estilo do DESIGN.md do mydealz (github.com/VoltAgent/awesome-design-md): cartão de oferta branco sobre cinza-claro, cantos arredondados, botões em pílula, laranja da marca, fonte Nunito Sans, tom de conversa ("achei pra você"). Código em robo/arte.py e robo/reel.py
+- **Visual:** vitrine de produto premium no escuro (inspirado num Reels de referência de sites 2026): fundo quase preto, produto recortado flutuando com brilho laranja, nome em maiúsculas condensadas (Barlow Condensed), preço grande laranja, círculo com o número. Vale para feed, story, Reels e vitrine. Código: robo/arte.py, robo/reel.py, docs/index.html
 - Vitrine (link da bio): https://multimulti-ofertas.github.io/multimulti
   Cada post diz "Link na bio → produto nº X".
 - ManyChat (grátis): "comenta EU QUERO" → manda o link no direct. No plano grátis vale para 1 post por automação.
@@ -43,8 +43,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 2. Pegar AppID e Secret da Open API da Shopee e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome)
 3. Depois da Shopee: no ManyChat, religar "Auto-DM de links dos comentários" (está STOPPED) e configurar "Instagram Default Reply" para mandar o link da vitrine no direct
-4. Refazer a vitrine (docs/index.html) no mesmo visual das artes (ainda está no visual "futurista" antigo)
-5. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO para responder em qualquer post
+4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO para responder em qualquer post
 
 ## Contas e e-mails
 - GitHub: usuário multimulti-ofertas, entra com o Google ([e-mail removido], que está cheio); reserva: Outlook
