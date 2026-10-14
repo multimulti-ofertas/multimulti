@@ -1,7 +1,7 @@
 """Gera as ofertas do dia: busca na Shopee, escolhe, cria artes/Reels/legendas e atualiza a vitrine.
 
 Uso:
-  python -m robo.gerar            # de verdade (precisa SHOPEE_APP_ID / SHOPEE_SECRET)
+  python -m robo.gerar            # de verdade (API da Shopee, ou planilhas da pasta ofertas/)
   python -m robo.gerar --demo     # teste com produtos de mentira, sem internet
 """
 import argparse
@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 
 from PIL import Image, ImageDraw
 
-from . import config, texto
+from . import config, planilha, texto
 from .arte import feed, story
 from .reel import reel
 
@@ -55,12 +55,14 @@ def palavras_do_dia(cat, rnd):
 def pontuar(p):
     pct = float(p.get("priceDiscountRate") or 0)
     vendas = float(p.get("sales") or 0)
-    nota = float(p.get("ratingStar") or 0)
+    nota = float(p.get("ratingStar") or 4.5)  # planilha não traz nota
     comissao = float(p.get("commissionRate") or 0)
     return pct + 10 * math.log10(vendas + 1) + (nota - 4.5) * 20 + comissao * 50
 
 
 def passa_filtro(p):
+    if p.get("fonte") == "planilha":  # planilha não traz nota nem desconto
+        return int(p.get("sales") or 0) >= config.VENDAS_MINIMAS and bool(p.get("priceMin"))
     return (float(p.get("ratingStar") or 0) >= config.NOTA_MINIMA
             and int(p.get("sales") or 0) >= config.VENDAS_MINIMAS
             and float(p.get("priceDiscountRate") or 0) >= config.DESCONTO_MINIMO
@@ -68,22 +70,26 @@ def passa_filtro(p):
 
 
 def ja_usados(lista, d):
-    limite = d - dt.timedelta(days=config.NAO_REPETIR_DIAS)
-    return {str(x["itemId"]) for x in lista if dt.date.fromisoformat(x["data"]) >= limite}
+    """Ids e nomes já postados. NAO_REPETIR_DIAS = None: nunca repete."""
+    dias = config.NAO_REPETIR_DIAS
+    limite = d - dt.timedelta(days=dias) if dias else dt.date.min
+    antigos = [x for x in lista if dt.date.fromisoformat(x["data"]) >= limite]
+    return {str(x["itemId"]) for x in antigos}, [planilha.chave_parecida(x["nome"]) for x in antigos]
 
 
-def escolher(candidatos, usados, qtd):
-    vistos, nomes, esc = set(), set(), []
+def escolher(candidatos, usados):
+    """Lista ordenada (melhores primeiro), sem repetidos nem produtos parecidos."""
+    ids, nomes = usados
+    ids, nomes = set(ids), list(nomes)
+    esc = []
     for cat, p in sorted(candidatos, key=lambda cp: pontuar(cp[1]), reverse=True):
         iid = str(p["itemId"])
-        chave_nome = texto.titulo_curto(p["productName"])[:22].lower()
-        if iid in usados or iid in vistos or chave_nome in nomes or not passa_filtro(p):
+        chave = planilha.chave_parecida(p["productName"])
+        if iid in ids or not passa_filtro(p) or any(planilha.parecido(chave, n) for n in nomes):
             continue
-        vistos.add(iid)
-        nomes.add(chave_nome)
+        ids.add(iid)
+        nomes.append(chave)
         esc.append((cat, p))
-        if len(esc) >= qtd:
-            break
     return esc
 
 
@@ -150,11 +156,30 @@ def candidatos_demo(cat_dia, rnd):
 
 # ---------- montagem ----------
 
+class SemFoto(Exception):
+    pass
+
+
+def extra_de(item):
+    if item["nota"]:
+        return f"⭐ {item['nota']} · {item['vendidos']} vendidos"
+    return f"{item['vendidos']} vendidos"
+
+
 def montar(cat, p, n, d, papel, demo):
     pasta = MIDIA / str(n)
     pasta.mkdir(parents=True, exist_ok=True)
     foto = pasta / "foto.jpg"
-    baixar_imagem(p["imageUrl"], foto)
+    url_foto = p.get("imageUrl") or planilha.foto_da_pagina(p)
+    if not url_foto:
+        shutil.rmtree(pasta, ignore_errors=True)
+        raise SemFoto(p["productName"])
+    p["imageUrl"] = url_foto
+    try:
+        baixar_imagem(url_foto, foto)
+    except Exception:
+        shutil.rmtree(pasta, ignore_errors=True)
+        raise SemFoto(p["productName"])
 
     link = p.get("offerLink")
     if not link and not demo:
@@ -171,7 +196,7 @@ def montar(cat, p, n, d, papel, demo):
     texto.com_ia(item)
 
     selo = f"{item['pct']}% OFF" if item["pct"] >= 15 else config.SELO.get(cat, "ACHADO").upper()
-    extra = f"⭐ {item['nota']} · {item['vendidos']} vendidos"
+    extra = extra_de(item)
     cfg = {
         "photo": str(foto), "category": config.SELO.get(cat, "Achado"), "badge": selo,
         "title": item["titulo"], "new": item["preco_curto"], "extra": extra.replace("⭐ ", "Nota "),
@@ -203,8 +228,9 @@ def main():
     ap.add_argument("--data", help="AAAA-MM-DD (padrão: hoje em Cuiabá)")
     args = ap.parse_args()
 
-    if not args.demo and not os.environ.get("SHOPEE_APP_ID"):
-        print("Shopee ainda não configurada (falta SHOPEE_APP_ID). Pulando hoje.")
+    usa_api = bool(os.environ.get("SHOPEE_APP_ID"))
+    if not args.demo and not usa_api and not list(planilha.PASTA.glob("*.csv")):
+        print("Sem API da Shopee e sem planilha na pasta ofertas/. Pulando hoje.")
         return
     d = dt.date.fromisoformat(args.data) if args.data else hoje()
     lista = carregar()
@@ -215,26 +241,46 @@ def main():
     rnd = random.Random(d.toordinal())
     cat = categoria_do_dia(d)
     print(f"Dia {d} → tema: {cat}")
-    cands = candidatos_demo(cat, rnd) if args.demo else candidatos_shopee(cat, rnd)
-    print(f"{len(cands)} candidatos encontrados")
-    escolhidos = escolher(cands, ja_usados(lista, d), config.PRODUTOS_POR_DIA)
+    usados = ja_usados(lista, d)
+    if args.demo:
+        escolhidos = escolher(candidatos_demo(cat, rnd), usados)
+    elif usa_api:
+        escolhidos = escolher(candidatos_shopee(cat, rnd), usados)
+    else:
+        do_tema, outros = planilha.candidatos(cat)
+        print(f"Planilha: {len(do_tema)} produtos do tema, {len(outros)} de outros temas")
+        escolhidos = escolher(do_tema, usados)
+        ids = ({str(p["itemId"]) for _, p in escolhidos} | usados[0],
+               usados[1] + [planilha.chave_parecida(p["productName"]) for _, p in escolhidos])
+        escolhidos += escolher(outros, ids)  # completa com outros temas se faltar
+    print(f"{len(escolhidos)} candidatos novos (sem repetidos)")
     if not escolhidos:
-        raise SystemExit("Nenhum produto passou nos filtros hoje. Veja robo/config.py.")
+        raise SystemExit("Acabaram os produtos novos. Baixe outra planilha no painel da Shopee.")
 
     prox = max([x["n"] for x in lista], default=0) + 1
     papeis = ["feed", "reel", "reel"] + [None] * 10  # 1 feed + 2 Reels por dia
-    if len(escolhidos) == 1:
-        papeis = ["feed"]
-    novos = []
-    for i, (c, p) in enumerate(escolhidos):
-        item = montar(c, p, prox + i, d, papeis[i], args.demo)
+    novos, tipos_dia = [], set()
+    for c, p in escolhidos:
+        if len(novos) >= config.PRODUTOS_POR_DIA:
+            break
+        tp = planilha.tipo(p["productName"])
+        if tp and tp in tipos_dia:  # variedade: 1 de cada tipo por dia
+            continue
+        try:
+            item = montar(c, p, prox + len(novos), d, papeis[len(novos)], args.demo)
+        except SemFoto as e:
+            print(f"  [pulado, sem foto] {e}")
+            continue
         novos.append(item)
-        print(f"  nº {item['n']}: {item['titulo']} ({item['preco']}, {item['pct']}% OFF) [{item['agenda'] or 'vitrine'}]")
-    if len(escolhidos) == 1:  # só 1 produto: ele também vira Reels
+        tipos_dia.add(tp)
+        print(f"  nº {item['n']}: {item['titulo']} ({item['preco']}) [{item['agenda'] or 'vitrine'}]")
+    if not novos:
+        raise SystemExit("Nenhum produto com foto. Confira ofertas/imagens.json.")
+    if len(novos) == 1:  # só 1 produto: ele também vira Reels
         it = novos[0]
         pasta = MIDIA / str(it["n"])
-        cfg = {"photo": str(pasta / "foto.jpg"), "hook": it["gancho"], "badge": f"{it['pct']}% OFF",
-               "new": it["preco_curto"], "extra": f"NOTA {it['nota']} · {it['vendidos']} VENDIDOS", "numero": it["n"]}
+        cfg = {"photo": str(pasta / "foto.jpg"), "hook": it["gancho"], "badge": f"{it['pct']}% OFF" if it["pct"] >= 15 else config.SELO.get(it["categoria"], "ACHADO").upper(),
+               "new": it["preco_curto"], "extra": extra_de(it).replace("⭐ ", "NOTA ").upper(), "numero": it["n"]}
         reel(cfg, str(pasta / "reel.mp4"))
         it["reel"] = f"media/{it['n']}/reel.mp4"
 

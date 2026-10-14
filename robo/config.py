@@ -47,7 +47,7 @@ VENDAS_MINIMAS = 100
 DESCONTO_MINIMO = 10          # % OFF
 PRODUTOS_POR_DIA = 6          # quantos entram na vitrine por dia (1 feed + 2 Reels + o resto só nos stories)
 STORIES_POR_VEZ = 2           # stories postados a cada horário (08h, 15h e 20h = 6 por dia)
-NAO_REPETIR_DIAS = 30         # não repete o mesmo produto antes disso
+NAO_REPETIR_DIAS = None       # None = nunca repete o mesmo produto (nem um muito parecido)
 GUARDAR_MIDIA_DIAS = 10       # apaga vídeos/imagens antigos para o repositório não crescer demais
 
 # Endereços

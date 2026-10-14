@@ -149,7 +149,7 @@ function render(){
       <div class="foto"><img src="${esc(x.imagem)}" alt="" loading="lazy"><span class="num">Nº ${x.n}</span></div>
       <div class="info">
         <div class="tit">${esc(x.titulo)}</div>
-        <div class="meta"><b>★ ${esc(x.nota)}</b> · ${esc(x.vendidos)} vendidos</div>
+        <div class="meta">${x.nota ? `<b>★ ${esc(x.nota)}</b> · ` : ""}${esc(x.vendidos)} vendidos</div>
         <div class="preco"><b>${esc(x.preco)}</b>${x.pct > 0 ? `<span class="off">-${x.pct}%</span>` : ""}</div>
         <div class="btn">Ver na Shopee <i>→</i></div>
       </div></a>`;

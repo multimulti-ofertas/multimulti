@@ -62,7 +62,10 @@ def legenda_padrao(item):
         linhas.append(f"🔥 {item['pct']}% OFF → por {item['preco']}")
     else:
         linhas.append(f"💰 Por {item['preco']}")
-    linhas.append(f"⭐ Nota {item['nota']} · {item['vendidos']} vendidos na Shopee")
+    if item["nota"]:
+        linhas.append(f"⭐ Nota {item['nota']} · {item['vendidos']} vendidos na Shopee")
+    else:
+        linhas.append(f"🔥 {item['vendidos']} vendidos na Shopee")
     linhas += ["", f"🛒 Link na bio → produto nº {item['n']}", "",
                "Marca aquele amigo que precisa disso 👇", "",
                "Preço sujeito a alteração.", "",
@@ -90,12 +93,12 @@ def com_ia(item):
         "brasileiro, tom direto e animado, sem exagero nem promessas falsas). Use SÓ os dados abaixo; "
         "não invente características, medidas ou preços.\n\n"
         f"Produto (nome na Shopee): {item['nome']}\n"
-        f"Preço: {item['preco']} | Desconto: {item['pct']}% | Nota: {item['nota']} | Vendidos: {item['vendidos']}\n"
+        f"Preço: {item['preco']} | Desconto: {item['pct']}% | Nota: {item['nota'] or 'não informada'} | Vendidos: {item['vendidos']}\n"
         f"Número na vitrine: {item['n']}\n\n"
         "Responda APENAS um JSON com as chaves:\n"
         '"titulo": nome curto e claro do produto (máx 55 caracteres),\n'
         '"gancho": lista de 3 linhas curtas em MAIÚSCULAS para abrir o Reels (máx 16 caracteres cada),\n'
-        '"legenda": legenda completa com emoji no início, 1 frase de benefício, preço e % OFF, '
+        '"legenda": legenda completa com emoji no início, 1 frase de benefício, preço (e % OFF só se for maior que 0), '
         f'a linha "🛒 Link na bio → produto nº {item["n"]}", um CTA de marcar amigo, '
         '"Preço sujeito a alteração." e no fim as hashtags: '
         f'{config.HASHTAGS_FIXAS} {config.HASHTAGS.get(item["categoria"], "")} + 1 hashtag do produto.'
