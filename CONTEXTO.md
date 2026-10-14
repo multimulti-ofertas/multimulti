@@ -83,6 +83,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   pages_manage_posts + business_management; a Página está no portfólio MultiMulti.Ofertas).
 - Sem FBPAGETOKEN o Facebook é só pulado com aviso. "Postar" manual tem a opção `so_facebook`.
 - Marcações em produtos.json: fb_feed, fb_reel, fb_story.
+- Rotina tolera atraso do GitHub (hora = agora+10min) e recupera feed/Reels pulados no mesmo dia.
+- Workflows fixados em ubuntu-24.04 (GitHub muda o ubuntu-latest para 26 em 19/out).
 - Cuidado: disparar 2 "Postar" seguidos — um agendado chegando cancela o manual que estava na fila.
 
 ## Instagram / Meta
@@ -93,6 +95,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   (meados de dezembro).** Próximo passo sugerido: criar o GH_PAT (guiar o João, sem colar no chat).
 
 ## Falta
+0. Bio do Instagram diz "Comenta EU QUERO no post" mas o que funciona é DIRECT (auto-DM de comentário está parado).
+   Trocar por "📩 Manda EU QUERO no direct que eu te mando o link". (revisão de 14/out)
 1. Shopee: cadastro de afiliado APROVADO em 13/out; informações fiscais em "Avaliação Pendente";
    pedido "Quero ativar a API" enviado em 13/out (resposta no Outlook, até 3 dias úteis).
    Depois: pegar AppID e Secret em "Abrir API" e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
