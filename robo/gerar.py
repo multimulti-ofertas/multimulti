@@ -188,7 +188,7 @@ def montar(cat, p, n, d, papel, demo):
 
     item = {
         "n": n, "data": d.isoformat(), "categoria": cat, "itemId": str(p["itemId"]),
-        "nome": p["productName"], "titulo": texto.frase(texto.titulo_curto(p["productName"])),
+        "nome": p["productName"], "titulo": texto.nome_curto(p["productName"]),
         "link": link, "imagem": p["imageUrl"] if not demo else f"media/{n}/foto.jpg",
         "agenda": papel, "postado": None,
     }
