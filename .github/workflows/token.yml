@@ -21,6 +21,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          if [ -z "$GH_TOKEN" ]; then echo "Sem GH_PAT: renove o token manualmente a cada 60 dias."; exit 0; fi
+          if [ -z "$GH_TOKEN" ]; then echo "::warning::Sem GH_PAT: o token do Instagram NÃO foi salvo (vence em 60 dias)."; exit 0; fi
           gh secret set IGTOKEN --repo "${{ github.repository }}" < novo_token.txt
           rm -f novo_token.txt
+          echo "::notice::Token do Instagram renovado e salvo no secret IGTOKEN."

@@ -6,4 +6,4 @@ if __name__ == "__main__":
     print(f"::add-mask::{novo}")
     with open("novo_token.txt", "w") as f:
         f.write(novo)
-    print(f"Token renovado. Expira em {int(expira or 0) // 86400} dias.")
+    print(f"::notice::Token renovado. Expira em {int(expira or 0) // 86400} dias.")

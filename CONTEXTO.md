@@ -94,15 +94,14 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - 14/out: a Meta bloqueou a conta de desenvolvedor por "atividade incomum" (API access blocked). O João
   confirmou a conta no **perfil pessoal** (não como a página) e o acesso voltou no mesmo dia.
   Se acontecer de novo: POSTAR_NO_INSTAGRAM = False, João confirma a conta, rodar "Checar Instagram".
-- Token: secret IGTOKEN. **Sem o secret GH_PAT ele não se renova sozinho: vence ~60 dias depois de gerado
-  (meados de dezembro).** Próximo passo sugerido: criar o GH_PAT (guiar o João, sem colar no chat).
+- Token: secret IGTOKEN, renovado toda segunda pelo token.yml usando o secret GH_PAT (criado 14/out: fine-grained
+  "robo-renovar-instagram", sem vencimento, só repo multimulti, só Secrets read/write). Testado em 14/out.
 
 ## Falta
 1. Shopee: cadastro de afiliado APROVADO em 13/out; informações fiscais em "Avaliação Pendente";
    pedido "Quero ativar a API" enviado em 13/out (resposta no Outlook, até 3 dias úteis).
    Depois: pegar AppID e Secret em "Abrir API" e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome).
-2. Criar o secret GH_PAT para o token do Instagram se renovar sozinho.
 3. Testar o ManyChat com outra conta.
 4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
 5. Atenção ao tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias).
