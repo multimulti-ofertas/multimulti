@@ -182,7 +182,12 @@
   "link": "https://s.shopee.com.br/1qcneiTfe0",
   "imagem": "https://down-br.img.susercontent.com/file/promo-dim-0100ea8271b26542cb90ba84be90cd935c4b",
   "agenda": "feed",
-  "postado": null,
+  "postado": {
+   "feed": {
+    "id": "18076720022446185",
+    "em": "2026-10-14T14:46:57.990923"
+   }
+  },
   "preco": "R$ 48,47",
   "preco_curto": "R$ 48,47",
   "pct": 0,
