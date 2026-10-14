@@ -98,8 +98,6 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   (meados de dezembro).** Próximo passo sugerido: criar o GH_PAT (guiar o João, sem colar no chat).
 
 ## Falta
-0. Bio do Instagram diz "Comenta EU QUERO no post" mas o que funciona é DIRECT (auto-DM de comentário está parado).
-   Trocar por "📩 Manda EU QUERO no direct que eu te mando o link". (revisão de 14/out)
 1. Shopee: cadastro de afiliado APROVADO em 13/out; informações fiscais em "Avaliação Pendente";
    pedido "Quero ativar a API" enviado em 13/out (resposta no Outlook, até 3 dias úteis).
    Depois: pegar AppID e Secret em "Abrir API" e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
@@ -110,6 +108,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 5. Atenção ao tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias).
 
 ## Já configurado
+- Bio do Instagram (14/out): "📩 Manda EU QUERO no direct" + link da vitrine em Links (conferido)
 - GitHub Pages ligado (Source: GitHub Actions); link da vitrine na bio do Instagram
 - Secret `IGTOKEN` (app da Meta "MultiMulti Robo", modo desenvolvimento, empresa MultiMulti.Ofertas)
 - O ID da conta do Instagram é descoberto pelo próprio token (não precisa de IGUSERID)
