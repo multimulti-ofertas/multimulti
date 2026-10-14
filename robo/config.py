@@ -17,6 +17,17 @@ TEMA_EM = {
     "2026-10-15": "top",   # quinta: estilo estava fraco na planilha → mistura os mais vendidos
 }
 
+# Nomes escritos à mão quando o nome automático fica estranho (itemId → nome curto)
+NOMES = {
+    "16280432664": "Borracha protetora de porta 10m",
+    "57201143767": "Cola para tênis e sapatos",
+    "22394340005": "Tinta para couro e sapato",
+    "21098003892": "Porta-óculos para carro",
+    "23294438614": "Maleta para furadeira",
+    "19798290134": "Cadarço chato para tênis",
+    "20098534951": "Protetor de porta (Honda)",
+}
+
 # Nome que aparece no selo da arte
 SELO = {"carro": "Carro", "ferramentas": "Ferramentas", "cuidado": "Cuidado", "estilo": "Estilo"}
 EMOJI = {"carro": "🚗", "ferramentas": "🔧", "cuidado": "🧔", "estilo": "👟"}
