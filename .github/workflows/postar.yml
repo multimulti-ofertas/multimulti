@@ -1,4 +1,4 @@
-name: Postar no Instagram
+name: Postar no Instagram e Facebook
 on:
   schedule:
     # Rotina: roda de hora em hora, uns minutos antes da hora cheia (o GitHub costuma atrasar),
@@ -13,6 +13,11 @@ on:
         default: auto
         type: choice
         options: [auto, feed, reel, story]
+      so_facebook:
+        description: "Só Facebook (põe na Página o que já saiu no Instagram hoje)"
+        required: false
+        default: false
+        type: boolean
 permissions:
   contents: write
 concurrency:
@@ -30,13 +35,14 @@ jobs:
         env:
           IG_USER_ID: ${{ secrets.IGUSERID || secrets.IG_USER_ID }}
           IG_TOKEN: ${{ secrets.IGTOKEN || secrets.IG_TOKEN }}
+          FB_PAGE_TOKEN: ${{ secrets.FBPAGETOKEN }}
         run: |
-          python -m robo.postar --tipo "${{ inputs.tipo || 'auto' }}"
+          python -m robo.postar --tipo "${{ inputs.tipo || 'auto' }}" ${{ inputs.so_facebook && '--so-facebook' || '' }}
       - name: Marcar como postado
         if: always()   # mesmo se algo falhar, salva o que já foi publicado (evita post repetido)
         run: |
           git config user.name "robo-multimulti"
           git config user.email "robo@users.noreply.github.com"
           git add docs/produtos.json
-          git diff --cached --quiet || git commit -m "Postado no Instagram"
+          git diff --cached --quiet || git commit -m "Postado no Instagram/Facebook"
           git pull --rebase && git push

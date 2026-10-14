@@ -1,15 +1,20 @@
-"""Publica no Instagram o que está agendado para agora.
+"""Publica no Instagram e na Página do Facebook o que está agendado para agora.
 
   python -m robo.postar --tipo auto    # rotina: olha a hora em Cuiabá e segue config.ROTINA
   python -m robo.postar --tipo feed    # um post do feed (2 por dia)
   python -m robo.postar --tipo reel    # um Reels (2 por dia)
   python -m robo.postar --tipo story   # um story; os produtos do dia vão se revezando
   python -m robo.postar --tipo auto --teste   # só mostra o que faria, sem postar
+  python -m robo.postar --tipo feed --so-facebook   # só põe na Página o que já saiu no Instagram hoje
+
+Facebook: espelha o Instagram. Feed e Reels que já saíram no Instagram hoje e ainda não estão na Página
+são postados lá (assim ela se atualiza sozinha se ficar para trás). Story vai junto com o do Instagram.
+Sem o secret FBPAGETOKEN, o Facebook é pulado com um aviso.
 """
 import argparse
 import datetime as dt
 
-from . import config, instagram
+from . import config, facebook, instagram
 from .gerar import carregar, salvar, hoje
 
 
@@ -45,6 +50,8 @@ def main():
     ap.add_argument("--tipo", choices=["auto", "feed", "reel", "story"], required=True)
     ap.add_argument("--teste", action="store_true")
     ap.add_argument("--hora", type=int, help="só para teste: finge que é essa hora (0-23)")
+    ap.add_argument("--so-facebook", action="store_true",
+                    help="não posta no Instagram; só põe na Página o que já saiu no Instagram hoje")
     args = ap.parse_args()
 
     if not config.POSTAR_NO_INSTAGRAM and not args.teste:
@@ -59,19 +66,24 @@ def main():
         tipos = [args.tipo]
 
     tentou = erros = 0
+    fb_ok = facebook.configurado()
+    if not fb_ok:
+        print("::warning::Facebook pulado: falta o secret FBPAGETOKEN.")
     for tipo in tipos:
         lista = carregar()
-        alvos = pendentes(lista, hoje().isoformat(), tipo)
-        if not alvos:
-            print(f"Nada para postar ({tipo}) agora.")
-            continue
+        d = hoje().isoformat()
+        feitos_agora = []
+        alvos = [] if args.so_facebook else pendentes(lista, d, tipo)
+        if not alvos and not args.so_facebook:
+            print(f"Nada para postar no Instagram ({tipo}) agora.")
         for alvo in alvos:
             tentou += 1
             url = f"{config.PAGES_URL}/{alvo[tipo]}"
-            print(f"Postando {tipo} do nº {alvo['n']}: {alvo['titulo']}\n{url}")
+            print(f"[instagram] {tipo} do nº {alvo['n']}: {alvo['titulo']}\n{url}")
             if tipo != "story":
                 print(f"---\n{alvo['legenda']}")
             if args.teste:
+                feitos_agora.append(alvo)
                 continue
             try:
                 if tipo == "feed":
@@ -81,8 +93,8 @@ def main():
                 else:
                     mid = instagram.postar_story(url)
             except Exception as e:  # qualquer falha: registra e segue (o que já saiu fica marcado)
-                print(f"[erro] {tipo} do nº {alvo['n']}: {e}")
-                print(f"::error::{tipo} do nº {alvo['n']} falhou: {str(e)[:300]}")
+                print(f"[erro] instagram {tipo} do nº {alvo['n']}: {e}")
+                print(f"::error::Instagram: {tipo} do nº {alvo['n']} falhou: {str(e)[:300]}")
                 erros += 1
                 continue
             agora = dt.datetime.utcnow().isoformat()
@@ -90,10 +102,45 @@ def main():
             if tipo == "story":
                 alvo["stories"] = int(alvo.get("stories") or 0) + 1
             salvar(lista)
-            print(f"Publicado! id {mid}")
+            feitos_agora.append(alvo)
+            print(f"Publicado no Instagram! id {mid}")
+
+        # Página do Facebook: espelha o que saiu no Instagram
+        if not fb_ok and not args.teste:
+            continue
+        chave = f"fb_{tipo}"
+        if tipo == "story":
+            fb_alvos = feitos_agora
+        else:
+            fb_alvos = [x for x in lista if x["data"] == d and not so_vitrine(x) and x.get(tipo)
+                        and (ja_postado(x, tipo) or x in feitos_agora) and not ja_postado(x, chave)]
+            fb_alvos.sort(key=lambda x: x["n"])
+        for alvo in fb_alvos:
+            tentou += 1
+            url = f"{config.PAGES_URL}/{alvo[tipo]}"
+            print(f"[facebook] {tipo} do nº {alvo['n']}: {alvo['titulo']}")
+            if args.teste:
+                if tipo != "story":
+                    print(f"---\n{facebook.legenda(alvo['legenda'], alvo['n'])}")
+                continue
+            try:
+                if tipo == "feed":
+                    mid = facebook.postar_imagem(url, facebook.legenda(alvo["legenda"], alvo["n"]))
+                elif tipo == "reel":
+                    mid = facebook.postar_reels(url, facebook.legenda(alvo["legenda"], alvo["n"]))
+                else:
+                    mid = facebook.postar_story(url)
+            except Exception as e:
+                print(f"[erro] facebook {tipo} do nº {alvo['n']}: {e}")
+                print(f"::error::Facebook: {tipo} do nº {alvo['n']} falhou: {str(e)[:300]}")
+                erros += 1
+                continue
+            agora = dt.datetime.utcnow().isoformat()
+            alvo["postado"] = dict(alvo.get("postado") or {}, **{chave: {"id": mid, "em": agora}})
+            salvar(lista)
+            print(f"Publicado no Facebook! id {mid}")
     if tentou and erros == tentou and not args.teste:
         raise SystemExit("Nenhuma publicação deu certo.")
-
 
 if __name__ == "__main__":
     main()

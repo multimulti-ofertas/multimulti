@@ -12,4 +12,5 @@ jobs:
       - env:
           IG_USER_ID: ${{ secrets.IGUSERID || secrets.IG_USER_ID }}
           IG_TOKEN: ${{ secrets.IGTOKEN || secrets.IG_TOKEN }}
+          FB_PAGE_TOKEN: ${{ secrets.FBPAGETOKEN }}
         run: python -m robo.checar

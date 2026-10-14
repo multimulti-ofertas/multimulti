@@ -31,3 +31,15 @@ if lim.status_code == 200:
 else:
     aviso("error", f"Sem permissão de publicar ({lim.status_code}): {lim.text[:300]}")
     raise SystemExit(1)
+
+# Página do Facebook
+from . import facebook
+if not facebook.configurado():
+    aviso("warning", "Facebook: falta o secret FBPAGETOKEN (a Página não recebe posts).")
+else:
+    try:
+        nome, pid = facebook.checar()
+        aviso("notice", f"Facebook OK: Página {nome} | id {pid}")
+    except Exception as e:
+        aviso("error", f"Facebook recusou o token: {str(e)[:300]}")
+        raise SystemExit(1)
