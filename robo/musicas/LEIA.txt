@@ -1,5 +1,15 @@
-Trechos de 10s usados nos Reels (já cortados no "drop", com fade no fim e volume ajustado).
+Trechos de 10s usados nos Reels (cortados no "drop", fade no fim, volume -14 LUFS).
 Origem: Coleção de Sons da Meta (facebook.com/sound/collection), uso liberado no Facebook/Instagram.
-- game-over.m4a      → "Game Over" (Lightbox Music), a partir de 0:15
-- talk-about-it.m4a  → "Talk About It" (cloud cover), a partir de 0:37
-Só os trechos ficam aqui (não as músicas inteiras). Para adicionar outra: mesmo formato, 10s, .m4a.
+Só os trechos ficam aqui, nunca a música inteira. robo/musica.py alterna pelo nº do produto.
+- cataclysm.m4a       Cataclysm (anonymous audio)          a partir de 0:44
+- cracker-jacks.m4a   Cracker Jacks (Summer Islands)       0:37
+- desce-desce.m4a     Desce Desce (cloud cover)            0:37
+- flashbang.m4a       Flashbang (cloud cover)              0:49
+- game-over.m4a       Game Over (Lightbox Music)           0:15
+- golden-baile.m4a    Golden Baile (anonymous audio)       0:30
+- mad-maxx.m4a        Mad Maxx (cloud cover)               0:41
+- stop-motion.m4a     Stop Motion (LAVLO)                  0:39
+- talk-about-it.m4a   Talk About It (cloud cover)          0:37
+- traka.m4a           Traka (Instrumental) (Tony Dark Eyes) 1:18
+- tropa-do-phonk.m4a  Tropa Do Phonk (cloud cover)         0:21
+Para tirar uma: apague o arquivo. Para pôr outra: mesmo formato (10s, .m4a).

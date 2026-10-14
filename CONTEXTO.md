@@ -44,7 +44,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   círculo com o número, "LINK NA BIO →". Story também diz "ou responde o story que eu te mando o link".
 - Reels: cena contínua de 10s (chamada → produto flutuando → preço → "Link na bio nº X").
 - Música nos Reels (desde 14/out): trechos de 10s em robo/musicas/*.m4a (Coleção de Sons da Meta), já cortados
-  no drop, com fade e volume -14 LUFS. robo/musica.py alterna pelo nº do produto. Hoje: Game Over e Talk About It.
+  no drop, com fade e volume -14 LUFS. robo/musica.py alterna pelo nº do produto. 11 músicas (lista em robo/musicas/LEIA.txt).
   Só os trechos ficam no repositório (público), nunca a música inteira. O João NÃO quer as músicas salvas no computador dele.
   Músicas virais do Instagram: impossível pela API (e com direito autoral derruba o Reels) — não insistir.
 - Legendas em tom de conversa ("Achei esse e lembrei de você…") + "📩 Ou manda EU QUERO no direct…".
