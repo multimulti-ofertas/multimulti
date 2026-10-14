@@ -113,8 +113,9 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Verificação em duas etapas no GitHub; acesso do Claude limitado a este repositório
 
 ## Contas e e-mails
-- GitHub: usuário multimulti-ofertas, entra com o Google ([e-mail removido], que está cheio); reserva: Outlook
-- ManyChat, Meta for Developers e Shopee Afiliados: e-mail do Outlook ([e-mail removido])
+- GitHub: usuário multimulti-ofertas, entra com o Google (Gmail pessoal do João, que está cheio); reserva: Outlook
+- ManyChat, Meta for Developers e Shopee Afiliados: e-mail do Outlook do João
+- Este repositório é PÚBLICO (exigência do GitHub Pages grátis): nunca escrever e-mails, senhas, tokens ou dados pessoais aqui.
 
 ## Preferências do João
 - Explicações bem leigas, um passo de cada vez, em português

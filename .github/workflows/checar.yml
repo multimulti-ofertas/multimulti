@@ -1,6 +1,8 @@
 name: Checar Instagram
 on:
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   checar:
     runs-on: ubuntu-24.04
