@@ -1,6 +1,6 @@
 # Contexto do projeto MultiMulti (para continuar em outra conversa)
 
-Atualizado em 14/out/2026. Ao abrir uma conversa nova com o Claude, diga:
+Atualizado em 14/out/2026, 10:50 (Cuiabá). Ao abrir uma conversa nova com o Claude, diga:
 "Leia o CONTEXTO.md do repositório multimulti-ofertas/multimulti e vamos continuar."
 
 ## O que é
@@ -8,57 +8,101 @@ Perfil de achadinhos masculinos da Shopee (carro, ferramentas, cuidado, estilo) 
 Instagram @multimulti.ofertas · Página do Facebook "MultiMulti Ofertas".
 Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip separado.
 
-## Como funciona hoje
-- Robô neste repositório (GitHub Actions), horário de Cuiabá:
-  - 07:00 busca 6 ofertas da Shopee do tema do dia, cria arte, story, Reels e legenda, atualiza a vitrine
-  - Rotina (desde 14/out): feed 08:00 e 20:00 · Reels 12:00 e 21:00 · 1 story por hora das 08:00 às 22:00 (19 por dia; limite do Instagram é 50). 8 produtos por dia. Horários em robo/config.py → ROTINA
-- **Sem a API da Shopee (ainda):** o robô lê as planilhas da pasta `ofertas/` (painel de afiliados →
-  Oferta de produto → marcar tudo → "Obter Link em Massa" → baixa um .csv). Separa por tema, nunca
-  repete produto nem um parecido, e só 1 de cada tipo por dia. A foto vem da página da Shopee.
-  Uma planilha de 83 produtos rendeu 40 produtos novos (~7 dias). Quando acabar, baixar outra.
-  Quando a API sair, ela passa a ter prioridade sozinha.
-- Só vitrine (produtos aparecem no site, nada vai pro Instagram): Actions → Gerar ofertas do dia → marcar "so_vitrine"
-  (usado em 14/out: os 6 de hoje estão só na vitrine)
-- Nomes dos produtos: `texto.nome_curto` (curtos, com acento, sem palavras de anúncio)
-- Vitrine v5: futurista e interativa (busca fixa no topo, carrossel automático, produto 3D, filtros, partículas)
-- Prévia sem publicar: Actions → Gerar ofertas do dia → marcar "previa" (resultado no ramo `previa`)
-- **Visual:** vitrine de produto premium no escuro (inspirado num Reels de referência de sites 2026): fundo quase preto, produto recortado flutuando com brilho laranja, nome em maiúsculas condensadas (Barlow Condensed), preço grande laranja, círculo com o número. Vale para feed, story, Reels e vitrine. Código: robo/arte.py, robo/reel.py, docs/index.html
-- Vitrine (link da bio): https://multimulti-ofertas.github.io/multimulti
-  Cada post diz "Link na bio → produto nº X".
-- ManyChat (grátis), tudo leva para a vitrine: direct com EU QUERO/QUERO/LINK/EUQUERO; resposta a qualquer story; direct com preço/valor/oi/onde etc.; e resposta padrão para qualquer outra mensagem. A antiga "Auto-DM de links dos comentários" continua parada (no grátis só vale para 1 post).
+## Situação agora (14/out)
+- **Rotina LIGADA e postando no Instagram.** 1º post do feed saiu em 14/out às 10:46 (nº 1, Máquina de barbear 3 em 1).
+- Produtos de 14/out: nº 1 a 8 (feed: 1 e 2 · Reels: 3 e 4 · stories: todos). Planilha atual rende ~5 dias (até ~19/out).
+- Esperando a Shopee liberar a Open API (prazo até sex 16/out, resposta no **Outlook**).
 
-## Já configurado
-- GitHub Pages ligado (Source: GitHub Actions)
-- Secret `IGTOKEN` (token do Instagram, app da Meta "MultiMulti Robo", modo teste)
-- O ID da conta do Instagram é descoberto pelo próprio token (não precisa de IGUSERID)
-- Verificação em duas etapas no GitHub; acesso do Claude limitado a este repositório
+## Como funciona (robô = GitHub Actions deste repositório, horário de Cuiabá)
+| Horário | O que acontece | Onde mudar |
+|---|---|---|
+| 06:25 | "Gerar ofertas do dia": escolhe 8 produtos, monta feed/story/Reels/legendas, atualiza a vitrine | .github/workflows/gerar.yml |
+| 08:00 e 20:00 | Post no feed (+ story) | robo/config.py → ROTINA |
+| 12:00 e 21:00 | Reels (+ story) | robo/config.py → ROTINA |
+| 08:00 a 22:00 | 1 story por hora (os 8 produtos se revezam) | robo/config.py → ROTINA |
+| Segunda 06:00 | Renova o token do Instagram (só salva se existir o secret GH_PAT) | token.yml |
+- "Postar no Instagram" roda de hora em hora (xx:50) e publica o que a tabela ROTINA manda para aquela hora.
+  São 19 publicações/dia; limite da conta é 100 por 24h.
+- Chave geral: `POSTAR_NO_INSTAGRAM` em robo/config.py (False = só monta produtos e vitrine, não posta).
+- Se uma publicação falhar no meio, o que já saiu fica marcado (não repete post).
+- Temas: segunda carro · terça ferramentas · quarta cuidado · quinta estilo · sexta a domingo top (mistura).
+  Se a planilha não tem o tema do dia, completa com outros temas.
 
-- Link da vitrine já está na bio do Instagram
-- Vitrine com visual futurista (v2) e aviso "ofertas chegam em breve" quando vazia
+## De onde vêm os produtos
+- **Sem a API da Shopee (ainda):** planilhas .csv na pasta `ofertas/`. Como baixar: painel de afiliados →
+  Oferta → Oferta de produto → buscar → "Selecione todos os produtos nesta página" → "Obter Link em Massa".
+  Mandar o arquivo para o Claude colocar em `ofertas/`.
+- Regras: nunca repete produto (nem um muito parecido de outra loja), só 1 de cada tipo por dia,
+  tira palmilhas/lentes/feminino. A foto é pega na página da Shopee; o produto é recortado do fundo branco.
+- Nomes curtos e limpos: `texto.nome_curto` (acentos, sem "profissional/original/códigos").
+- Quando acabar a planilha, o "Gerar ofertas do dia" falha com "Acabaram os produtos novos".
+- Quando a API sair (secrets SHOPEEAPPID e SHOPEESECRET), ela passa a ter prioridade sozinha.
 
-## Instagram
-- 14/out: a Meta bloqueou a conta de desenvolvedor por "atividade incomum"; o João confirmou a conta (no perfil
-  pessoal, não como a página) e o acesso voltou no mesmo dia. Se acontecer de novo: robo/config.py →
-  POSTAR_NO_INSTAGRAM = False, e rodar "Checar Instagram" depois de confirmar.
-- Sem o secret GH_PAT, o token do Instagram não se renova sozinho: vence ~60 dias depois de gerado (meados de dez).
+## Visual (feed, story, Reels e vitrine)
+- Inspirado num Reels de referência ("Websites in 2026"): fundo quase preto, produto recortado flutuando e
+  inclinado com brilho laranja, nome em maiúsculas condensadas (Barlow Condensed), preço grande laranja,
+  círculo com o número, "LINK NA BIO →". Story também diz "ou responde o story que eu te mando o link".
+- Reels: cena contínua de 10s (chamada → produto flutuando → preço → "Link na bio nº X").
+- Legendas em tom de conversa ("Achei esse e lembrei de você…") + "📩 Ou manda EU QUERO no direct…".
+- Código: robo/arte.py, robo/reel.py, robo/texto.py. Fontes em robo/fontes e docs/fontes (licença OFL).
+- Histórico de tentativas de visual em 14/out (não usar de novo): cartaz laranja/preto da taste-skill,
+  cartão branco estilo mydealz, fundo laranja. O João escolheu o escuro com produto flutuando.
+
+## Vitrine (link da bio)
+- https://multimulti-ofertas.github.io/multimulti (v5, docs/index.html)
+- Futurista e interativa: busca fixa no topo ("Viu no Insta? Digita o nº do post"), carrossel automático dos
+  achados do dia, produto 3D que inclina com o mouse/celular, grade em perspectiva, partículas, filtros por categoria.
+- Link direto para um produto: ...multimulti/?n=4
+
+## ManyChat (plano grátis) — tudo manda o botão "Abrir a vitrine 🔥"
+1. "Direct: EU QUERO → vitrine": direct com EU QUERO, QUERO, LINK ou EUQUERO
+2. Resposta a qualquer story
+3. Direct com preço, valor, quanto, comprar, onde, oi, olá, bom dia, boa tarde, boa noite, produto, achado
+4. Resposta padrão (Configurações → Instagram) para qualquer outra mensagem
+- A antiga "Auto-DM de links dos comentários" continua parada (no grátis só vale para 1 post).
+- Mandar o link exato de cada produto no direct só com ManyChat PRO (~US$ 15/mês).
+- Falta testar: alguém de outra conta mandar "EU QUERO" no direct.
+
+## Ferramentas para o Claude
+- Actions → "Gerar ofertas do dia" com opções: `previa` (monta e guarda no ramo `previa`, não publica),
+  `so_vitrine` (só vitrine, nada no Instagram), `demo` (produtos de mentira).
+- Actions → "Checar Instagram": testa o token e mostra o resultado nos avisos (annotations) da execução.
+- Actions → "Postar no Instagram" manual: tipo auto/feed/reel/story.
+- O Claude dispara workflows pela API REST (gh api .../dispatches) e lê avisos em check-runs/<job>/annotations.
+  Registros (logs) e artefatos não abrem pelo proxy: por isso a prévia vai para o ramo `previa`.
+
+## Instagram / Meta
+- 14/out: a Meta bloqueou a conta de desenvolvedor por "atividade incomum" (API access blocked). O João
+  confirmou a conta no **perfil pessoal** (não como a página) e o acesso voltou no mesmo dia.
+  Se acontecer de novo: POSTAR_NO_INSTAGRAM = False, João confirma a conta, rodar "Checar Instagram".
+- Token: secret IGTOKEN. **Sem o secret GH_PAT ele não se renova sozinho: vence ~60 dias depois de gerado
+  (meados de dezembro).** Próximo passo sugerido: criar o GH_PAT (guiar o João, sem colar no chat).
 
 ## Falta
-1. ~~Shopee aprovar o cadastro de afiliado~~ APROVADO em 13/out. Instagram multimulti.ofertas verificado no painel
-   (categorias: Automóveis, Roupas/Sapatos Masculinos, Acessórios de Moda, Cupons, Peças para Veículos)
-   - Informações fiscais enviadas em 13/out, "Avaliação Pendente"
-   - "Abrir API" ainda sem acesso (AppID/Senha vazios, botão Aplicar apagado): esperar a aprovação fiscal
-     - Pedido "Quero ativar a API" enviado em 13/out pela Central de Ajuda do Afiliado
-       (help.shopee.com.br → Acesso rápido → E-mail). Prazo: até 3 dias úteis, resposta no Outlook
-     - Plano B se demorar: artigo "Saiba Como Obter Link em Massa" na Central de Ajuda
-2. Pegar AppID e Secret da Open API da Shopee e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
-   (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome)
-3. (feito em 14/out) ManyChat configurado. Para mandar o link exato de cada produto no direct, só com ManyChat PRO
-4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO para responder em qualquer post
+1. Shopee: cadastro de afiliado APROVADO em 13/out; informações fiscais em "Avaliação Pendente";
+   pedido "Quero ativar a API" enviado em 13/out (resposta no Outlook, até 3 dias úteis).
+   Depois: pegar AppID e Secret em "Abrir API" e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
+   (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome).
+2. Criar o secret GH_PAT para o token do Instagram se renovar sozinho.
+3. Testar o ManyChat com outra conta.
+4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
+5. Atenção ao tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias).
+
+## Já configurado
+- GitHub Pages ligado (Source: GitHub Actions); link da vitrine na bio do Instagram
+- Secret `IGTOKEN` (app da Meta "MultiMulti Robo", modo desenvolvimento, empresa MultiMulti.Ofertas)
+- O ID da conta do Instagram é descoberto pelo próprio token (não precisa de IGUSERID)
+- Verificação em duas etapas no GitHub; acesso do Claude limitado a este repositório
 
 ## Contas e e-mails
 - GitHub: usuário multimulti-ofertas, entra com o Google ([e-mail removido], que está cheio); reserva: Outlook
 - ManyChat, Meta for Developers e Shopee Afiliados: e-mail do Outlook ([e-mail removido])
 
-## Preferências
+## Preferências do João
 - Explicações bem leigas, um passo de cada vez, em português
 - Nunca colar tokens/senhas no chat
+- Não criar coisas que ele não pediu (ex.: o DESIGN.md próprio, que foi removido); quando pedir para usar algo
+  de fora (skill, DESIGN.md), usar o que ele indicou
+- Produtos nunca repetidos
+- Antes de ligar algo novo: revisar tudo e testar primeiro
+- Ao chegar no limite da sessão, abrir conversa nova com a frase do topo deste arquivo
