@@ -265,6 +265,17 @@ def main():
         ids = ({str(p["itemId"]) for _, p in escolhidos} | usados[0],
                usados[1] + [planilha.chave_parecida(p["productName"]) for _, p in escolhidos])
         escolhidos += escolher(outros, ids)  # completa com outros temas se faltar
+    if cat == "top":  # dia "top": alterna os temas (o melhor de cada um, depois o 2º de cada um...)
+        filas = {}
+        for c, p in escolhidos:
+            filas.setdefault(c, []).append((c, p))
+        ordem = [c for c in ("carro", "ferramentas", "cuidado", "estilo") if c in filas]
+        misturados = []
+        while any(filas[c] for c in ordem):
+            for c in ordem:
+                if filas[c]:
+                    misturados.append(filas[c].pop(0))
+        escolhidos = misturados
     print(f"{len(escolhidos)} candidatos novos (sem repetidos)")
     if not escolhidos:
         raise SystemExit("Acabaram os produtos novos. Baixe outra planilha no painel da Shopee.")
