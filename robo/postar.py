@@ -47,13 +47,17 @@ def hora_da_rotina(agora=None):
     return (agora + dt.timedelta(minutes=10)).hour
 
 
+def rotina():
+    return config.ROTINA_ANTIGA if hoje().isoformat() <= "2026-10-14" else config.ROTINA
+
+
 def atrasados(lista, d, h, tipos):
     """Feed/Reels de horários anteriores de hoje que não saíram (o GitHub às vezes pula uma execução)."""
     extra = []
     for tipo in ("feed", "reel"):
         if tipo in tipos:
             continue
-        previstos = sum(1 for hh, ts in config.ROTINA.items() if hh <= h and tipo in ts)
+        previstos = sum(1 for hh, ts in rotina().items() if hh <= h and tipo in ts)
         feitos = sum(1 for x in lista if x["data"] == d and ja_postado(x, tipo))
         if feitos < previstos and pendentes(lista, d, tipo):
             print(f"Recuperando {tipo} atrasado ({feitos} de {previstos} previstos até agora).")
@@ -76,7 +80,7 @@ def main():
 
     if args.tipo == "auto":
         h = args.hora if args.hora is not None else hora_da_rotina()
-        tipos = list(config.ROTINA.get(h, []))
+        tipos = list(rotina().get(h, []))
         tipos = atrasados(carregar(), hoje().isoformat(), h, tipos) + tipos
         print(f"Rotina das {h:02d}h: {', '.join(tipos) or 'nada'}")
     else:

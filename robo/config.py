@@ -69,11 +69,16 @@ POSTAR_NO_INSTAGRAM = True
 
 # Rotina diária (horário de Cuiabá). O robô de postagem roda de hora em hora e publica o que estiver
 # marcado para aquela hora. Limite do Instagram: 50 publicações por 24h (aqui são 19 por dia).
-ROTINA = {h: ["story"] for h in range(8, 23)}   # 1 story por hora, das 08h às 22h (15 por dia)
-ROTINA[8] = ["feed", "story"]    # 1º post do feed
-ROTINA[20] = ["feed", "story"]   # 2º post do feed (12h depois)
-ROTINA[12] = ["reel", "story"]   # 1º Reels
-ROTINA[21] = ["reel", "story"]   # 2º Reels
+# Horários em CUIABÁ (Brasília = +1h). Escolhidos em 14/out pelos estudos de 2026 (almoço e noite).
+ROTINA = {h: ["story"] for h in range(9, 21)}   # 1 story por hora: 09h–20h Cuiabá = 10h–21h Brasília (12 por dia)
+ROTINA[11] = ["feed", "story"]   # feed: 11h Cuiabá = 12h Brasília
+ROTINA[19] = ["feed", "story"]   # feed: 19h Cuiabá = 20h Brasília
+ROTINA[12] = ["reel", "story"]   # Reels: 12h Cuiabá = 13h Brasília
+ROTINA[20] = ["reel", "story"]   # Reels: 20h Cuiabá = 21h Brasília
+
+# Rotina antiga, só para terminar o dia 14/out sem juntar dois posts no mesmo horário (pode apagar depois)
+ROTINA_ANTIGA = {h: ["story"] for h in range(8, 23)}
+ROTINA_ANTIGA.update({8: ["feed", "story"], 20: ["feed", "story"], 12: ["reel", "story"], 21: ["reel", "story"]})
 NAO_REPETIR_DIAS = None       # None = nunca repete o mesmo produto (nem um muito parecido)
 GUARDAR_MIDIA_DIAS = 10       # apaga vídeos/imagens antigos para o repositório não crescer demais
 

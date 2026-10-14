@@ -20,12 +20,14 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 | Horário | O que acontece | Onde mudar |
 |---|---|---|
 | 06:25 | "Gerar ofertas do dia": escolhe 8 produtos, monta feed/story/Reels/legendas, atualiza a vitrine | .github/workflows/gerar.yml |
-| 08:00 e 20:00 | Post no feed (+ story) | robo/config.py → ROTINA |
-| 12:00 e 21:00 | Reels (+ story) | robo/config.py → ROTINA |
-| 08:00 a 22:00 | 1 story por hora (os 8 produtos se revezam) | robo/config.py → ROTINA |
+| 11:00 e 19:00 (12h e 20h Brasília) | Post no feed (+ story) | robo/config.py → ROTINA |
+| 12:00 e 20:00 (13h e 21h Brasília) | Reels (+ story) | robo/config.py → ROTINA |
+| 09:00 a 20:00 (10h–21h Brasília) | 1 story por hora, 12 por dia (os 8 produtos se revezam) | robo/config.py → ROTINA |
 | Segunda 06:00 | Renova o token do Instagram (só salva se existir o secret GH_PAT) | token.yml |
 - "Postar no Instagram" roda de hora em hora (xx:50) e publica o que a tabela ROTINA manda para aquela hora.
-  São 19 publicações/dia; limite da conta é 100 por 24h.
+  São 16 publicações/dia no Instagram (+ as mesmas no Facebook); limite do Instagram é 100 por 24h.
+  Horários trocados em 14/out (valem a partir de 15/out) com base nos estudos de 2026 (almoço e noite);
+  rever pelos Insights do Instagram depois de ~2 semanas. ROTINA_ANTIGA em config.py só serviu para 14/out.
 - Chave geral: `POSTAR_NO_INSTAGRAM` em robo/config.py (False = só monta produtos e vitrine, não posta).
 - Se uma publicação falhar no meio, o que já saiu fica marcado (não repete post). Falha do Instagram tenta de novo 1x após 30s.
 - Temas: segunda carro · terça ferramentas · quarta cuidado · quinta estilo · sexta a domingo top (mistura).
