@@ -8,6 +8,10 @@ on:
         description: "Teste com produtos de mentira (não publica nada)"
         type: boolean
         default: false
+      previa:
+        description: "Prévia com produtos de verdade (gera as artes para baixar, não publica nada)"
+        type: boolean
+        default: false
 permissions:
   contents: write
   pages: write
@@ -31,11 +35,11 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python -m robo.gerar ${{ inputs.demo && '--demo' || '' }}
       - name: Baixar resultado do teste
-        if: ${{ inputs.demo }}
+        if: ${{ inputs.demo || inputs.previa }}
         uses: actions/upload-artifact@v4
-        with: { name: teste-demo, path: docs/media }
+        with: { name: "${{ inputs.previa && 'previa' || 'teste-demo' }}", path: "docs/media\ndocs/produtos.json" }
       - name: Salvar no repositório
-        if: ${{ !inputs.demo }}
+        if: ${{ !inputs.demo && !inputs.previa }}
         run: |
           git config user.name "robo-multimulti"
           git config user.email "robo@users.noreply.github.com"
@@ -44,5 +48,5 @@ jobs:
           git pull --rebase && git push
   vitrine:
     needs: gerar
-    if: ${{ !inputs.demo }}
+    if: ${{ !inputs.demo && !inputs.previa }}
     uses: ./.github/workflows/pages.yml
