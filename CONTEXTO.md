@@ -72,8 +72,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 
 ## Proteção (14/out)
 - "Vigia diário" (vigia.yml, 07:10): confere tokens IG/Página, vitrine, ofertas do dia, posts de ontem, robôs que falharam
-  e estoque de produtos. Se algo quebrou, a execução FALHA e o GitHub manda e-mail (o e-mail principal da conta precisa
-  estar funcionando — o Gmail está cheio).
+  e estoque de produtos. Se algo quebrou, a execução FALHA e o GitHub manda e-mail para o e-mail principal (Gmail novo).
 - Já ligados no repositório: varredura de segredos + bloqueio de envio com segredo (push protection).
 - Workflows com permissão mínima; arquivo do token apagado sempre; e-mails tirados do CONTEXTO (repo é público).
 
@@ -124,11 +123,11 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - ManyChat, Meta for Developers e contato do Shopee Afiliados: e-mail do Outlook do João.
   ATENÇÃO: o João NÃO sabe a senha do Outlook e ele não tem recuperação (só abre no app do celular).
   Plano (14/out): migrar tudo para um Gmail novo só do negócio (criado 14/out, com 2FA + celular + códigos;
-  endereço com o João, não escrever aqui). Feito: login da Shopee (estava no Gmail pessoal) → Gmail novo; GitHub
-  e-mail principal → Outlook (trocar para o Gmail novo depois). Conta Meta (Facebook + Instagram): contato =
+  endereço com o João, não escrever aqui). Feito (14/out): Shopee → Gmail novo; GitHub e-mail principal → Gmail novo
+  (avisos do Vigia chegam lá); ManyChat → e-mail Gmail novo + login pelo Google. Conta Meta (Facebook + Instagram): contato =
   Gmail novo + celular, Outlook removido, 2FA ligado (14/out). developers.facebook.com ainda mostrava
   "No contact email set" (conferir se atualiza sozinho).
-  Falta trocar para o Gmail novo: ManyChat, GitHub, e o contato do Shopee Afiliados
+  Falta: contato do Shopee Afiliados → Gmail novo
   (SÓ depois que chegar a resposta da API no Outlook).
 - Senhas: gerenciador do Google (Google pessoal tem 2FA completo). Nunca em arquivo .txt.
 - Este repositório é PÚBLICO (exigência do GitHub Pages grátis): nunca escrever e-mails, senhas, tokens ou dados pessoais aqui.
