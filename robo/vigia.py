@@ -92,15 +92,19 @@ def falhas():
         return
     desde = (dt.datetime.utcnow() - dt.timedelta(hours=24)).strftime("%Y-%m-%dT%H:%M:%SZ")
     r = requests.get(f"https://api.github.com/repos/{repo}/actions/runs",
-                     params={"created": f">={desde}", "status": "failure", "per_page": 50},
+                     params={"created": f">={desde}", "per_page": 100},
                      headers={"Authorization": f"Bearer {tok}"}, timeout=30)
     if r.status_code != 200:
         return atencao(f"Não consegui ler as execuções ({r.status_code}).")
-    nomes = sorted({x["name"] for x in r.json().get("workflow_runs", []) if x["name"] != "Vigia diário"})
+    ultima = {}  # só conta como problema se a execução MAIS RECENTE de cada robô falhou
+    for x in sorted(r.json().get("workflow_runs", []), key=lambda x: x["created_at"]):
+        if x["name"] != "Vigia diário" and x["status"] == "completed":
+            ultima[x["name"]] = x["conclusion"]
+    nomes = sorted(n for n, c in ultima.items() if c == "failure")
     if nomes:
-        erro(f"Robôs que falharam nas últimas 24h: {', '.join(nomes)}")
+        erro(f"Robôs com falha na última execução: {', '.join(nomes)}")
     else:
-        ok("Nenhum robô falhou nas últimas 24h")
+        ok("Todos os robôs funcionaram na última execução")
 
 
 def estoque():
