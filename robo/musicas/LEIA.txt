@@ -1,0 +1,5 @@
+Trechos de 10s usados nos Reels (já cortados no "drop", com fade no fim e volume ajustado).
+Origem: Coleção de Sons da Meta (facebook.com/sound/collection), uso liberado no Facebook/Instagram.
+- game-over.m4a      → "Game Over" (Lightbox Music), a partir de 0:15
+- talk-about-it.m4a  → "Talk About It" (cloud cover), a partir de 0:37
+Só os trechos ficam aqui (não as músicas inteiras). Para adicionar outra: mesmo formato, 10s, .m4a.

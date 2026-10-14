@@ -9,11 +9,14 @@ O conteúdo fica entre y=220 e y=1450 e longe da borda direita (botões do Insta
 
 reel(cfg, saida.mp4)
 cfg: photo, hook (lista de 2 linhas), title, new, numero, extra, badge, category
+Música: robo/musica.py escolhe um trecho de 10s pelo número (sem música na pasta = mudo).
 """
 import math
 import subprocess
 
 from PIL import Image
+
+from . import musica
 
 from .arte import (BRANCO, CINZA, FUNDO, GROSSA, GROSSA2, LARANJA, LARANJA_CLARO, TEXTO, bloco,
                    brilho, chao, circulo_numero, fit_layer, linha_vendas, marca, numero_de,
@@ -73,11 +76,12 @@ def reel(cfg, out, segundos=10.0):
     piso = chao(W, H, W // 2, cy_prod + prod.height // 2 + 40, int(prod.width * 0.8), 80)
 
     n = int(segundos * FPS)
+    som = musica.escolher(numero)
+    audio = ["-i", str(som)] if som else ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100"]
     proc = subprocess.Popen(
         ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
-         "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
-         "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
-         "-shortest", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "medium",
+         "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", *audio,
+         "-map", "0:v", "-map", "1:a", "-t", str(segundos), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "medium",
          "-crf", "20", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", out],
         stdin=subprocess.PIPE)
 
