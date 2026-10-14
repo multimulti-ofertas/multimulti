@@ -37,7 +37,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Mandar o arquivo para o Claude colocar em `ofertas/`.
 - Regras: nunca repete produto (nem um muito parecido de outra loja), só 1 de cada tipo por dia,
   tira palmilhas/lentes/feminino. A foto é pega na página da Shopee; o produto é recortado do fundo branco.
-- Nomes curtos e limpos: `texto.nome_curto` (acentos, sem "profissional/original/códigos").
+- Nomes curtos e limpos: `texto.nome_curto` (acentos, sem "profissional/original/códigos"). Nome estranho → corrigir à mão em config.NOMES.
+- Tema trocado numa data específica: config.TEMA_EM (ex.: 15/out virou "top" porque estilo estava fraco). Dia "top" alterna os temas.
 - Quando acabar a planilha, o "Gerar ofertas do dia" falha com "Acabaram os produtos novos".
 - Quando a API sair (secrets SHOPEEAPPID e SHOPEESECRET), ela passa a ter prioridade sozinha.
 
