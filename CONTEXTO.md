@@ -17,6 +17,10 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   repete produto nem um parecido, e só 1 de cada tipo por dia. A foto vem da página da Shopee.
   Uma planilha de 83 produtos rendeu 40 produtos novos (~7 dias). Quando acabar, baixar outra.
   Quando a API sair, ela passa a ter prioridade sozinha.
+- Só vitrine (produtos aparecem no site, nada vai pro Instagram): Actions → Gerar ofertas do dia → marcar "so_vitrine"
+  (usado em 14/out: os 6 de hoje estão só na vitrine)
+- Nomes dos produtos: `texto.nome_curto` (curtos, com acento, sem palavras de anúncio)
+- Vitrine v5: futurista e interativa (busca fixa no topo, carrossel automático, produto 3D, filtros, partículas)
 - Prévia sem publicar: Actions → Gerar ofertas do dia → marcar "previa" (resultado no ramo `previa`)
 - **Visual:** vitrine de produto premium no escuro (inspirado num Reels de referência de sites 2026): fundo quase preto, produto recortado flutuando com brilho laranja, nome em maiúsculas condensadas (Barlow Condensed), preço grande laranja, círculo com o número. Vale para feed, story, Reels e vitrine. Código: robo/arte.py, robo/reel.py, docs/index.html
 - Vitrine (link da bio): https://multimulti-ofertas.github.io/multimulti
