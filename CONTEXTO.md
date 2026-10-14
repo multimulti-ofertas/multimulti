@@ -125,8 +125,10 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   ATENÇÃO: o João NÃO sabe a senha do Outlook e ele não tem recuperação (só abre no app do celular).
   Plano (14/out): migrar tudo para um Gmail novo só do negócio (criado 14/out, com 2FA + celular + códigos;
   endereço com o João, não escrever aqui). Feito: login da Shopee (estava no Gmail pessoal) → Gmail novo; GitHub
-  e-mail principal → Outlook (trocar para o Gmail novo depois).
-  Falta trocar para o Gmail novo: Facebook pessoal/Meta, ManyChat, GitHub, e o contato do Shopee Afiliados
+  e-mail principal → Outlook (trocar para o Gmail novo depois). Conta Meta (Facebook + Instagram): contato =
+  Gmail novo + celular, Outlook removido, 2FA ligado (14/out). developers.facebook.com ainda mostrava
+  "No contact email set" (conferir se atualiza sozinho).
+  Falta trocar para o Gmail novo: ManyChat, GitHub, e o contato do Shopee Afiliados
   (SÓ depois que chegar a resposta da API no Outlook).
 - Senhas: gerenciador do Google (Google pessoal tem 2FA completo). Nunca em arquivo .txt.
 - Este repositório é PÚBLICO (exigência do GitHub Pages grátis): nunca escrever e-mails, senhas, tokens ou dados pessoais aqui.
