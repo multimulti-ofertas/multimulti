@@ -59,7 +59,9 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   cartão branco estilo mydealz, fundo laranja. O João escolheu o escuro com produto flutuando.
 
 ## Vitrine (link da bio)
-- https://multimulti-ofertas.github.io/multimulti (v5, docs/index.html)
+- https://multimulti-ofertas.github.io/multimulti (v6, docs/index.html)
+- v6 (14/out): "modo leve" no navegador do Instagram/Facebook e em celular — sem partículas, sem 3D, sem blur, animações só
+  no slide visível, foto local em vez da da Shopee. Motivo: no Instagram a página travava ao trocar de produto, recarregava e ficava preta.
 - Futurista e interativa: busca fixa no topo ("Digita o nº do post", encurtado para caber no celular), carrossel automático dos
   achados do dia, produto 3D que inclina com o mouse/celular, grade em perspectiva, partículas, filtros por categoria.
 - Link direto para um produto: ...multimulti/?n=4

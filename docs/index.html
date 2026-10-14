@@ -26,12 +26,13 @@
   body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background:radial-gradient(600px circle at var(--mx) var(--my),rgba(255,107,26,.10),transparent 60%)}
   #particulas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.7}
+  .leve #particulas{display:none}
   a{color:inherit}
   .caps{font-family:var(--cond);font-weight:700;letter-spacing:.16em;text-transform:uppercase}
 
   /* ===== barra fixa com a pesquisa ===== */
-  .barra{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    background:rgba(7,7,10,.72);border-bottom:1px solid rgba(255,255,255,.06)}
+  .barra{position:sticky;top:0;z-index:20;background:rgba(7,7,10,.95);border-bottom:1px solid rgba(255,255,255,.06)}
+  @media (hover:hover) and (min-width:900px){html:not(.leve) .barra{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(7,7,10,.72)}}
   .barra .in{max-width:1180px;margin:0 auto;padding:12px 16px;display:grid;grid-template-columns:auto 1fr;gap:10px 18px;align-items:center}
   .marca{font-family:var(--cond);font-weight:900;font-size:24px;letter-spacing:.08em;text-decoration:none;white-space:nowrap}
   .marca span{color:var(--laranja)}
@@ -68,20 +69,27 @@
     background-image:linear-gradient(rgba(255,107,26,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,26,.5) 1px,transparent 1px);
     background-size:60px 60px;transform:perspective(420px) rotateX(64deg);transform-origin:center top;
     -webkit-mask-image:linear-gradient(to bottom,transparent,#000 30%,transparent 95%);mask-image:linear-gradient(to bottom,transparent,#000 30%,transparent 95%);
-    animation:anda 3s linear infinite;opacity:.55}
+    opacity:.55}
+  .slide.ativo::after{animation:anda 3s linear infinite}
+  .leve .slide::after{animation:none!important}
   @keyframes anda{to{background-position:0 60px}}
   .palco{display:grid;place-items:center;min-height:280px;position:relative;perspective:900px}
-  .palco .obj{transform-style:preserve-3d;transition:transform .25s ease-out;will-change:transform}
-  .palco img{display:block;max-width:min(80vw,520px);max-height:44svh;object-fit:contain;rotate:-7deg;
-    filter:drop-shadow(0 40px 40px rgba(0,0,0,.6)) drop-shadow(0 0 30px rgba(255,107,26,.25));animation:flutua 5s ease-in-out infinite}
+  .palco .obj{transition:transform .25s ease-out}
+  html:not(.leve) .slide.ativo .obj{transform-style:preserve-3d;will-change:transform}
+  .palco img{display:block;max-width:min(78vw,520px);max-height:38svh;object-fit:contain;rotate:-7deg;
+}
+  .slide.ativo .palco img{filter:drop-shadow(0 30px 30px rgba(0,0,0,.55));animation:flutua 5s ease-in-out infinite}
+  .leve .slide.ativo .palco img{filter:none}
   .palco img.quadro{border-radius:22px;background:#fff;rotate:-3deg;max-width:min(70vw,420px)}
   .palco::after{content:"";position:absolute;bottom:3%;left:50%;width:50%;height:26px;transform:translateX(-50%);
-    background:rgba(255,107,26,.5);filter:blur(22px);border-radius:50%;z-index:-1}
+    background:radial-gradient(closest-side,rgba(255,107,26,.5),transparent);border-radius:50%;z-index:-1}
   /* anel girando atrás do produto */
   .anel{position:absolute;width:min(70vw,460px);aspect-ratio:1;border-radius:50%;z-index:-1;
     background:conic-gradient(from 0deg,transparent 0 70%,rgba(255,107,26,.9) 85%,transparent 100%);
     -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1px));mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1px));
-    animation:gira 6s linear infinite;opacity:.8}
+    opacity:.8;display:none}
+  .slide.ativo .anel{display:block;animation:gira 6s linear infinite}
+  .leve .slide.ativo .anel{animation:none}
   @keyframes gira{to{rotate:1turn}}
   @keyframes flutua{0%,100%{translate:0 0}50%{translate:0 -12px}}
 
@@ -98,7 +106,8 @@
   .acoes{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:12px}
   .btn{position:relative;display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 28px;border-radius:999px;background:var(--laranja);
     color:#0a0a0c;text-decoration:none;white-space:nowrap;font-family:var(--cond);font-weight:900;font-size:21px;letter-spacing:.08em;text-transform:uppercase;
-    box-shadow:0 0 0 0 rgba(255,107,26,.6);animation:pulso 2.6s infinite;transition:transform .18s,background .18s}
+    box-shadow:0 0 0 0 rgba(255,107,26,.6);transition:transform .18s,background .18s}
+  html:not(.leve) .slide.ativo .btn{animation:pulso 2.6s infinite}
   @keyframes pulso{70%{box-shadow:0 0 0 14px rgba(255,107,26,0)}100%{box-shadow:0 0 0 0 rgba(255,107,26,0)}}
   .btn:hover{background:var(--laranja-claro)}
   .btn:active{transform:scale(.97)}
@@ -106,7 +115,8 @@
   .btn:hover svg{transform:translateX(4px)}
   .num{flex:none;position:relative;width:78px;height:78px;border-radius:50%;display:grid;place-items:center;text-align:center;line-height:1}
   .num::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,107,26,.35)}
-  .num::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:3px solid transparent;border-top-color:var(--laranja);border-right-color:var(--laranja);animation:gira 2.4s linear infinite}
+  .num::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:3px solid transparent;border-top-color:var(--laranja);border-right-color:var(--laranja)}
+  html:not(.leve) .slide.ativo .num::after{animation:gira 2.4s linear infinite}
   .num small{display:block;font-family:var(--cond);font-weight:700;font-size:12px;color:var(--cinza);letter-spacing:.12em}
   .num b{font-family:var(--cond);font-weight:900;font-size:32px}
 
@@ -122,6 +132,12 @@
   .pontos button{width:8px;height:8px;border-radius:999px;border:0;padding:0;background:var(--cinza-escuro);cursor:pointer;transition:width .25s,background .25s}
   .pontos button[aria-current="true"]{width:26px;background:var(--laranja);box-shadow:0 0 8px var(--laranja)}
 
+  /* celular: o produto ganha espaço próprio e não fica cortado em cima nem cobre o texto */
+  @media (max-width:899px){
+    .slide{min-height:0}
+    .palco{min-height:min(40svh,340px);margin-bottom:8px}
+    .palco img{max-height:min(36svh,300px)}
+  }
   @media (min-width:900px){
     .slide{grid-template-rows:none;grid-template-columns:1fr 1fr;align-items:center;padding:60px 64px 100px;column-gap:40px}
     .slide::before{background:radial-gradient(closest-side at 70% 48%,rgba(255,150,80,.55),rgba(255,107,26,.3) 40%,rgba(255,107,26,.07) 74%,transparent 100%)}
@@ -148,8 +164,8 @@
   @media (min-width:1040px){.grade{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
   .card{--rx:0deg;--ry:0deg;position:relative;display:flex;flex-direction:column;text-decoration:none;border-radius:18px;padding:12px;
-    background:var(--sup);isolation:isolate;transform:perspective(800px) rotateX(var(--rx)) rotateY(var(--ry));
-    transition:transform .2s ease-out;animation:entra .5s ease both}
+    background:var(--sup);isolation:isolate;animation:entra .5s ease both}
+  @media (hover:hover){html:not(.leve) .card{transform:perspective(800px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .2s ease-out}}
   /* borda de luz que gira no hover */
   .card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;z-index:-1;
     background:conic-gradient(from var(--ang,0deg),rgba(255,255,255,.08),rgba(255,107,26,.95),rgba(255,255,255,.08) 40%);
@@ -161,7 +177,8 @@
   @keyframes entra{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
   .mini{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;display:grid;place-items:center;
     background:radial-gradient(closest-side,rgba(255,107,26,.45),rgba(255,107,26,.07) 70%,transparent),var(--sup2)}
-  .mini img{width:84%;height:84%;object-fit:contain;rotate:-6deg;filter:drop-shadow(0 14px 14px rgba(0,0,0,.55));transition:scale .25s}
+  .mini img{width:84%;height:84%;object-fit:contain;rotate:-6deg;transition:scale .25s}
+  @media (hover:hover){html:not(.leve) .mini img{filter:drop-shadow(0 14px 14px rgba(0,0,0,.55))}}
   .mini img.quadro{width:72%;height:72%;border-radius:10px;background:#fff;rotate:-3deg}
   .card:hover .mini img{scale:1.06}
   .mini .n{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;border:2px solid var(--laranja);
@@ -230,6 +247,9 @@
 <script>
 const $ = s => document.querySelector(s);
 const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* modo leve: navegador de dentro do Instagram/Facebook e celulares mais fracos (evita a página travar e recarregar) */
+const leve = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\//i.test(navigator.userAgent) || (navigator.deviceMemory || 8) <= 4 || matchMedia("(hover: none)").matches;
+if (leve) document.documentElement.classList.add("leve");
 let itens = [], filtro = "todos";
 const NOMES = {carro:"Carro", ferramentas:"Ferramentas", cuidado:"Cuidado", estilo:"Estilo"};
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -243,32 +263,34 @@ const fmtDia = iso => {
   return d.toLocaleDateString("pt-BR", {weekday:"long", day:"2-digit", month:"2-digit"});
 };
 const precoHTML = p => { const m = String(p || "").match(/^(.*?)(R\$)\s*(.+)$/); return m ? `${esc(m[1])}<small>R$</small>${esc(m[3])}` : esc(p); };
-const imgHTML = x => x.recorte
-  ? `<img src="${esc(x.recorte)}" alt="${esc(x.titulo)}" loading="lazy">`
-  : `<img class="quadro" src="${esc(x.imagem)}" alt="${esc(x.titulo)}" loading="lazy">`;
+const fotoLocal = x => x.feed ? x.feed.replace(/feed\.jpg$/, "foto.jpg") : x.imagem;  // foto já baixada (mais leve que a da Shopee)
+const imgHTML = (x, cedo) => x.recorte
+  ? `<img src="${esc(x.recorte)}" alt="${esc(x.titulo)}" loading="${cedo ? "eager" : "lazy"}" decoding="async">`
+  : `<img class="quadro" src="${esc(fotoLocal(x))}" alt="${esc(x.titulo)}" loading="${cedo ? "eager" : "lazy"}" decoding="async">`;
 const rotulo = x => (NOMES[x.categoria] ? NOMES[x.categoria].toUpperCase() + " · " : "") + "ACHADO DO DIA";
 const vendas = x => [x.pct > 0 ? x.pct + "% OFF" : "", x.vendidos ? x.vendidos + " vendidos" : ""].filter(Boolean).join(" · ");
 
 /* ----- partículas flutuando ao fundo ----- */
 (function(){
-  const c = $("#particulas"); if (reduz || !c.getContext) return;
-  const g = c.getContext("2d"); let W, H, ps = [];
-  const tam = () => { W = c.width = innerWidth * devicePixelRatio; H = c.height = innerHeight * devicePixelRatio; };
+  const c = $("#particulas"); if (reduz || leve || !c.getContext) return;
+  const g = c.getContext("2d"); let W, H, ps = []; const dpr = Math.min(devicePixelRatio || 1, 1.5);
+  const tam = () => { W = c.width = innerWidth * dpr; H = c.height = innerHeight * dpr; };
   tam(); addEventListener("resize", tam);
-  for (let i = 0; i < 42; i++) ps.push({x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, v: Math.random() * .00025 + .00008, a: Math.random() * .6 + .2});
+  for (let i = 0; i < 32; i++) ps.push({x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + .4, v: Math.random() * .00025 + .00008, a: Math.random() * .6 + .2});
   (function anda(){
     g.clearRect(0, 0, W, H);
     for (const p of ps){
       p.y -= p.v; if (p.y < -.02) { p.y = 1.02; p.x = Math.random(); }
-      g.beginPath(); g.arc(p.x * W, p.y * H, p.r * devicePixelRatio, 0, 7);
+      g.beginPath(); g.arc(p.x * W, p.y * H, p.r * dpr, 0, 7);
       g.fillStyle = `rgba(255,${120 + (p.r * 40 | 0)},60,${p.a})`; g.fill();
     }
-    requestAnimationFrame(anda);
+    if (!document.hidden) requestAnimationFrame(anda); else document.addEventListener("visibilitychange", () => requestAnimationFrame(anda), {once:true});
   })();
 })();
 
 /* ----- luz que segue o dedo/mouse ----- */
 addEventListener("pointermove", e => {
+  if (e.pointerType !== "mouse") return;  // no celular isso repinta a página inteira a cada toque
   document.documentElement.style.setProperty("--mx", e.clientX + "px");
   document.documentElement.style.setProperty("--my", e.clientY + "px");
 }, {passive:true});
@@ -286,7 +308,7 @@ function destaque(){
   const hoje = itens.filter(x => x.data === dia).sort((a, b) => a.n - b.n);
   total = hoje.length;
   trilho.innerHTML = hoje.map((x, i) => `<article class="slide" data-n="${x.n}" aria-label="Achado nº ${x.n}">
-    <div class="palco"><span class="anel"></span><div class="obj">${imgHTML(x)}</div></div>
+    <div class="palco"><span class="anel"></span><div class="obj">${imgHTML(x, i === 0)}</div></div>
     <div class="ficha">
       <span class="hud caps"><span>${esc(rotulo(x))}</span><span class="cont">${dois(i + 1)} / ${dois(total)}</span></span>
       <h2>${esc(x.titulo)}</h2>
@@ -294,6 +316,7 @@ function destaque(){
       <div class="acoes"><a class="btn" href="${esc(x.link)}" target="_blank" rel="noopener sponsored">Ver na Shopee ${seta}</a>
         <span class="num" aria-label="Número ${x.n}"><span><small>Nº</small><b>${x.n}</b></span></span></div>
     </div></article>`).join("");
+  trilho.firstElementChild?.classList.add("ativo");
   if (total < 2) return;
   $("#nav").hidden = false;
   $("#pontos").innerHTML = hoje.map((x, i) => `<button aria-label="Ir para o achado nº ${x.n}" data-i="${i}"></button>`).join("");
@@ -301,12 +324,13 @@ function destaque(){
   const atual = () => Math.round(trilho.scrollLeft / trilho.clientWidth);
   const marca = () => {
     idx = atual();
+    [...trilho.children].forEach((s, i) => s.classList.toggle("ativo", i === idx));
     [...$("#pontos").children].forEach((b, i) => b.setAttribute("aria-current", i === idx));
     [...$("#progresso").children].forEach((s, i) => { const b = s.firstChild; b.style.transition = "none"; b.style.width = i < idx ? "100%" : "0"; });
     if (!reduz && timer){ const b = $("#progresso").children[idx]?.firstChild; if (b){ void b.offsetWidth; b.style.transition = "width 5s linear"; b.style.width = "100%"; } }
   };
   const vai = i => trilho.scrollTo({left: ((i + total) % total) * trilho.clientWidth, behavior: reduz ? "auto" : "smooth"});
-  const autoplay = liga => { clearInterval(timer); timer = null; if (liga && !reduz){ timer = setInterval(() => vai(idx + 1), 5000); } marca(); };
+  const autoplay = liga => { clearInterval(timer); timer = null; if (liga && !reduz){ timer = setInterval(() => { if (!document.hidden) vai(idx + 1); }, 5000); } marca(); };
   $("#ant").onclick = () => { vai(idx - 1); autoplay(true); };
   $("#prox").onclick = () => { vai(idx + 1); autoplay(true); };
   $("#pontos").onclick = e => { if (e.target.dataset.i){ vai(+e.target.dataset.i); autoplay(true); } };
@@ -314,14 +338,17 @@ function destaque(){
   trilho.addEventListener("pointerdown", () => autoplay(false));
   autoplay(true);
 
-  // inclinação 3D do produto seguindo o dedo/mouse (ou o giro do celular)
-  const inclina = (dx, dy) => trilho.querySelectorAll(".obj").forEach(o => o.style.transform = `rotateY(${dx * 16}deg) rotateX(${-dy * 12}deg) translateZ(20px)`);
+  // inclinação 3D do produto seguindo o mouse (só no computador; no celular deixava a página pesada)
+  if (leve) return;
+  let pend = null;
+  const inclina = (dx, dy) => { if (pend) return; pend = requestAnimationFrame(() => { pend = null;
+    const o = trilho.children[idx]?.querySelector(".obj"); if (o) o.style.transform = `rotateY(${dx * 16}deg) rotateX(${-dy * 12}deg) translateZ(20px)`; }); };
   $(".destaque").addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
     const r = e.currentTarget.getBoundingClientRect();
     inclina((e.clientX - r.left) / r.width - .5, (e.clientY - r.top) / r.height - .5);
   });
   $(".destaque").addEventListener("pointerleave", () => inclina(0, 0));
-  addEventListener("deviceorientation", e => { if (e.gamma != null) inclina(Math.max(-1, Math.min(1, e.gamma / 30)) * .5, Math.max(-1, Math.min(1, (e.beta - 45) / 30)) * .5); }, {passive:true});
 }
 
 /* ----- filtros ----- */
@@ -361,7 +388,7 @@ function render(){
 }
 // cartões inclinam levemente seguindo o mouse
 $("#lista").addEventListener("pointermove", e => {
-  const c = e.target.closest(".card"); if (!c || e.pointerType !== "mouse") return;
+  const c = e.target.closest(".card"); if (!c || e.pointerType !== "mouse" || leve) return;
   const r = c.getBoundingClientRect();
   c.style.setProperty("--ry", ((e.clientX - r.left) / r.width - .5) * 10 + "deg");
   c.style.setProperty("--rx", -((e.clientY - r.top) / r.height - .5) * 10 + "deg");
@@ -381,4 +408,4 @@ if (p){ $("#q").value = p; }
 </script>
 </body>
 </html>
-<!-- v5 -->
+<!-- v6: modo leve para o navegador do Instagram -->
