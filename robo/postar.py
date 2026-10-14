@@ -13,6 +13,7 @@ Sem o secret FBPAGETOKEN, o Facebook é pulado com um aviso.
 """
 import argparse
 import datetime as dt
+import time
 
 from . import config, facebook, instagram
 from .gerar import carregar, salvar, hoje
@@ -101,13 +102,19 @@ def main():
             if args.teste:
                 feitos_agora.append(alvo)
                 continue
-            try:
+            def publicar():
                 if tipo == "feed":
-                    mid = instagram.postar_imagem(url, alvo["legenda"])
-                elif tipo == "reel":
-                    mid = instagram.postar_reels(url, alvo["legenda"])
-                else:
-                    mid = instagram.postar_story(url)
+                    return instagram.postar_imagem(url, alvo["legenda"])
+                if tipo == "reel":
+                    return instagram.postar_reels(url, alvo["legenda"])
+                return instagram.postar_story(url)
+            try:
+                try:
+                    mid = publicar()
+                except Exception as e1:  # o Instagram às vezes "perde" a mídia; tenta de novo 1 vez
+                    print(f"[aviso] instagram {tipo} do nº {alvo['n']}: {str(e1)[:200]} — tentando de novo em 30s")
+                    time.sleep(30)
+                    mid = publicar()
             except Exception as e:  # qualquer falha: registra e segue (o que já saiu fica marcado)
                 print(f"[erro] instagram {tipo} do nº {alvo['n']}: {e}")
                 print(f"::error::Instagram: {tipo} do nº {alvo['n']} falhou: {str(e)[:300]}")
