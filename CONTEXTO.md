@@ -10,7 +10,10 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 
 ## Situação agora (14/out)
 - **Rotina LIGADA e postando no Instagram E na Página do Facebook** (Facebook desde 14/out 14:15). 1º post do feed saiu em 14/out às 10:46 (nº 1, Máquina de barbear 3 em 1).
-- Produtos de 14/out: nº 1 a 8 (feed: 1 e 2 · Reels: 3 e 4 · stories: todos). Planilha atual rende ~5 dias (até ~19/out).
+- Produtos de 14/out: nº 1 a 8 (feed: 1 e 2 · Reels: 3 e 4 · stories: todos).
+- Estoque (14/out, depois das planilhas de carro e ferramentas): passam no filtro carro 11 · ferramentas 4 · estilo 6 · cuidado 26 (~6 dias).
+  As planilhas de carro/ferramentas vieram fracas: 191 itens, só 15 com 100+ vendas (resto: peça CNC chinesa, pingente, 0 vendas).
+  Dica para o João: no painel, ordenar por "Mais vendidos" e buscar termos específicos (ex.: "kit chave catraca", "suporte celular carro").
 - Esperando a Shopee liberar a Open API (prazo até sex 16/out, resposta no **Outlook**).
 
 ## Como funciona (robô = GitHub Actions deste repositório, horário de Cuiabá)
