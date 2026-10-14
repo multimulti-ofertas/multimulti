@@ -1,6 +1,6 @@
 # Contexto do projeto MultiMulti (para continuar em outra conversa)
 
-Atualizado em 14/out/2026, 10:50 (Cuiabá). Ao abrir uma conversa nova com o Claude, diga:
+Atualizado em 14/out/2026, 14:20 (Cuiabá). Ao abrir uma conversa nova com o Claude, diga:
 "Leia o CONTEXTO.md do repositório multimulti-ofertas/multimulti e vamos continuar."
 
 ## O que é
@@ -9,7 +9,7 @@ Instagram @multimulti.ofertas · Página do Facebook "MultiMulti Ofertas".
 Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip separado.
 
 ## Situação agora (14/out)
-- **Rotina LIGADA e postando no Instagram.** 1º post do feed saiu em 14/out às 10:46 (nº 1, Máquina de barbear 3 em 1).
+- **Rotina LIGADA e postando no Instagram E na Página do Facebook** (Facebook desde 14/out 14:15). 1º post do feed saiu em 14/out às 10:46 (nº 1, Máquina de barbear 3 em 1).
 - Produtos de 14/out: nº 1 a 8 (feed: 1 e 2 · Reels: 3 e 4 · stories: todos). Planilha atual rende ~5 dias (até ~19/out).
 - Esperando a Shopee liberar a Open API (prazo até sex 16/out, resposta no **Outlook**).
 
@@ -70,6 +70,16 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Actions → "Postar no Instagram" manual: tipo auto/feed/reel/story.
 - O Claude dispara workflows pela API REST (gh api .../dispatches) e lê avisos em check-runs/<job>/annotations.
   Registros (logs) e artefatos não abrem pelo proxy: por isso a prévia vai para o ramo `previa`.
+
+## Facebook (Página MultiMulti Ofertas, id 1361895823674839)
+- robo/facebook.py espelha o Instagram: feed, Reels e story. Se a Página ficar para trás, o próximo horário põe o que faltou do dia.
+- No Facebook a legenda troca "Link na bio" por link direto (...multimulti/?n=X) e tira a linha do direct.
+- Secret `FBPAGETOKEN`: token DE PÁGINA que não vence (conferido no Depurador: Tipo Page, Expira Nunca).
+  App MultiMulti Robo ganhou o caso de uso "Gerenciar tudo na sua Página" (pages_show_list, pages_read_engagement,
+  pages_manage_posts + business_management; a Página está no portfólio MultiMulti.Ofertas).
+- Sem FBPAGETOKEN o Facebook é só pulado com aviso. "Postar" manual tem a opção `so_facebook`.
+- Marcações em produtos.json: fb_feed, fb_reel, fb_story.
+- Cuidado: disparar 2 "Postar" seguidos — um agendado chegando cancela o manual que estava na fila.
 
 ## Instagram / Meta
 - 14/out: a Meta bloqueou a conta de desenvolvedor por "atividade incomum" (API access blocked). O João
