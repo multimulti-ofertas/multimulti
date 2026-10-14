@@ -36,6 +36,7 @@ OR, BK, WH = LARANJA, TINTA, BRANCO
 _AQUI = os.path.join(os.path.dirname(__file__), "fontes")
 MEDIO = os.path.join(_AQUI, "NunitoSans-Medium.ttf")   # 500
 NEGRITO = os.path.join(_AQUI, "NunitoSans-Bold.ttf")   # 700
+FORTE = os.path.join(_AQUI, "NunitoSans-Black.ttf")    # 900: só chamada, preço e número
 BOLD = TEXTO = TEXTO_B = DISPLAY = DISPLAY2 = COND = NEGRITO
 
 # escala: a arte tem 1080px, ~2,5x a tela de um celular (os tokens do guia são para 390-430px)
@@ -104,8 +105,8 @@ def bloco(text, path, size, color, maxw, linhas=2, entrelinha=1.2):
 
 
 def preco_layer(valor, altura, color, maxw):
-    """Preço em negrito, numa linha só (diminui até caber)."""
-    return fit_layer(valor, NEGRITO, altura, color, maxw)
+    """Preço bem grosso, numa linha só (diminui até caber)."""
+    return fit_layer(valor, FORTE, altura, color, maxw)
 
 
 # ---------- formas ----------
@@ -274,38 +275,109 @@ def salvar(img, out):
         img.save(out)
 
 
+# ---------- peças chamativas ----------
+
+def selo_numero(numero, d=170):
+    """Selo redondo laranja com o número da vitrine, colado no canto da foto."""
+    lay = Image.new("RGBA", (d, d), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).ellipse([0, 0, d - 1, d - 1], fill=LARANJA + (255,), outline=BRANCO + (255,), width=8)
+    a = text_layer("nº", NEGRITO, int(d * 0.2), BRANCO)
+    b = fit_layer(str(numero), FORTE, int(d * 0.46), BRANCO, int(d * 0.7))
+    alt = a.height + 6 + b.height
+    y = (d - alt) // 2
+    lay.paste(a, ((d - a.width) // 2, y), a)
+    lay.paste(b, ((d - b.width) // 2, y + a.height + 6), b)
+    return lay
+
+
+def chamada_de(cfg):
+    return cfg.get("chamada") or "Olha esse achado"
+
+
+def topo_laranja(img, cfg, y, larg_util, tam=64):
+    """Chamada em branco à esquerda e pílula da categoria à direita, sobre o laranja."""
+    cat = (cfg.get("category") or "").strip()
+    pc = pilula(cat, 30, BRANCO, LARANJA_FORTE, padx=30, pady=14) if cat and cat.lower() != "achado" else None
+    maxw = larg_util - (pc.width + 24 if pc else 0)
+    ch = fit_layer(chamada_de(cfg), FORTE, tam, BRANCO, maxw)
+    img.paste(ch, (M + 6, y), ch)
+    if pc:
+        img.paste(pc, (M + larg_util - pc.width, y + (ch.height - pc.height) // 2), pc)
+    return ch.height
+
+
+def miolo_cartao(img, cfg, x0, y0, larg, y_fim, tam_tit=48, tam_preco=128, selo=170):
+    """Foto + título + preço/vendas dentro do cartão, entre y0 e y_fim."""
+    lp = linha_preco_forte(cfg, tam_preco, larg)
+    yp = y_fim - lp.height
+    tit = bloco(cfg["title"], NEGRITO, tam_tit, TINTA, larg, linhas=2)
+    yt = yp - 24 - tit.height
+    foto = moldura_foto(cfg["photo"], larg, yt - 32 - y0)
+    img.paste(foto, (x0, y0), foto)
+    sl = selo_numero(numero_de(cfg), selo)
+    img.paste(sl, (x0 + larg - sl.width + 24, y0 - 24), sl)
+    img.paste(tit, (x0, yt), tit)
+    img.paste(lp, (x0, yp), lp)
+
+
+def linha_preco_forte(cfg, tam, maxw):
+    """Preço grande em laranja + desconto (menta) + vendas em pílula vermelha cheia."""
+    pr = preco_layer(cfg["new"], tam, LARANJA_FORTE, maxw)
+    pecas = [pr]
+    if desconto(cfg):
+        pecas.append(pilula(desconto(cfg), int(tam * 0.3), MENTA, VERDE_FORTE))
+    vendas = (cfg.get("extra") or "").replace("⭐ ", "nota ")
+    if vendas:
+        pecas.append(pilula(vendas, int(tam * 0.27), QUENTE, BRANCO, icone="sobe"))
+    gap = 22
+
+    def linha(ps):
+        lay = Image.new("RGBA", (sum(p.width for p in ps) + gap * (len(ps) - 1), max(p.height for p in ps)), (0, 0, 0, 0))
+        x = 0
+        for p in ps:
+            lay.paste(p, (x, (lay.height - p.height) // 2 + (6 if p is not pr else 0)), p)
+            x += p.width + gap
+        return lay
+
+    tudo = linha(pecas)
+    if tudo.width <= maxw or len(pecas) == 1:
+        return tudo
+    l1, l2 = linha(pecas[:-1]), pecas[-1]
+    lay = Image.new("RGBA", (max(l1.width, l2.width), l1.height + 16 + l2.height), (0, 0, 0, 0))
+    lay.paste(l1, (0, 0), l1)
+    lay.paste(l2, (0, l1.height + 16), l2)
+    return lay
+
+
+def cartao_liso(w, h, raio=None):
+    lay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ImageDraw.Draw(lay).rounded_rectangle([0, 0, w - 1, h - 1], radius=raio or R_MD + 8, fill=BRANCO + (255,))
+    return lay
+
+
 # ---------- feed ----------
 
 def feed(cfg, out):
-    img = Image.new("RGB", (W, H), CANVAS)
-    cw, ch = W - 2 * M, H - 2 * M
-    card = cartao(cw, ch)
-    img.paste(card, (M, M), card)
-    x0, y = M + PAD, M + PAD
-    larg = cw - 2 * PAD
+    img = Image.new("RGB", (W, H), LARANJA)
+    larg_util = W - 2 * M
+    h_topo = topo_laranja(img, cfg, 50, larg_util)
 
-    au = autor(subtitulo(cfg))
-    img.paste(au, (x0, y), au)
-    y += au.height + 30
+    cy0 = 50 + h_topo + 34
+    cw, ch = W - 2 * M, H - M - cy0
+    card = cartao_liso(cw, ch)
+    img.paste(card, (M, cy0), card)
+    x0, larg = M + PAD, cw - 2 * PAD
 
-    # de baixo para cima: botões, preço, título; a foto fica com o resto
-    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 40, LARANJA, BRANCO, icone="seta", padx=48, pady=24)
-    salva = pilula("Salva pra depois", 34, BRANCO, TINTA, borda=LINHA, padx=36, pady=24)
-    yb = M + ch - PAD - btn.height
-    img.paste(btn, (x0, yb), btn)
-    img.paste(salva, (x0 + larg - salva.width, yb + (btn.height - salva.height) // 2), salva)
+    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 44, LARANJA, BRANCO, icone="seta", padx=0, pady=28)
+    # botão de ponta a ponta do cartão
+    b = Image.new("RGBA", (larg, btn.height), (0, 0, 0, 0))
+    ImageDraw.Draw(b).rounded_rectangle([0, 0, larg - 1, btn.height - 1], radius=btn.height // 2, fill=LARANJA + (255,))
+    miolo = btn.crop((0, 0, btn.width, btn.height))
+    b.paste(miolo, ((larg - miolo.width) // 2, 0), miolo)
+    yb = cy0 + ch - PAD - b.height
+    img.paste(b, (x0, yb), b)
 
-    lp = linha_preco(cfg, 104, larg)
-    yp = yb - 34 - lp.height
-    img.paste(lp, (x0, yp), lp)
-
-    tit = bloco(cfg["title"], NEGRITO, 46, TINTA, larg, linhas=2)
-    yt = yp - 26 - tit.height
-    img.paste(tit, (x0, yt), tit)
-
-    foto = moldura_foto(cfg["photo"], larg, yt - 34 - y)
-    img.paste(foto, (x0, y), foto)
-
+    miolo_cartao(img, cfg, x0, cy0 + PAD, larg, yb - 30)
     salvar(img, out)
     return img
 
@@ -314,35 +386,23 @@ def feed(cfg, out):
 
 def story(cfg, out):
     SW, SH = 1080, 1920
-    img = Image.new("RGB", (SW, SH), CANVAS)
+    img = Image.new("RGB", (SW, SH), LARANJA)
     # o Instagram cobre ~200px em cima e ~180px embaixo
-    topo = text_layer("Olha o que achei hoje", NEGRITO, 64, TINTA)
-    img.paste(topo, (M + 6, 250), topo)
-    sub = text_layer("Toca no link da bio e procura o número", MEDIO, 34, CORPO)
-    img.paste(sub, (M + 6, 250 + topo.height + 18), sub)
+    t1 = fit_layer("Olha o que achei hoje", FORTE, 84, BRANCO, SW - 2 * M)
+    img.paste(t1, (M + 6, 240), t1)
+    t2 = text_layer("Toca no link da bio e procura o número", MEDIO, 36, BRANCO)
+    img.paste(t2, (M + 6, 240 + t1.height + 20), t2)
 
-    cy0 = 250 + topo.height + 18 + sub.height + 40
-    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 48, LARANJA, BRANCO, icone="seta", padx=56, pady=30)
-    yb = 1720 - btn.height
-    cy1 = yb - 36
+    cy0 = 240 + t1.height + 20 + t2.height + 50
+    btn = pilula(f"Link na bio · nº {numero_de(cfg)}", 52, BRANCO, LARANJA_FORTE, icone="seta", padx=60, pady=32)
+    yb = 1730 - btn.height
+    cy1 = yb - 40
     cw = SW - 2 * M
-    card = cartao(cw, cy1 - cy0)
+    card = cartao_liso(cw, cy1 - cy0)
     img.paste(card, (M, cy0), card)
     img.paste(btn, ((SW - btn.width) // 2, yb), btn)
 
     x0, larg = M + PAD, cw - 2 * PAD
-    au = autor(subtitulo(cfg))
-    img.paste(au, (x0, cy0 + PAD), au)
-    y = cy0 + PAD + au.height + 30
-
-    lp = linha_preco(cfg, 120, larg)
-    yp = cy1 - PAD - lp.height
-    img.paste(lp, (x0, yp), lp)
-    tit = bloco(cfg["title"], NEGRITO, 52, TINTA, larg, linhas=2)
-    yt = yp - 28 - tit.height
-    img.paste(tit, (x0, yt), tit)
-    foto = moldura_foto(cfg["photo"], larg, yt - 34 - y)
-    img.paste(foto, (x0, y), foto)
-
+    miolo_cartao(img, cfg, x0, cy0 + PAD, larg, cy1 - PAD, tam_tit=54, tam_preco=140, selo=190)
     salvar(img, out)
     return img

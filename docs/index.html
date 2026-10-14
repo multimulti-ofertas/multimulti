@@ -3,117 +3,123 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#07070a">
-<title>MultiMulti Achadinhos</title>
-<meta name="description" content="Os achadinhos masculinos mais vendidos da Shopee: carro, ferramentas, cuidado e estilo.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ff6b1a'/><text x='50' y='66' font-size='46' text-anchor='middle' font-family='Arial' font-weight='bold' fill='%23111'>MM</text></svg>">
+<title>MultiMulti Ofertas · achadinhos da Shopee</title>
+<meta name="description" content="Achadinhos masculinos da Shopee escolhidos a dedo: carro, ferramentas, cuidado e estilo. Viu no Instagram? Procure pelo número do post.">
+<meta name="theme-color" content="#fb6001">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23fb6001'/><text x='50' y='63' font-size='38' text-anchor='middle' font-family='Arial' font-weight='bold' fill='white'>MM</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,500;6..12,700;6..12,900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --or:#ff6b1a; --or2:#ffb347; --glow:rgba(255,107,26,.45);
-    --bg:#07070a; --vidro:rgba(22,22,28,.72); --borda:rgba(255,255,255,.08);
-    --tx:#f2f2f5; --mut:#8b8b98;
-    --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-    --sans:"Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    --laranja:#fb6001; --laranja-forte:#c44800; --quente:#ce1736; --menta:#defde4; --verde:#197e25;
+    --canvas:#f3f5f7; --branco:#fff; --tinta:#000; --corpo:#6b6d70; --linha:#dfe1e4;
+    --r:12px; --pilula:999px;
   }
   *{box-sizing:border-box}
-  html{background:var(--bg)}
-  body{margin:0;min-height:100vh;color:var(--tx);font-family:var(--sans);background:
-      radial-gradient(900px 420px at 50% -120px,rgba(255,107,26,.22),transparent 70%),
-      linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/28px 28px,
-      linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/28px 28px,
-      var(--bg);
-    background-attachment:fixed;-webkit-font-smoothing:antialiased}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--canvas);color:var(--tinta);
+    font-family:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-weight:500;line-height:1.5}
+  a{color:inherit}
 
-  header{position:sticky;top:0;z-index:5;padding:16px 16px 14px;text-align:center;
-    background:rgba(7,7,10,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--borda)}
-  header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
-    background:linear-gradient(90deg,transparent,var(--or) 30%,var(--or2) 50%,var(--or) 70%,transparent);
-    box-shadow:0 0 14px var(--glow)}
-  .logo{font-weight:700;font-size:30px;letter-spacing:.02em;line-height:1}
-  .logo span{color:var(--or);text-shadow:0 0 18px var(--glow)}
-  .sub{font-family:var(--mono);color:var(--mut);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:8px;
-    display:flex;align-items:center;justify-content:center;gap:8px}
-  .on{width:7px;height:7px;border-radius:50%;background:#3dff8b;box-shadow:0 0 8px #3dff8b;animation:pulsa 2s infinite}
-  @keyframes pulsa{50%{opacity:.35}}
+  /* topo laranja */
+  header{background:var(--laranja);color:var(--branco);padding:22px 16px 26px}
+  .topo{max-width:1080px;margin:0 auto}
+  .quem{display:flex;align-items:center;gap:12px}
+  .av{width:48px;height:48px;border-radius:50%;background:var(--branco);color:var(--laranja);
+    display:grid;place-items:center;font-weight:900;font-size:18px;flex:none}
+  .quem b{display:block;font-size:18px;font-weight:900;line-height:1.2}
+  .quem span{font-size:14px;opacity:.92}
+  h1{font-weight:900;font-size:clamp(30px,7.5vw,52px);line-height:1.05;letter-spacing:-.01em;margin:22px 0 8px}
+  .lead{margin:0 0 18px;font-size:17px;max-width:46ch}
+  .busca{position:relative;max-width:560px}
+  .busca input{width:100%;height:54px;border:0;border-radius:var(--pilula);padding:0 22px 0 50px;
+    font:inherit;font-size:17px;font-weight:700;color:var(--tinta);background:var(--branco)}
+  .busca input::placeholder{color:var(--corpo);font-weight:500}
+  .busca input:focus{outline:3px solid var(--tinta);outline-offset:2px}
+  .busca svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px}
 
-  .busca{position:relative;margin:14px auto 0;max-width:520px}
-  .busca::before{content:"›";position:absolute;left:15px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-weight:700;color:var(--or)}
-  .busca input{width:100%;padding:13px 14px 13px 36px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
-    background:rgba(255,255,255,.04);color:var(--tx);font-size:16px;font-family:var(--mono);transition:border-color .2s,box-shadow .2s}
-  .busca input::placeholder{color:#6d6d7a}
-  .busca input:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px rgba(255,107,26,.18),0 0 22px rgba(255,107,26,.25)}
+  /* lista */
+  main{max-width:1080px;margin:0 auto;padding:8px 16px 8px}
+  .dia{font-weight:900;font-size:22px;margin:26px 2px 12px}
+  .grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media (min-width:720px){.grade{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+  @media (min-width:980px){.grade{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
-  main{max-width:560px;margin:0 auto;padding:10px 16px 8px}
-  .dia{display:flex;align-items:center;gap:10px;font-family:var(--mono);color:var(--or);font-weight:700;font-size:12px;
-    text-transform:uppercase;letter-spacing:.16em;margin:24px 2px 12px}
-  .dia::before{content:"//";color:var(--mut)}
-  .dia::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,107,26,.5),transparent)}
+  .card{position:relative;display:flex;flex-direction:column;background:var(--branco);border:1px solid var(--linha);
+    border-radius:var(--r);padding:10px;text-decoration:none;
+    transition:transform .18s ease,border-color .18s ease;animation:entra .4s ease both}
+  .card:hover{transform:translateY(-3px);border-color:var(--laranja)}
+  .card:focus-visible{outline:3px solid var(--tinta);outline-offset:2px}
+  .card.alvo{border:3px solid var(--laranja);padding:8px}
+  @keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-  .card{position:relative;display:flex;gap:12px;padding:10px;margin-bottom:12px;text-decoration:none;color:inherit;
-    background:var(--vidro);border:1px solid var(--borda);border-radius:16px;
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-    transition:border-color .2s,box-shadow .2s,transform .2s;
-    opacity:0;transform:translateY(10px);animation:entra .45s ease forwards}
-  .card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(135deg,rgba(255,107,26,.16),transparent 40%)}
-  .card:hover,.card.alvo{border-color:rgba(255,107,26,.7);box-shadow:0 0 0 1px rgba(255,107,26,.35),0 8px 30px rgba(255,107,26,.18)}
-  .card:active{transform:scale(.985)}
-  @keyframes entra{to{opacity:1;transform:none}}
+  .foto{position:relative;aspect-ratio:1;border-radius:8px;border:1px solid var(--linha);background:var(--branco);overflow:hidden}
+  .foto img{width:100%;height:100%;object-fit:contain;padding:8px;display:block}
+  .selo{position:absolute;top:6px;right:6px;width:46px;height:46px;border-radius:50%;background:var(--laranja);
+    border:3px solid var(--branco);color:var(--branco);display:grid;place-items:center;text-align:center;line-height:1}
+  .selo small{display:block;font-size:10px;font-weight:700}
+  .selo b{font-size:18px;font-weight:900}
 
-  .foto{position:relative;flex:0 0 112px;height:112px;border-radius:12px;background:#fff;overflow:hidden}
-  .foto img{width:100%;height:100%;object-fit:contain}
-  .num{position:absolute;top:6px;left:6px;font-family:var(--mono);font-weight:700;font-size:12px;color:var(--or);
-    background:rgba(7,7,10,.88);border:1px solid rgba(255,107,26,.55);padding:3px 7px;border-radius:7px;letter-spacing:.04em}
+  .tit{font-weight:700;font-size:15px;line-height:1.3;margin:10px 2px 6px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+  .preco{font-weight:900;font-size:26px;line-height:1.1;color:var(--laranja-forte);margin:0 2px;letter-spacing:-.01em}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 2px 12px}
+  .tag{display:inline-flex;align-items:center;gap:5px;border-radius:var(--pilula);padding:3px 10px;font-size:12px;font-weight:700}
+  .tag.quente{background:var(--quente);color:var(--branco)}
+  .tag.quente::before{content:"";width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid currentColor}
+  .tag.off{background:var(--menta);color:var(--verde)}
+  .btn{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:var(--pilula);
+    background:var(--laranja);color:var(--branco);font-weight:700;font-size:15px}
+  .btn svg{width:14px;height:14px;transition:transform .18s ease}
+  .card:hover .btn svg{transform:translate(2px,-2px)}
 
-  .info{position:relative;flex:1;min-width:0;display:flex;flex-direction:column}
-  .tit{font-weight:700;font-size:15px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .meta{font-family:var(--mono);color:var(--mut);font-size:11px;margin-top:5px;letter-spacing:.02em}
-  .meta b{color:var(--or2);font-weight:700}
-  .preco{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:6px}
-  .preco b{font-family:var(--mono);font-size:19px;font-weight:700;letter-spacing:-.02em}
-  .off{font-family:var(--mono);font-weight:700;font-size:11px;color:var(--or);padding:2px 6px;border-radius:6px;
-    border:1px solid var(--or);background:rgba(255,107,26,.12);text-shadow:0 0 8px var(--glow)}
-  .btn{margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:10px;
-    font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#111;
-    background:linear-gradient(90deg,var(--or),var(--or2));box-shadow:0 0 18px rgba(255,107,26,.35)}
-  .btn i{font-style:normal;transition:transform .2s}
-  .card:hover .btn i{transform:translateX(3px)}
+  .vazio{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:32px 22px;margin:22px 0;text-align:center}
+  .vazio b{display:block;font-size:22px;font-weight:900;margin-bottom:6px}
+  .vazio p{margin:0 auto;color:var(--corpo);max-width:38ch}
+  .vazio a{color:var(--laranja-forte);font-weight:700}
 
-  .vazio{text-align:center;padding:48px 14px;color:var(--mut);line-height:1.6}
-  .vazio .t{display:block;color:var(--tx);font-size:19px;font-weight:700;margin-bottom:10px}
-  .vazio .tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--or);border:1px solid rgba(255,107,26,.4);border-radius:999px;padding:5px 12px;margin-bottom:18px}
-  .vazio a,footer a{color:var(--or)}
-  .radar{width:84px;height:84px;margin:0 auto 22px;border-radius:50%;position:relative;
-    border:1px solid rgba(255,107,26,.35);background:radial-gradient(circle,rgba(255,107,26,.12),transparent 70%)}
-  .radar::before{content:"";position:absolute;inset:14px;border-radius:50%;border:1px solid rgba(255,107,26,.25)}
-  .radar::after{content:"";position:absolute;inset:0;border-radius:50%;
-    background:conic-gradient(from 0deg,rgba(255,107,26,.55),transparent 28%);animation:gira 2.4s linear infinite}
-  @keyframes gira{to{transform:rotate(1turn)}}
+  .como{max-width:1080px;margin:28px auto 0;padding:0 16px}
+  .como div{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r);padding:20px 22px}
+  .como b{font-size:18px;font-weight:900}
+  .como p{margin:6px 0 0;color:var(--corpo)}
 
-  footer{color:var(--mut);font-size:12px;text-align:center;padding:26px 16px 44px;line-height:1.6}
-  footer .marca{font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;font-size:10px;margin-top:10px;opacity:.6}
+  footer{background:var(--tinta);color:var(--branco);margin-top:36px;padding:34px 16px 44px}
+  footer .in{max-width:1080px;margin:0 auto}
+  footer .marca{font-weight:900;font-size:clamp(34px,9vw,64px);line-height:1;letter-spacing:-.01em}
+  footer .marca span{color:var(--laranja)}
+  footer p{margin:14px 0 0;color:#cfd1d4;font-size:14px;max-width:52ch}
+  footer a{color:var(--branco);font-weight:700}
 
-  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">MULTI<span>MULTI</span></div>
-  <div class="sub"><span class="on"></span>Achadinhos masculinos · Shopee</div>
-  <div class="busca"><input id="q" inputmode="search" placeholder="nº do produto ou nome" autocomplete="off" aria-label="Buscar pelo número ou nome do produto"></div>
+  <div class="topo">
+    <div class="quem"><div class="av">MM</div><div><b>MultiMulti Ofertas</b><span>achadinhos masculinos da Shopee</span></div></div>
+    <h1>Achei pra você</h1>
+    <p class="lead">Viu no Instagram? Digita o número do post e vai direto no produto.</p>
+    <div class="busca">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg>
+      <input id="q" inputmode="search" placeholder="Número do post ou nome" autocomplete="off" aria-label="Buscar pelo número do post ou pelo nome do produto">
+    </div>
+  </div>
 </header>
-<main id="lista"><div class="vazio"><div class="radar"></div>Carregando ofertas…</div></main>
-<footer>
-  Links de afiliado: você paga o mesmo preço e ajuda o MultiMulti a continuar postando.<br>
-  Preços e estoque podem mudar a qualquer momento.<br>
-  <a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a>
-  <div class="marca">MultiMulti · achados novos todo dia</div>
-</footer>
+
+<main id="lista"><div class="vazio"><b>Carregando os achados…</b></div></main>
+
+<section class="como"><div>
+  <b>Como funciona</b>
+  <p>Todo dia separo achadinhos de carro, ferramentas, cuidado e estilo com muita venda e preço bom. Cada post tem um número: é só procurar aqui.</p>
+</div></section>
+
+<footer><div class="in">
+  <div class="marca">MULTI<span>MULTI</span></div>
+  <p>Os links são de afiliado: você paga o mesmo preço e ajuda o MultiMulti a continuar postando. Preço e estoque podem mudar a qualquer momento.</p>
+  <p><a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a> · achados novos todo dia</p>
+</div></footer>
+
 <script>
 const $ = s => document.querySelector(s);
 let itens = [];
@@ -121,48 +127,54 @@ const fmtDia = iso => {
   const d = new Date(iso + "T12:00:00");
   const hoje = new Date(); hoje.setHours(12,0,0,0);
   const diff = Math.round((hoje - d) / 864e5);
-  if (diff === 0) return "Hoje";
-  if (diff === 1) return "Ontem";
-  return d.toLocaleDateString("pt-BR", {weekday:"long", day:"2-digit", month:"2-digit"});
+  if (diff === 0) return "Achados de hoje";
+  if (diff === 1) return "Achados de ontem";
+  const t = d.toLocaleDateString("pt-BR", {weekday:"long", day:"2-digit", month:"2-digit"});
+  return t.charAt(0).toUpperCase() + t.slice(1);
 };
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const num = n => String(n).padStart(2, "0");
+const seta = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"/></svg>';
 function render(){
   const q = $("#q").value.trim().toLowerCase().replace(/^(n[ºo°]?|#)\s*/, "");
   if (!itens.length){
-    $("#lista").innerHTML = `<div class="vazio"><div class="radar"></div><span class="tag"><span class="on"></span>Sistema online</span>
-      <span class="t">As primeiras ofertas chegam em breve</span>
-      Todo dia o robô caça achadinhos novos.<br>Siga <a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a> pra não perder.</div>`;
+    $("#lista").innerHTML = `<div class="vazio"><b>Os primeiros achados chegam em breve</b>
+      <p>Todo dia tem coisa nova. Segue <a href="https://instagram.com/multimulti.ofertas">@multimulti.ofertas</a> pra não perder.</p></div>`;
     return;
   }
   const soNumero = /^\d+$/.test(q);
   const lista = itens.filter(x => !q || (soNumero ? String(x.n) === String(Number(q)) : x.titulo.toLowerCase().includes(q)));
   if (!lista.length){
-    $("#lista").innerHTML = `<div class="vazio">${soNumero ? `<span class="t">Nº ${esc(q)} não encontrado</span>Ele pode ter saído da vitrine. Apague a busca para ver todos.` : `<span class="t">Nada por aqui</span>Tente outra palavra ou o número do post.`}</div>`;
+    $("#lista").innerHTML = soNumero
+      ? `<div class="vazio"><b>Não achei o nº ${esc(q)}</b><p>Ele pode ter saído da vitrine. Apaga a busca pra ver todos os achados.</p></div>`
+      : `<div class="vazio"><b>Nada por aqui</b><p>Tenta outra palavra ou o número do post.</p></div>`;
     return;
   }
   let html = "", dia = "", i = 0;
   for (const x of lista){
-    if (x.data !== dia){ dia = x.data; html += `<div class="dia">${esc(fmtDia(dia))}</div>`; }
+    if (x.data !== dia){
+      if (dia) html += "</div>";
+      dia = x.data; html += `<div class="dia">${esc(fmtDia(dia))}</div><div class="grade">`;
+    }
     const alvo = soNumero && String(x.n) === String(Number(q));
-    html += `<a class="card${alvo ? " alvo" : ""}" style="animation-delay:${Math.min(i++, 8) * 60}ms" href="${esc(x.link)}" target="_blank" rel="noopener sponsored">
-      <div class="foto"><img src="${esc(x.imagem)}" alt="" loading="lazy"><span class="num">Nº ${x.n}</span></div>
-      <div class="info">
-        <div class="tit">${esc(x.titulo)}</div>
-        <div class="meta">${x.nota ? `<b>★ ${esc(x.nota)}</b> · ` : ""}${esc(x.vendidos)} vendidos</div>
-        <div class="preco"><b>${esc(x.preco)}</b>${x.pct > 0 ? `<span class="off">-${x.pct}%</span>` : ""}</div>
-        <div class="btn">Ver na Shopee <i>→</i></div>
-      </div></a>`;
+    const off = x.pct > 0 ? `<span class="tag off">${esc(x.pct)}% OFF</span>` : "";
+    const vend = x.vendidos ? `<span class="tag quente">${esc(x.vendidos)} vendidos</span>` : "";
+    html += `<a class="card${alvo ? " alvo" : ""}" style="animation-delay:${Math.min(i++, 10) * 50}ms" href="${esc(x.link)}" target="_blank" rel="noopener sponsored">
+      <div class="foto"><img src="${esc(x.imagem)}" alt="${esc(x.titulo)}" loading="lazy"><span class="selo"><span><small>nº</small><b>${esc(x.n)}</b></span></span></div>
+      <div class="tit">${esc(x.titulo)}</div>
+      <div class="preco">${esc(x.preco)}</div>
+      <div class="tags">${off}${vend}</div>
+      <span class="btn">Ver na Shopee ${seta}</span></a>`;
   }
-  $("#lista").innerHTML = html;
+  $("#lista").innerHTML = html + "</div>";
+  if (soNumero) document.querySelector(".card.alvo")?.scrollIntoView({block:"center"});
 }
 fetch("produtos.json?v=" + Date.now()).then(r => r.ok ? r.json() : []).then(j => {
   itens = j; render();
-}).catch(() => { $("#lista").innerHTML = '<div class="vazio"><span class="t">Sinal perdido</span>Não consegui carregar as ofertas. Tente de novo.</div>'; });
+}).catch(() => { $("#lista").innerHTML = '<div class="vazio"><b>Não consegui carregar</b><p>Confere a internet e tenta de novo.</p></div>'; });
 $("#q").addEventListener("input", render);
 const p = new URLSearchParams(location.search).get("n");
 if (p) $("#q").value = p;
 </script>
 </body>
 </html>
-<!-- v2 -->
+<!-- v3 -->

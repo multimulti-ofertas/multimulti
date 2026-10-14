@@ -201,6 +201,7 @@ def montar(cat, p, n, d, papel, demo):
         "photo": str(foto), "category": config.SELO.get(cat, "Achado"), "badge": selo,
         "title": item["titulo"], "new": item["preco_curto"], "extra": extra.replace("⭐ ", "Nota "),
         "cta": ["LINK NA BIO", f"Nº {n}"], "hook": " · ".join(item["gancho"][:2]), "numero": n,
+        "chamada": item["gancho"][0],
     }
     feed(cfg, str(pasta / "feed.jpg"))
     story(cfg, str(pasta / "story.jpg"))
