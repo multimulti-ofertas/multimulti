@@ -1,0 +1,136 @@
+"""Vigia diário: confere se está tudo funcionando e FALHA (o GitHub manda e-mail) se algo quebrou.
+
+Confere: token do Instagram, token da Página, vitrine no ar, ofertas de hoje geradas, posts de ontem
+(Instagram e Facebook), robôs que falharam nas últimas 24h e quantos dias de produtos ainda restam.
+Os resultados aparecem como avisos (annotations) na execução "Vigia diário".
+"""
+import datetime as dt
+import os
+
+import requests
+
+from . import config, facebook, planilha
+from .gerar import carregar, escolher, ja_usados, hoje
+from .instagram import BASE
+
+problemas = []
+
+
+def ok(msg):
+    print(f"::notice::✅ {msg}")
+
+
+def atencao(msg):
+    print(f"::warning::⚠️ {msg}")
+
+
+def erro(msg):
+    print(f"::error::❌ {msg}")
+    problemas.append(msg)
+
+
+def instagram():
+    tok = (os.environ.get("IG_TOKEN") or "").strip()
+    if not tok:
+        return erro("Falta o secret IGTOKEN.")
+    r = requests.get(f"{BASE}/me", params={"fields": "user_id,username", "access_token": tok}, timeout=30)
+    if r.status_code != 200:
+        return erro(f"Instagram recusou o token ({r.status_code}): {r.text[:200]}")
+    uid = r.json().get("user_id")
+    lim = requests.get(f"{BASE}/{uid}/content_publishing_limit",
+                       params={"fields": "quota_usage", "access_token": tok}, timeout=30)
+    if lim.status_code != 200:
+        return erro(f"Instagram sem permissão de publicar ({lim.status_code}). A Meta pode ter bloqueado: "
+                    "confirme a conta no perfil pessoal e rode o Vigia de novo.")
+    ok(f"Instagram @{r.json().get('username')} funcionando")
+    if not (os.environ.get("GH_PAT") or "").strip():
+        atencao("Sem o secret GH_PAT: o token do Instagram não se renova sozinho.")
+
+
+def pagina():
+    if not facebook.configurado():
+        return erro("Falta o secret FBPAGETOKEN (a Página do Facebook não recebe posts).")
+    try:
+        nome, _, _ = facebook.checar()
+        ok(f"Página do Facebook {nome} funcionando")
+    except Exception as e:
+        erro(f"Página do Facebook recusou o token: {str(e)[:200]}")
+
+
+def vitrine():
+    try:
+        r = requests.get(f"{config.PAGES_URL}/produtos.json", timeout=30)
+        if r.status_code == 200 and r.json():
+            ok("Vitrine no ar")
+        else:
+            erro(f"Vitrine fora do ar ou vazia ({r.status_code}).")
+    except Exception as e:
+        erro(f"Vitrine não respondeu: {e}")
+
+
+def posts():
+    lista = carregar()
+    d = hoje()
+    if not any(x["data"] == d.isoformat() for x in lista):
+        erro(f"As ofertas de hoje ({d:%d/%m}) não foram geradas.")
+    ontem = (d - dt.timedelta(days=1)).isoformat()
+    do_dia = [x for x in lista if x["data"] == ontem]
+    if not do_dia:
+        return
+    conta = {k: sum(1 for x in do_dia if (x.get("postado") or {}).get(k))
+             for k in ("feed", "reel", "fb_feed", "fb_reel")}
+    falta = [f"{k} {v}/2" for k, v in conta.items() if v < 2]
+    if falta:
+        atencao(f"Ontem saiu menos que o previsto: {', '.join(falta)}")
+    else:
+        ok("Ontem: 2 feeds e 2 Reels no Instagram e no Facebook")
+
+
+def falhas():
+    tok, repo = os.environ.get("GITHUB_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
+    if not tok or not repo:
+        return
+    desde = (dt.datetime.utcnow() - dt.timedelta(hours=24)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    r = requests.get(f"https://api.github.com/repos/{repo}/actions/runs",
+                     params={"created": f">={desde}", "status": "failure", "per_page": 50},
+                     headers={"Authorization": f"Bearer {tok}"}, timeout=30)
+    if r.status_code != 200:
+        return atencao(f"Não consegui ler as execuções ({r.status_code}).")
+    nomes = sorted({x["name"] for x in r.json().get("workflow_runs", []) if x["name"] != "Vigia diário"})
+    if nomes:
+        erro(f"Robôs que falharam nas últimas 24h: {', '.join(nomes)}")
+    else:
+        ok("Nenhum robô falhou nas últimas 24h")
+
+
+def estoque():
+    if os.environ.get("SHOPEE_APP_ID"):
+        return ok("Produtos vêm da API da Shopee (sem planilha para acabar)")
+    lista = carregar()
+    usados = ja_usados(lista, hoje())
+    temas = {}
+    total = []
+    for c in ("carro", "ferramentas", "cuidado", "estilo"):
+        do_tema, _ = planilha.candidatos(c)
+        bons = escolher(do_tema, usados)
+        temas[c] = len(bons)
+        total += [p["itemId"] for _, p in bons]
+    dias = len(set(total)) // config.PRODUTOS_POR_DIA
+    resumo = " · ".join(f"{k} {v}" for k, v in temas.items())
+    if dias < 2:
+        erro(f"Produtos acabando: só {dias} dia(s) ({resumo}). Mande planilha nova.")
+    elif dias < 4:
+        atencao(f"Produtos para {dias} dias ({resumo}). Bom mandar planilha nova.")
+    else:
+        ok(f"Produtos para ~{dias} dias ({resumo})")
+
+
+for etapa in (instagram, pagina, vitrine, posts, falhas, estoque):
+    try:
+        etapa()
+    except Exception as e:
+        erro(f"{etapa.__name__}: {e}")
+
+if problemas:
+    raise SystemExit(f"{len(problemas)} problema(s) encontrado(s).")
+print("Tudo certo.")

@@ -70,6 +70,13 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Mandar o link exato de cada produto no direct só com ManyChat PRO (~US$ 15/mês).
 - Testado em 14/out de outra conta: "eu quero" no direct → resposta + botão → vitrine abre certa no celular.
 
+## Proteção (14/out)
+- "Vigia diário" (vigia.yml, 07:10): confere tokens IG/Página, vitrine, ofertas do dia, posts de ontem, robôs que falharam
+  e estoque de produtos. Se algo quebrou, a execução FALHA e o GitHub manda e-mail (o e-mail principal da conta precisa
+  estar funcionando — o Gmail está cheio).
+- Já ligados no repositório: varredura de segredos + bloqueio de envio com segredo (push protection).
+- Workflows com permissão mínima; arquivo do token apagado sempre; e-mails tirados do CONTEXTO (repo é público).
+
 ## Ferramentas para o Claude
 - Actions → "Gerar ofertas do dia" com opções: `previa` (monta e guarda no ramo `previa`, não publica),
   `so_vitrine` (só vitrine, nada no Instagram), `demo` (produtos de mentira).

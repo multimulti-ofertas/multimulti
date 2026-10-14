@@ -1,0 +1,24 @@
+name: Vigia diário
+on:
+  schedule:
+    - cron: "10 11 * * *"   # 07:10 em Cuiabá (depois do "Gerar ofertas do dia")
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  vigiar:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - name: Conferir tudo
+        env:
+          IG_TOKEN: ${{ secrets.IGTOKEN }}
+          FB_PAGE_TOKEN: ${{ secrets.FBPAGETOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT != '' && 'sim' || '' }}
+          SHOPEE_APP_ID: ${{ secrets.SHOPEEAPPID }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m robo.vigia
