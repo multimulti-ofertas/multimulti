@@ -38,6 +38,15 @@ jobs:
         if: ${{ inputs.demo || inputs.previa }}
         uses: actions/upload-artifact@v4
         with: { name: "${{ inputs.previa && 'previa' || 'teste-demo' }}", path: "docs/media\ndocs/produtos.json" }
+      - name: Guardar prévia no ramo "previa" (não aparece na vitrine)
+        if: ${{ inputs.previa }}
+        run: |
+          git config user.name "robo-multimulti"
+          git config user.email "robo@users.noreply.github.com"
+          git checkout -B previa
+          git add -A docs
+          git commit -m "Prévia $(TZ=America/Cuiaba date '+%F %H:%M')"
+          git push -f origin previa
       - name: Salvar no repositório
         if: ${{ !inputs.demo && !inputs.previa }}
         run: |
