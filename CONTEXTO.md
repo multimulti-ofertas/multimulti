@@ -1,6 +1,6 @@
 # Contexto do projeto MultiMulti (para continuar em outra conversa)
 
-Atualizado em 14/out/2026, 14:20 (Cuiabá). Ao abrir uma conversa nova com o Claude, diga:
+Atualizado em 14/out/2026, 16:45 (Cuiabá). Ao abrir uma conversa nova com o Claude, diga:
 "Leia o CONTEXTO.md do repositório multimulti-ofertas/multimulti e vamos continuar."
 
 ## O que é
@@ -27,7 +27,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - "Postar no Instagram" roda de hora em hora (xx:50) e publica o que a tabela ROTINA manda para aquela hora.
   São 19 publicações/dia; limite da conta é 100 por 24h.
 - Chave geral: `POSTAR_NO_INSTAGRAM` em robo/config.py (False = só monta produtos e vitrine, não posta).
-- Se uma publicação falhar no meio, o que já saiu fica marcado (não repete post).
+- Se uma publicação falhar no meio, o que já saiu fica marcado (não repete post). Falha do Instagram tenta de novo 1x após 30s.
 - Temas: segunda carro · terça ferramentas · quarta cuidado · quinta estilo · sexta a domingo top (mistura).
   Se a planilha não tem o tema do dia, completa com outros temas.
 
@@ -57,7 +57,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 
 ## Vitrine (link da bio)
 - https://multimulti-ofertas.github.io/multimulti (v5, docs/index.html)
-- Futurista e interativa: busca fixa no topo ("Viu no Insta? Digita o nº do post"), carrossel automático dos
+- Futurista e interativa: busca fixa no topo ("Digita o nº do post", encurtado para caber no celular), carrossel automático dos
   achados do dia, produto 3D que inclina com o mouse/celular, grade em perspectiva, partículas, filtros por categoria.
 - Link direto para um produto: ...multimulti/?n=4
 
@@ -77,7 +77,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Workflows com permissão mínima; arquivo do token apagado sempre; e-mails tirados do CONTEXTO (repo é público).
 
 ## Ferramentas para o Claude
-- Actions → "Gerar ofertas do dia" com opções: `previa` (monta e guarda no ramo `previa`, não publica),
+- Actions → "Gerar ofertas do dia" com opções: `previa` (monta e guarda no ramo `previa`, não publica; `data` simula outro dia),
   `so_vitrine` (só vitrine, nada no Instagram), `demo` (produtos de mentira).
 - Actions → "Checar Instagram": testa o token e mostra o resultado nos avisos (annotations) da execução.
 - Actions → "Postar no Instagram" manual: tipo auto/feed/reel/story.
@@ -108,8 +108,9 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
    pedido "Quero ativar a API" enviado em 13/out (resposta no Outlook, até 3 dias úteis).
    Depois: pegar AppID e Secret em "Abrir API" e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome).
-4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
-5. Atenção ao tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias).
+2. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
+3. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
+   histórico guarda). O GitHub recomenda até 1 GB → resolver antes de ~jan/2027 (ex.: mídias num ramo separado recriado do zero).
 
 ## Já configurado
 - Bio do Instagram (14/out): "📩 Manda EU QUERO no direct" + link da vitrine em Links (conferido)
@@ -119,8 +120,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Verificação em duas etapas no GitHub; acesso do Claude limitado a este repositório
 
 ## Contas e e-mails
-- GitHub: usuário multimulti-ofertas, entra com o Google (Gmail pessoal do João, que está cheio); reserva: Outlook
-- ManyChat, Meta for Developers e contato do Shopee Afiliados: e-mail do Outlook do João.
+- GitHub: usuário multimulti-ofertas, entra com o Google (Gmail pessoal do João); e-mail principal = Gmail novo do negócio.
+- Contato do Shopee Afiliados e a resposta da API: ainda no Outlook do João.
   ATENÇÃO: o João NÃO sabe a senha do Outlook e ele não tem recuperação (só abre no app do celular).
   Plano (14/out): migrar tudo para um Gmail novo só do negócio (criado 14/out, com 2FA + celular + códigos;
   endereço com o João, não escrever aqui). Feito (14/out): Shopee → Gmail novo; GitHub e-mail principal → Gmail novo
