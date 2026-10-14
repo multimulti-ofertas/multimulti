@@ -12,6 +12,11 @@ CALENDARIO = {
     6: "top",
 }
 
+# Exceções por data (AAAA-MM-DD → tema). Ex.: quando a planilha de um tema está fraca.
+TEMA_EM = {
+    "2026-10-15": "top",   # quinta: estilo estava fraco na planilha → mistura os mais vendidos
+}
+
 # Nome que aparece no selo da arte
 SELO = {"carro": "Carro", "ferramentas": "Ferramentas", "cuidado": "Cuidado", "estilo": "Estilo"}
 EMOJI = {"carro": "🚗", "ferramentas": "🔧", "cuidado": "🧔", "estilo": "👟"}

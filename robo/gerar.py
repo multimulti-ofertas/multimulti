@@ -43,7 +43,7 @@ def salvar(lista):
 
 
 def categoria_do_dia(d):
-    return config.CALENDARIO[d.weekday()]
+    return config.TEMA_EM.get(d.isoformat()) or config.CALENDARIO[d.weekday()]
 
 
 def palavras_do_dia(cat, rnd):
