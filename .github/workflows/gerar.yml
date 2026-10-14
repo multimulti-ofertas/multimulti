@@ -16,6 +16,10 @@ on:
         description: "Prévia com produtos de verdade (gera as artes para baixar, não publica nada)"
         type: boolean
         default: false
+      data:
+        description: "Só com prévia: gerar para outro dia (AAAA-MM-DD)"
+        type: string
+        default: ""
 permissions:
   contents: write
   pages: write
@@ -37,7 +41,7 @@ jobs:
           SHOPEE_APP_ID: ${{ secrets.SHOPEEAPPID || secrets.SHOPEE_APP_ID }}
           SHOPEE_SECRET: ${{ secrets.SHOPEESECRET || secrets.SHOPEE_SECRET }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python -m robo.gerar ${{ inputs.demo && '--demo' || '' }} ${{ inputs.so_vitrine && '--so-vitrine' || '' }}
+        run: python -m robo.gerar ${{ inputs.demo && '--demo' || '' }} ${{ inputs.so_vitrine && '--so-vitrine' || '' }} ${{ (inputs.previa && inputs.data) && format('--data {0}', inputs.data) || '' }}
       - name: Baixar resultado do teste
         if: ${{ inputs.demo || inputs.previa }}
         uses: actions/upload-artifact@v4
