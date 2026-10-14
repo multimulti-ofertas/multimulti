@@ -1,20 +1,18 @@
 name: Postar no Instagram
 on:
   schedule:
-    - cron: "0 12 * * *"   # 08:00 em Cuiabá → stories
-    - cron: "0 16 * * *"   # 12:00 em Cuiabá → feed
-    - cron: "0 19 * * *"   # 15:00 em Cuiabá → stories
-    - cron: "0 22 * * *"   # 18:00 em Cuiabá → Reels 1
-    - cron: "0 0 * * *"    # 20:00 em Cuiabá → stories
-    - cron: "0 1 * * *"    # 21:00 em Cuiabá → Reels 2
+    # Rotina: roda de hora em hora, uns minutos antes da hora cheia (o GitHub costuma atrasar),
+    # das 07:50 às 21:50 em Cuiabá (11:50 a 01:50 UTC). O que postar em cada hora está em robo/config.py → ROTINA.
+    - cron: "50 11-23 * * *"
+    - cron: "50 0-1 * * *"
   workflow_dispatch:
     inputs:
       tipo:
         description: "feed, reel ou story"
         required: true
-        default: feed
+        default: auto
         type: choice
-        options: [feed, reel, story]
+        options: [auto, feed, reel, story]
 permissions:
   contents: write
 concurrency:
@@ -33,15 +31,7 @@ jobs:
           IG_USER_ID: ${{ secrets.IGUSERID || secrets.IG_USER_ID }}
           IG_TOKEN: ${{ secrets.IGTOKEN || secrets.IG_TOKEN }}
         run: |
-          TIPO="${{ inputs.tipo }}"
-          if [ -z "$TIPO" ]; then
-            case "${{ github.event.schedule }}" in
-              "0 16 * * *") TIPO=feed ;;
-              "0 22 * * *"|"0 1 * * *") TIPO=reel ;;
-              *) TIPO=story ;;
-            esac
-          fi
-          python -m robo.postar --tipo "$TIPO"
+          python -m robo.postar --tipo "${{ inputs.tipo || 'auto' }}"
       - name: Marcar como postado
         run: |
           git config user.name "robo-multimulti"

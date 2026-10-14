@@ -45,8 +45,16 @@ PALAVRAS = {
 NOTA_MINIMA = 4.6
 VENDAS_MINIMAS = 100
 DESCONTO_MINIMO = 10          # % OFF
-PRODUTOS_POR_DIA = 6          # quantos entram na vitrine por dia (1 feed + 2 Reels + o resto só nos stories)
-STORIES_POR_VEZ = 2           # stories postados a cada horário (08h, 15h e 20h = 6 por dia)
+PRODUTOS_POR_DIA = 8          # por dia: 2 no feed + 2 em Reels + 4 só nos stories (todos na vitrine)
+STORIES_POR_VEZ = 1           # stories postados a cada horário da rotina
+
+# Rotina diária (horário de Cuiabá). O robô de postagem roda de hora em hora e publica o que estiver
+# marcado para aquela hora. Limite do Instagram: 50 publicações por 24h (aqui são 19 por dia).
+ROTINA = {h: ["story"] for h in range(8, 23)}   # 1 story por hora, das 08h às 22h (15 por dia)
+ROTINA[8] = ["feed", "story"]    # 1º post do feed
+ROTINA[20] = ["feed", "story"]   # 2º post do feed (12h depois)
+ROTINA[12] = ["reel", "story"]   # 1º Reels
+ROTINA[21] = ["reel", "story"]   # 2º Reels
 NAO_REPETIR_DIAS = None       # None = nunca repete o mesmo produto (nem um muito parecido)
 GUARDAR_MIDIA_DIAS = 10       # apaga vídeos/imagens antigos para o repositório não crescer demais
 

@@ -1,7 +1,7 @@
 name: Gerar ofertas do dia
 on:
   schedule:
-    - cron: "0 11 * * *"   # 07:00 em Cuiabá
+    - cron: "25 10 * * *"   # 06:25 em Cuiabá (pronto antes do 1º post das 08:00)
   workflow_dispatch:
     inputs:
       demo:

@@ -270,7 +270,7 @@ def main():
         raise SystemExit("Acabaram os produtos novos. Baixe outra planilha no painel da Shopee.")
 
     prox = max([x["n"] for x in lista], default=0) + 1
-    papeis = ["feed", "reel", "reel"] + [None] * 10  # 1 feed + 2 Reels por dia
+    papeis = ["feed", "feed", "reel", "reel"] + [None] * 20  # 2 no feed + 2 Reels por dia
     novos, tipos_dia = [], set()
     for c, p in escolhidos:
         if len(novos) >= config.PRODUTOS_POR_DIA:
