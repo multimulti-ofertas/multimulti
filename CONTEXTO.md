@@ -36,6 +36,14 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Link da vitrine já está na bio do Instagram
 - Vitrine com visual futurista (v2) e aviso "ofertas chegam em breve" quando vazia
 
+## ⚠️ BLOQUEIO (14/out)
+- A Meta bloqueou a conta de desenvolvedor ("Confirmação de conta necessária — atividade incomum").
+  O token responde "API access blocked". O João precisa entrar em developers.facebook.com e confirmar a conta.
+- Até lá: `POSTAR_NO_INSTAGRAM = False` em robo/config.py (o robô só monta produtos e vitrine).
+- Depois de confirmar: rodar Actions → "Checar Instagram" (mostra o resultado nos avisos); se OK, mudar
+  para True, apagar os produtos do dia que estão como só-vitrine e rodar "Gerar ofertas do dia".
+- Sem o secret GH_PAT, o token do Instagram não se renova sozinho: vence ~60 dias depois de gerado.
+
 ## Falta
 1. ~~Shopee aprovar o cadastro de afiliado~~ APROVADO em 13/out. Instagram multimulti.ofertas verificado no painel
    (categorias: Automóveis, Roupas/Sapatos Masculinos, Acessórios de Moda, Cupons, Peças para Veículos)

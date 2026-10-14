@@ -47,6 +47,10 @@ def main():
     ap.add_argument("--hora", type=int, help="só para teste: finge que é essa hora (0-23)")
     args = ap.parse_args()
 
+    if not config.POSTAR_NO_INSTAGRAM and not args.teste:
+        print("Postagem no Instagram desligada (config.POSTAR_NO_INSTAGRAM = False). Nada a fazer.")
+        return
+
     if args.tipo == "auto":
         h = args.hora if args.hora is not None else hora_da_rotina()
         tipos = config.ROTINA.get(h, [])
@@ -76,8 +80,9 @@ def main():
                     mid = instagram.postar_reels(url, alvo["legenda"])
                 else:
                     mid = instagram.postar_story(url)
-            except instagram.InstagramErro as e:
-                print(f"[erro] nº {alvo['n']}: {e}")
+            except Exception as e:  # qualquer falha: registra e segue (o que já saiu fica marcado)
+                print(f"[erro] {tipo} do nº {alvo['n']}: {e}")
+                print(f"::error::{tipo} do nº {alvo['n']} falhou: {str(e)[:300]}")
                 erros += 1
                 continue
             agora = dt.datetime.utcnow().isoformat()
