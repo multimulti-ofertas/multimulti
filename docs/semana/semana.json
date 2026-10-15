@@ -1,0 +1,58 @@
+{
+ "data": "2026-10-17",
+ "duracao": 26,
+ "musica": "traka",
+ "produtos": [
+  {
+   "n": 1,
+   "titulo": "Máquina de barbear 3 em 1",
+   "preco": "R$ 48,47",
+   "vendidos": "+100 mil"
+  },
+  {
+   "n": 4,
+   "titulo": "Mini barbeador elétrico",
+   "preco": "R$ 14,99",
+   "vendidos": "+100 mil"
+  },
+  {
+   "n": 2,
+   "titulo": "Navalha navalhete barbeiro",
+   "preco": "R$ 12,99",
+   "vendidos": "+90 mil"
+  }
+ ],
+ "roteiro": [
+  {
+   "de": 0,
+   "ate": 3.0,
+   "tela": "TOP 3 ACHADOS",
+   "fala": "Os 3 achados pra homem que mais tão vendendo na Shopee essa semana."
+  },
+  {
+   "de": 3.0,
+   "ate": 9.5,
+   "tela": "#3 Navalha navalhete barbeiro",
+   "fala": "Número 3: navalha navalhete barbeiro, por 12,99. Mais de 90 mil vendidos."
+  },
+  {
+   "de": 9.5,
+   "ate": 16.0,
+   "tela": "#2 Mini barbeador elétrico",
+   "fala": "Número 2: mini barbeador elétrico, por 14,99. Mais de 100 mil vendidos."
+  },
+  {
+   "de": 16.0,
+   "ate": 22.5,
+   "tela": "#1 Máquina de barbear 3 em 1",
+   "fala": "E o número 1: máquina de barbear 3 em 1, por 48,47. Mais de 100 mil vendidos."
+  },
+  {
+   "de": 22.5,
+   "ate": 26.0,
+   "tela": "LINK NA BIO",
+   "fala": "Curtiu algum? Link na bio, é só digitar o número."
+  }
+ ],
+ "legenda": "Top 3 achados da semana 🔥 Qual você levaria? Comenta o número 👇\n\n🛒 Link na bio → digita o nº do produto\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #multimulti #publi"
+}
