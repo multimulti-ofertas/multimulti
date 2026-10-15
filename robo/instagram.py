@@ -76,7 +76,8 @@ def postar_reels(url_mp4, legenda, capa_url=None):
     uid, tok = _cred()
     esperar_url(url_mp4)
     dados = {"media_type": "REELS", "video_url": url_mp4, "caption": legenda,
-             "share_to_feed": "true", "access_token": tok}
+             "share_to_feed": "true", "access_token": tok,
+             "thumb_offset": "4500"}  # capa = quadro dos 4,5s (produto + nome); o 1º quadro saía quase vazio
     if capa_url:
         dados["cover_url"] = capa_url
     c = _req("POST", f"{BASE}/{uid}/media", data=dados)
