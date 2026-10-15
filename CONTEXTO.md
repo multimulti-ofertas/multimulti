@@ -48,7 +48,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Inspirado num Reels de referência ("Websites in 2026"): fundo quase preto, produto recortado flutuando e
   inclinado com brilho laranja, nome em maiúsculas condensadas (Barlow Condensed), preço grande laranja,
   círculo com o número, "LINK NA BIO →". Story também diz "ou responde o story que eu te mando o link".
-- Reels: cena contínua de 10s (chamada → produto flutuando → preço → "Link na bio nº X").
+- Reels: cena contínua de 10s (chamada → produto flutuando → preço → "Link na bio nº X"). A chamada já aparece no 1º quadro;
+  capa = quadro dos 4,5s (thumb_offset); marca a 290px do topo para o grid não cortar.
 - Música nos Reels (desde 14/out): trechos de 10s em robo/musicas/*.m4a (Coleção de Sons da Meta), já cortados
   no drop, com fade e volume -14 LUFS. robo/musica.py alterna pelo nº do produto. 11 músicas (lista em robo/musicas/LEIA.txt).
   Só os trechos ficam no repositório (público), nunca a música inteira. O João NÃO quer as músicas salvas no computador dele.
@@ -117,8 +118,11 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
    (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome).
 2. João vai trocar o nome de exibição do app da Meta de "MultiMulti Robo" para "MultiMulti Ofertas" (Configurações do app
    → Básico), porque o Facebook mostra "Postado por MultiMulti Robo". Não quebra tokens.
-3. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
-4. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
+3. Destaques do Instagram: "Sobre" pronto e no ar (capa quadrada MULTI/MULTI + 4 stories). Próximo: "Avaliações" com
+   prints de AVALIAÇÕES REAIS da Shopee que o João vai mandar (montar no visual da marca, esconder nome de quem avaliou,
+   linha "Avaliação real de quem comprou na Shopee"). Depoimento inventado: não fazer.
+4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
+5. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
    histórico guarda). O GitHub recomenda até 1 GB → resolver antes de ~jan/2027 (ex.: mídias num ramo separado recriado do zero).
 
 ## Já configurado
