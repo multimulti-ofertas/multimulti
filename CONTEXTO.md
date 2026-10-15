@@ -14,7 +14,10 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Estoque (14/out, depois das planilhas de carro e ferramentas): passam no filtro carro 11 · ferramentas 4 · estilo 6 · cuidado 26 (~6 dias).
   As planilhas de carro/ferramentas vieram fracas: 191 itens, só 15 com 100+ vendas (resto: peça CNC chinesa, pingente, 0 vendas).
   Dica para o João: no painel, ordenar por "Mais vendidos" e buscar termos específicos (ex.: "kit chave catraca", "suporte celular carro").
-- Esperando a Shopee liberar a Open API (prazo até sex 16/out, resposta no **Outlook**).
+- **API da Shopee LIBERADA em 15/out** (secrets SHOPEEAPPID/SHOPEESECRET salvos; prévia de 16/out testada OK).
+  A partir de 16/out o robô busca sozinho: só +1 mil vendas (VENDAS_MINIMAS_API), nota ≥4.6, tema confirmado
+  pelo nome (planilha.tema), 1 de cada tipo por dia (planilha.TIPOS/MESMO_TIPO). Planilhas viram reserva.
+  Falta: trocar o e-mail de contato do painel de afiliados para o Gmail novo.
 
 > Foco (15/out): só Instagram + Facebook; WhatsApp em breve. TikTok e Kwai CANCELADOS pelo João
 > (API do TikTok não aprova postar nas próprias contas; Kwai não tem API). Não reabrir sem ele pedir.
