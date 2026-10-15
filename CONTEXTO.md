@@ -53,6 +53,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   no drop, com fade e volume -14 LUFS. robo/musica.py alterna pelo nº do produto. 11 músicas (lista em robo/musicas/LEIA.txt).
   Só os trechos ficam no repositório (público), nunca a música inteira. O João NÃO quer as músicas salvas no computador dele.
   Músicas virais do Instagram: impossível pela API (e com direito autoral derruba o Reels) — não insistir.
+- Legendas terminam com "#publi" (texto.com_publi, colocado na hora de postar). O João NÃO quer a palavra "afiliado" em nada
+  público; vitrine diz "Contém links patrocinados da Shopee".
 - Legendas em tom de conversa ("Achei esse e lembrei de você…") + "📩 Ou manda EU QUERO no direct…".
 - Código: robo/arte.py, robo/reel.py, robo/texto.py. Fontes em robo/fontes e docs/fontes (licença OFL).
 - Histórico de tentativas de visual em 14/out (não usar de novo): cartaz laranja/preto da taste-skill,
