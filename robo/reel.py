@@ -89,7 +89,7 @@ def reel(cfg, out, segundos=10.0):
         t = i / FPS
         k = 10 if t >= 2.0 else int(10 * _ease(t / 2.0))
         img = fundos[2 if t < 2.0 else k].copy()
-        _entra(img, mk, (W - mk.width) // 2, 230, 1.0, sobe=0)
+        _entra(img, mk, (W - mk.width) // 2, 290, 1.0, sobe=0)  # abaixo de 240px: o grid do perfil corta o topo
         if t < 2.0:  # 1. chamada — já aparece no 1º quadro (é ele que prende quem está rolando o feed)
             y = 820
             _entra(img, h1, M - 4, y, 1.0, sobe=70)
