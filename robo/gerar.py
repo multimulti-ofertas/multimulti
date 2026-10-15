@@ -48,7 +48,7 @@ def categoria_do_dia(d):
 
 def palavras_do_dia(cat, rnd):
     if cat == "top":
-        return [(c, rnd.choice(p)) for c, p in config.PALAVRAS.items()]
+        return [(c, w) for c, p in config.PALAVRAS.items() for w in rnd.sample(p, k=2)]  # 2 buscas por tema
     return [(cat, w) for w in rnd.sample(config.PALAVRAS[cat], k=min(3, len(config.PALAVRAS[cat])))]
 
 
