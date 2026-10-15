@@ -33,8 +33,8 @@ def pendentes(lista, d, tipo):
         return [x for x in do_dia if x.get("agenda") == "feed" and x.get("feed") and not ja_postado(x, "feed")][:1]
     if tipo == "reel":
         return [x for x in do_dia if x.get("reel") and not ja_postado(x, "reel")][:1]
-    # stories: os produtos do dia se revezam (o que apareceu menos vezes vai primeiro)
-    com_story = [x for x in do_dia if x.get("story")]
+    # stories: cada produto do dia aparece UMA vez só (nunca repete; acabou, não posta mais story no dia)
+    com_story = [x for x in do_dia if x.get("story") and not int(x.get("stories") or 0)]
     com_story.sort(key=lambda x: (int(x.get("stories") or 0), x["n"]))
     return com_story[:config.STORIES_POR_VEZ]
 

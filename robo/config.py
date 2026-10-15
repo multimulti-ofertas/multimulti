@@ -62,7 +62,7 @@ NOTA_MINIMA = 4.6
 VENDAS_MINIMAS = 100
 VENDAS_MINIMAS_API = 1000     # com a API dá para ser exigente: só produto com +1 mil vendas
 DESCONTO_MINIMO = 10          # % OFF
-PRODUTOS_POR_DIA = 8          # por dia: 2 no feed + 2 em Reels + 4 só nos stories (todos na vitrine)
+PRODUTOS_POR_DIA = 12         # por dia: 2 no feed + 2 em Reels + 8 só nos stories = 12 stories sem repetir
 STORIES_POR_VEZ = 1           # stories postados a cada horário da rotina
 
 # Chave geral: False = o robô continua montando os produtos e a vitrine, mas não publica nada no Instagram.

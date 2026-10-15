@@ -28,7 +28,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 | 06:25 | "Gerar ofertas do dia": escolhe 8 produtos, monta feed/story/Reels/legendas, atualiza a vitrine | .github/workflows/gerar.yml |
 | 11:00 e 19:00 (12h e 20h Brasília) | Post no feed (+ story) | robo/config.py → ROTINA |
 | 12:00 e 20:00 (13h e 21h Brasília) | Reels (+ story) | robo/config.py → ROTINA |
-| 09:00 a 20:00 (10h–21h Brasília) | 1 story por hora, 12 por dia (os 8 produtos se revezam) | robo/config.py → ROTINA |
+| 09:00 a 20:00 (10h–21h Brasília) | 1 story por hora, 12 por dia, cada produto UMA vez (12 produtos por dia, nunca repete) | robo/config.py → ROTINA |
 | Sábado 07:00 | "Top 3 da semana": vídeo dos 3 mais vendidos dos últimos 7 dias, música baixa, + roteiro e legenda.
   O João baixa em .../multimulti/semana/ e posta À MÃO com a narração dele | .github/workflows/semana.yml, robo/top3.py |
 | Segunda 06:00 | Renova o token do Instagram (só salva se existir o secret GH_PAT) | token.yml |
