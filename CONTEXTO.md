@@ -25,6 +25,11 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 | 09:00 a 20:00 (10h–21h Brasília) | 1 story por hora, 12 por dia (os 8 produtos se revezam) | robo/config.py → ROTINA |
 | Sábado 07:00 | "Top 3 da semana": vídeo dos 3 mais vendidos dos últimos 7 dias, música baixa, + roteiro e legenda.
   O João baixa em .../multimulti/semana/ e posta À MÃO com a narração dele | .github/workflows/semana.yml, robo/top3.py |
+| Todo dia (manual) | TikTok: página .../multimulti/tiktok/ mostra os 2 Reels do dia + legenda própria do TikTok (#publi).
+  O João toca "Postar no TikTok" (copia a legenda e compartilha o vídeo pro app), põe som em alta e liga "Conteúdo de marca".
+  Por que não é automático: a API do TikTok só posta público após auditoria, e a auditoria NÃO aprova ferramenta
+  para postar nas próprias contas. Alternativa paga com app auditado: Upload-Post (~US$16–24/mês, grátis não inclui TikTok).
+  Conta TikTok deve ser Comercial (link na bio sem mínimo de seguidores) | docs/tiktok/index.html |
 | Segunda 06:00 | Renova o token do Instagram (só salva se existir o secret GH_PAT) | token.yml |
 - "Postar no Instagram" roda de hora em hora (xx:50) e publica o que a tabela ROTINA manda para aquela hora.
   São 16 publicações/dia no Instagram (+ as mesmas no Facebook); limite do Instagram é 100 por 24h.

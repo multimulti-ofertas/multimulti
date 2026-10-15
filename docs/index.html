@@ -248,7 +248,7 @@
 const $ = s => document.querySelector(s);
 const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* modo leve: navegador de dentro do Instagram/Facebook e celulares mais fracos (evita a página travar e recarregar) */
-const leve = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\//i.test(navigator.userAgent) || (navigator.deviceMemory || 8) <= 4 || matchMedia("(hover: none)").matches;
+const leve = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\/|musical_ly|BytedanceWebview|TikTok/i.test(navigator.userAgent) || (navigator.deviceMemory || 8) <= 4 || matchMedia("(hover: none)").matches;
 if (leve) document.documentElement.classList.add("leve");
 let itens = [], filtro = "todos";
 const NOMES = {carro:"Carro", ferramentas:"Ferramentas", cuidado:"Cuidado", estilo:"Estilo"};
