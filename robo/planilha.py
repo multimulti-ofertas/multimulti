@@ -82,12 +82,17 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
          "catraca", "soquete", "jogo de chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda",
-         "sabonete", "suporte", "aspirador", "carregador", "camera"]
+         "sabonete", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete"]
 
 
 def tipo(nome):
     n = sem_acento(nome)
-    return next((t for t in TIPOS if re.search(r"\b" + re.escape(t), n)), None)
+    t = next((t for t in TIPOS if re.search(r"\b" + re.escape(t), n)), None)
+    return MESMO_TIPO.get(t, t)
+
+
+MESMO_TIPO = {"soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "mochila": "bolsa",
+              "aparador": "maquina", "barbeador": "maquina"}
 
 
 def _numero(txt):

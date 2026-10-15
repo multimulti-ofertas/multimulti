@@ -116,10 +116,11 @@ def nome_curto(nome, limite=32):
 
 
 def _nome_curto(nome, limite, cortar_traco):
-    t = re.sub(r"\s*/\s*\d+\s*(peças|pecas|pçs|pcs|unidades)\b", " ", nome or "", flags=re.I)  # "40 Peças / 46 Peças"
-    t = t.replace("/", " / ")                                       # "Oxigênio/Ar" não vira "OxigênioAr"
+    t = re.sub(r"\b\d+(/\d+)+\s*(pcs|pçs|peças|pecas|unidades|un)?\b", " ", nome or "", flags=re.I)  # "1/2/3/4", "2/1 PCS"
+    t = re.sub(r"\s*/\s*\d+\s*(peças|pecas|pçs|pcs|unidades)\b", " ", t, flags=re.I)  # "40 Peças / 46 Peças"
     t = re.sub(r"[\[\(【].*?[\]\)】]", " ", t)
     t = re.sub(r"\b[cC]/\s?", " ", t)                               # "C/ 5 rolos"
+    t = t.replace("/", " / ")                                       # "Oxigênio/Ar" não vira "OxigênioAr"
     t = re.sub(r"[|*#!•]+", " ", t)
     if cortar_traco:
         t = re.sub(r"\s[-–]\s.*$", "", t)
