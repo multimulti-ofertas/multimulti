@@ -199,6 +199,12 @@ def legenda_padrao(item):
     return "\n".join(linhas)
 
 
+def com_publi(legenda):
+    """Identificação de publicidade (pedida pelo CONAR/Shopee): "#publi" no fim da legenda."""
+    t = (legenda or "").rstrip()
+    return t if "#publi" in t.lower() else f"{t} #publi"
+
+
 def gancho_padrao(item):
     """Duas linhas em tom de conversa para abrir o Reels."""
     if item["pct"] >= 15:

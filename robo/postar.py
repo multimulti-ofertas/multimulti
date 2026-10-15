@@ -15,7 +15,7 @@ import argparse
 import datetime as dt
 import time
 
-from . import config, facebook, instagram
+from . import config, facebook, instagram, texto
 from .gerar import carregar, salvar, hoje
 
 
@@ -102,15 +102,15 @@ def main():
             url = f"{config.PAGES_URL}/{alvo[tipo]}"
             print(f"[instagram] {tipo} do nº {alvo['n']}: {alvo['titulo']}\n{url}")
             if tipo != "story":
-                print(f"---\n{alvo['legenda']}")
+                print(f"---\n{texto.com_publi(alvo['legenda'])}")
             if args.teste:
                 feitos_agora.append(alvo)
                 continue
             def publicar():
                 if tipo == "feed":
-                    return instagram.postar_imagem(url, alvo["legenda"])
+                    return instagram.postar_imagem(url, texto.com_publi(alvo["legenda"]))
                 if tipo == "reel":
-                    return instagram.postar_reels(url, alvo["legenda"])
+                    return instagram.postar_reels(url, texto.com_publi(alvo["legenda"]))
                 return instagram.postar_story(url)
             try:
                 try:
@@ -148,13 +148,13 @@ def main():
             print(f"[facebook] {tipo} do nº {alvo['n']}: {alvo['titulo']}")
             if args.teste:
                 if tipo != "story":
-                    print(f"---\n{facebook.legenda(alvo['legenda'], alvo['n'])}")
+                    print(f"---\n{facebook.legenda(texto.com_publi(alvo['legenda']), alvo['n'])}")
                 continue
             try:
                 if tipo == "feed":
-                    mid = facebook.postar_imagem(url, facebook.legenda(alvo["legenda"], alvo["n"]))
+                    mid = facebook.postar_imagem(url, facebook.legenda(texto.com_publi(alvo["legenda"]), alvo["n"]))
                 elif tipo == "reel":
-                    mid = facebook.postar_reels(url, facebook.legenda(alvo["legenda"], alvo["n"]))
+                    mid = facebook.postar_reels(url, facebook.legenda(texto.com_publi(alvo["legenda"]), alvo["n"]))
                 else:
                     mid = facebook.postar_story(url)
             except Exception as e:
