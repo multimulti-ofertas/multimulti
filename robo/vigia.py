@@ -1,7 +1,7 @@
 """Vigia diário: confere se está tudo funcionando e FALHA (o GitHub manda e-mail) se algo quebrou.
 
 Confere: token do Instagram, token da Página, vitrine no ar, ofertas de hoje geradas, posts de ontem
-(Instagram e Facebook), robôs que falharam nas últimas 24h e quantos dias de produtos ainda restam.
+(Instagram e Facebook), stories ou produtos repetidos, robôs que falharam nas últimas 24h e quantos dias de produtos ainda restam.
 Os resultados aparecem como avisos (annotations) na execução "Vigia diário".
 """
 import datetime as dt
@@ -84,6 +84,26 @@ def posts():
         atencao(f"Ontem saiu menos que o previsto: {', '.join(falta)}")
     else:
         ok("Ontem: 2 feeds e 2 Reels no Instagram e no Facebook")
+    repetidos = [f"nº {x['n']}" for x in do_dia if int(x.get("stories") or 0) > 1
+                 and ontem > "2026-10-15"]  # até 15/out repetir era a regra antiga (já corrigida)
+    if repetidos:
+        erro(f"Story repetido ontem: {', '.join(repetidos)}")
+    else:
+        ok(f"Ontem: {sum(1 for x in do_dia if x.get('stories'))} stories, nenhum repetido")
+
+
+def repetidos():
+    """Produto que já apareceu em outro dia (nunca pode repetir)."""
+    vistos, dup = {}, []
+    for x in sorted(carregar(), key=lambda x: x["n"]):
+        iid = str(x.get("itemId"))
+        if iid in vistos:
+            dup.append(f"nº {x['n']} = nº {vistos[iid]}")
+        vistos.setdefault(iid, x["n"])
+    if dup:
+        erro(f"Produto repetido: {', '.join(dup[:5])}")
+    else:
+        ok("Nenhum produto repetido")
 
 
 def falhas():
@@ -129,7 +149,7 @@ def estoque():
         ok(f"Produtos para ~{dias} dias ({resumo})")
 
 
-for etapa in (instagram, pagina, vitrine, posts, falhas, estoque):
+for etapa in (instagram, pagina, vitrine, posts, repetidos, falhas, estoque):
     try:
         etapa()
     except Exception as e:
