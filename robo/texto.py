@@ -92,7 +92,7 @@ _RUIDO_NOME = {
     "fabricado", "brasil", "bivolt", "usb",
 }
 _CORTE = {"para", "pra", "com", "e", "de", "-", "–", "|", "+", "/"}  # onde o nome principal costuma acabar
-_SOLTAS_FIM = {"e", "de", "do", "da", "dos", "das", "com", "para", "pra", "em", "a", "o", "-", "–", "+", "sem", "c"}
+_SOLTAS_FIM = {"e", "de", "do", "da", "dos", "das", "com", "para", "pra", "em", "a", "o", "-", "–", "+", "sem", "c", "modelo"}
 
 
 def _acentua(w):
@@ -116,7 +116,9 @@ def nome_curto(nome, limite=32):
 
 
 def _nome_curto(nome, limite, cortar_traco):
-    t = re.sub(r"[\[\(【].*?[\]\)】]", " ", nome or "")
+    t = re.sub(r"\s*/\s*\d+\s*(peças|pecas|pçs|pcs|unidades)\b", " ", nome or "", flags=re.I)  # "40 Peças / 46 Peças"
+    t = t.replace("/", " / ")                                       # "Oxigênio/Ar" não vira "OxigênioAr"
+    t = re.sub(r"[\[\(【].*?[\]\)】]", " ", t)
     t = re.sub(r"\b[cC]/\s?", " ", t)                               # "C/ 5 rolos"
     t = re.sub(r"[|*#!•]+", " ", t)
     if cortar_traco:
@@ -161,6 +163,9 @@ def _nome_curto(nome, limite, cortar_traco):
     texto_ = " ".join(ws)
     if destaque:
         texto_ = f"{texto_} {destaque}"
+    qtd = re.match(r"^(\d+\s?(?:peças|pecas|pçs|pcs|unidades))\s+(.+)$", texto_, re.I)  # "40 peças jogo..." -> "Jogo... 40 peças"
+    if qtd:
+        texto_ = f"{qtd.group(2)} {qtd.group(1).lower()}"
     return frase(re.sub(r"\s+", " ", texto_).strip(" -–,."))
 
 

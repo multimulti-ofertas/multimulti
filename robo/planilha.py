@@ -23,22 +23,24 @@ TEMAS = {
     "cuidado": [
         "barbe", "barba", "cabelo", "aparador", "lamina", "navalha", "tonico", "shampoo",
         "perfume", "body splash", "pomada", "pasta modeladora", "depil", "pelos", "gola higienica",
-        "gillette", "minoxi", "grecin", "oneblade", "kemei", "sobrancelha",
+        "gillette", "minoxi", "grecin", "oneblade", "kemei", "sobrancelha", "sabonete", "facial",
+        "protetor solar", "hidratante", "desodorante",
     ],
     "carro": [
-        "carro", "automotiv", "veicular", "porta malas", "volante", "farol", "pneu", "moto",
+        "carro", "automotiv", "veicular", "porta malas", "volante", "farol", "pneu", "moto", "12v",
     ],
     "ferramentas": [
         "ferramenta", "chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
         "multimetro", "catraca", "nivel a laser", "cola ",
     ],
     "estilo": [
-        "camiseta", "relogio", "tenis", "carteira", "bermuda", "oculos", "mochila", "meia",
+        "camiseta", "camisa", "relogio", "tenis", "carteira", "bermuda", "oculos", "mochila", "meia",
         "cueca", "bone", "cadarc", "jaqueta", "couro", "sapato", "limpa tenis",
     ],
 }
 # Produtos com estas palavras nunca entram.
-FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto"]
+FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
+        "gato", "infantil", "crianca", "bebe"]
 
 
 def sem_acento(t):
@@ -77,12 +79,15 @@ def parecido(a, b):
 
 # Tipos de produto: no mesmo dia entra no máximo 1 de cada tipo (variedade).
 TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "shampoo",
-         "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis"]
+         "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
+         "jogo de chave", "catraca", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
+         "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda",
+         "sabonete", "suporte", "aspirador", "carregador", "camera"]
 
 
 def tipo(nome):
     n = sem_acento(nome)
-    return next((t for t in TIPOS if t in n), None)
+    return next((t for t in TIPOS if re.search(r"\b" + re.escape(t), n)), None)
 
 
 def _numero(txt):

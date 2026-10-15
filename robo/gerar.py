@@ -64,7 +64,7 @@ def passa_filtro(p):
     if p.get("fonte") == "planilha":  # planilha não traz nota nem desconto
         return int(p.get("sales") or 0) >= config.VENDAS_MINIMAS and bool(p.get("priceMin"))
     return (float(p.get("ratingStar") or 0) >= config.NOTA_MINIMA
-            and int(p.get("sales") or 0) >= config.VENDAS_MINIMAS
+            and int(p.get("sales") or 0) >= config.VENDAS_MINIMAS_API
             and float(p.get("priceDiscountRate") or 0) >= config.DESCONTO_MINIMO
             and p.get("imageUrl") and p.get("priceMin"))
 
@@ -100,8 +100,10 @@ def candidatos_shopee(cat_dia, rnd):
     out = []
     for cat, kw in palavras_do_dia(cat_dia, rnd):
         try:
-            for p in shopee.buscar(kw, limite=40, ordem=2):
-                out.append((cat, p))
+            for p in shopee.buscar(kw, limite=50, ordem=2):
+                c = planilha.tema(p.get("productName"))
+                if c:  # só entra se o nome confirmar o tema (corta bomba de aquário, infantil, feminino...)
+                    out.append((c, p))
         except Exception as e:
             print(f"[aviso] busca '{kw}' falhou: {e}")
     return out
