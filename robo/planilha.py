@@ -27,11 +27,11 @@ TEMAS = {
         "protetor solar", "hidratante", "desodorante",
     ],
     "carro": [
-        "carro", "automotiv", "veicular", "porta malas", "volante", "farol", "pneu", "moto", "12v",
+        "carro", "automotiv", "veicular", "porta malas", "volante", "farol", "pneu", "moto ", "motocicl", "12v",
     ],
     "ferramentas": [
         "ferramenta", "chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
-        "multimetro", "catraca", "nivel a laser", "cola ",
+        "multimetro", "catraca", "nivel a laser", "cola ", "esmerilhadeira", "lixadeira", "serra ", "soquete",
     ],
     "estilo": [
         "camiseta", "camisa", "relogio", "tenis", "carteira", "bermuda", "oculos", "mochila", "meia",
@@ -52,7 +52,7 @@ def tema(nome):
     n = sem_acento(nome)
     if any(w in n for w in FORA):
         return None
-    pontos = {c: sum(w in n for w in ws) for c, ws in TEMAS.items()}
+    pontos = {c: sum(bool(re.search(r"\b" + re.escape(w), n)) for w in ws) for c, ws in TEMAS.items()}
     melhor = max(pontos, key=pontos.get)
     return melhor if pontos[melhor] else None
 
@@ -80,7 +80,7 @@ def parecido(a, b):
 # Tipos de produto: no mesmo dia entra no máximo 1 de cada tipo (variedade).
 TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "shampoo",
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
-         "jogo de chave", "catraca", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
+         "catraca", "soquete", "jogo de chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda",
          "sabonete", "suporte", "aspirador", "carregador", "camera"]
 
