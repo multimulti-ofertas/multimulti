@@ -89,7 +89,7 @@ _RUIDO_NOME = {
     "promoção", "promocao", "oferta", "envio", "imediato", "pronta", "entrega", "barato", "masculino",
     "masculina", "masculinos", "masculinas", "homens", "homem", "unissex", "unisex", "qualidade", "superior",
     "exclusivo", "alta", "aleatório", "aleatorio", "designer", "my", "importado", "importada", "fabricadas",
-    "fabricado", "brasil", "bivolt", "usb",
+    "fabricado", "brasil", "bivolt", "usb", "new", "lindo", "linda", "incrivel", "incrível",
 }
 _CORTE = {"para", "pra", "com", "e", "de", "-", "–", "|", "+", "/"}  # onde o nome principal costuma acabar
 _SOLTAS_FIM = {"e", "de", "do", "da", "dos", "das", "com", "para", "pra", "em", "a", "o", "-", "–", "+", "sem", "c", "modelo"}
@@ -116,7 +116,9 @@ def nome_curto(nome, limite=32):
 
 
 def _nome_curto(nome, limite, cortar_traco):
-    t = re.sub(r"\b\d+(/\d+)+\s*(pcs|pçs|peças|pecas|unidades|un)?\b", " ", nome or "", flags=re.I)  # "1/2/3/4", "2/1 PCS"
+    t = re.sub(r"\b\d+(/\d+)+\s*(pcs|pçs|peças|pecas|unidades|un|metros|metro)?\b", " ", nome or "", flags=re.I)  # "1/2/3/4", "2/1 PCS"
+    t = re.sub(r"\b\d+\s+ou\s+\d+\s*(pcs|pçs|peças|pecas|unidades)?\b", " ", t, flags=re.I)  # "10 ou 3 Peças"
+    t = re.sub(r"\b(\d+)\s?em\s?(\d+)\b", r"\1 em \2", t, flags=re.I)                     # "3 em1" -> "3 em 1"
     t = re.sub(r"\s*/\s*\d+\s*(peças|pecas|pçs|pcs|unidades)\b", " ", t, flags=re.I)  # "40 Peças / 46 Peças"
     t = re.sub(r"[\[\(【].*?[\]\)】]", " ", t)
     t = re.sub(r"\b[cC]/\s?", " ", t)                               # "C/ 5 rolos"

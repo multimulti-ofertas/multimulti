@@ -41,7 +41,7 @@ TEMAS = {
 # Produtos com estas palavras nunca entram.
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unha", "maquiagem", "perler", "artesanato",
-        "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo"]
+        "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador"]
 
 
 def sem_acento(t):
@@ -51,7 +51,7 @@ def sem_acento(t):
 
 def tema(nome):
     n = sem_acento(nome)
-    if any(w in n for w in FORA):
+    if any(re.search(r"\b" + re.escape(w), n) for w in FORA):  # começo de palavra: "trico" não pega "elétrico"
         return None
     pontos = {c: sum(bool(re.search(r"\b" + re.escape(w), n)) for w in ws) for c, ws in TEMAS.items()}
     melhor = max(pontos, key=pontos.get)
@@ -87,8 +87,16 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
 
 
 def tipo(nome):
+    """Tipo = palavra de TIPOS que aparece PRIMEIRO no nome ("Tênis ... cadarço" é tênis;
+    "Cadarço ... para tênis" é cadarço). "nariz" sempre ganha (aparador de nariz ≠ máquina de cabelo)."""
     n = sem_acento(nome)
-    t = next((t for t in TIPOS if re.search(r"\b" + re.escape(t), n)), None)
+    if re.search(r"\bnariz", n):
+        return "nariz"
+    achados = [(m.start(), i, t) for i, t in enumerate(TIPOS)
+               for m in [re.search(r"\b" + re.escape(t), n)] if m]
+    if not achados:
+        return None
+    t = min(achados)[2]
     return MESMO_TIPO.get(t, t)
 
 
