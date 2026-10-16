@@ -41,7 +41,7 @@ TEMAS = {
 # Produtos com estas palavras nunca entram.
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unha", "maquiagem", "perler", "artesanato",
-        "bijuteria", "micanga", "croche", "trico", "boneca"]
+        "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo"]
 
 
 def sem_acento(t):
@@ -81,7 +81,7 @@ def parecido(a, b):
 # Tipos de produto: no mesmo dia entra no máximo 1 de cada tipo (variedade).
 TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "shampoo",
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
-         "catraca", "soquete", "jogo de chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
+         "catraca", "soquete", "jogo de chave", "chave de fenda", "chaves de fenda", "precisao", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda", "meia", "par de meia", "pares de meia",
          "sabonete", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete"]
 
@@ -93,7 +93,8 @@ def tipo(nome):
 
 
 MESMO_TIPO = {"soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "mochila": "bolsa",
-              "aparador": "maquina", "barbeador": "maquina"}
+              "aparador": "maquina", "barbeador": "maquina",
+              "chave de fenda": "chave de precisao", "chaves de fenda": "chave de precisao", "precisao": "chave de precisao"}
 
 
 def _numero(txt):

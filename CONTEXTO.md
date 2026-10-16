@@ -49,7 +49,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Oferta → Oferta de produto → buscar → "Selecione todos os produtos nesta página" → "Obter Link em Massa".
   Mandar o arquivo para o Claude colocar em `ofertas/`.
 - Regras: nunca repete produto (nem um muito parecido de outra loja), só 1 de cada tipo por dia,
-  tira palmilhas/lentes/feminino. A foto é pega na página da Shopee; o produto é recortado do fundo branco.
+  tira palmilhas/lentes/feminino.
+  Tipo "chave de precisão" (chave de fenda/precisão) conta 1 por dia; "brinquedo" fica fora (16/out). A foto é pega na página da Shopee; o produto é recortado do fundo branco.
 - Nomes curtos e limpos: `texto.nome_curto` (acentos, sem "profissional/original/códigos"). Nome estranho → corrigir à mão em config.NOMES.
 - Tema trocado numa data específica: config.TEMA_EM (ex.: 15/out virou "top" porque estilo estava fraco). Dia "top" alterna os temas.
 - Quando acabar a planilha, o "Gerar ofertas do dia" falha com "Acabaram os produtos novos".

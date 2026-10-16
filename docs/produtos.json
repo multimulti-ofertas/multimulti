@@ -34,7 +34,17 @@
   "link": "https://s.shopee.com.br/AKbOpwDfM7",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-824gv-mf9zw8dra3nva3",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "feed": {
+    "pulado": "revisao"
+   },
+   "reel": {
+    "pulado": "revisao"
+   },
+   "story": {
+    "pulado": "revisao"
+   }
+  },
   "preco": "a partir de R$ 10,99",
   "preco_curto": "R$ 10,99",
   "pct": 17,
@@ -58,7 +68,17 @@
   "link": "https://s.shopee.com.br/9V2HqPGq2q",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-7rd6f-lwzeldw04ty7f3",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "feed": {
+    "pulado": "revisao"
+   },
+   "reel": {
+    "pulado": "revisao"
+   },
+   "story": {
+    "pulado": "revisao"
+   }
+  },
   "preco": "a partir de R$ 20,99",
   "preco_curto": "R$ 20,99",
   "pct": 45,
@@ -102,7 +122,7 @@
   "categoria": "ferramentas",
   "itemId": "22493876691",
   "nome": "Jogo 10/15 Brocas Diamantadas Serra Copo furar Vidro Granito Ceramica 6 a 50 mm kit ferramentas",
-  "titulo": "Jogo brocas diamantadas serra",
+  "titulo": "Jogo de brocas serra copo",
   "link": "https://s.shopee.com.br/9Kire6HTNp",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-7r98o-m82q4qcabtw1a5",
   "agenda": null,
@@ -112,7 +132,7 @@
   "pct": 74,
   "nota": 4.8,
   "vendidos": "+1,8 mil",
-  "legenda": "🔧 Achei esse e lembrei de você: Jogo brocas diamantadas serra\n\n🔥 74% OFF → por R$ 38,89\n⭐ Nota 4.8 · +1,8 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 24\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #ferramentas #façavocêmesmo",
+  "legenda": "🔧 Achei esse e lembrei de você: Jogo de brocas serra copo\n\n🔥 74% OFF → por R$ 38,89\n⭐ Nota 4.8 · +1,8 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 24\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #ferramentas #façavocêmesmo",
   "gancho": [
    "74% OFF nesse achado",
    "por R$ 38,89"
@@ -126,7 +146,7 @@
   "categoria": "estilo",
   "itemId": "58250519029",
   "nome": "Carteira Curta Masculina Com Padrão De Pedra-Bolso Para Moedas Zíper Vários Cartões E Bordas Costuradas--BT",
-  "titulo": "Carteira curta com padrão",
+  "titulo": "Carteira curta masculina",
   "link": "https://s.shopee.com.br/9zyYRKSCf9",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-81z1k-mhrfddfkvz7m45",
   "agenda": null,
@@ -136,7 +156,7 @@
   "pct": 72,
   "nota": 4.9,
   "vendidos": "+2,1 mil",
-  "legenda": "👟 Achadinho do dia pra você: Carteira curta com padrão\n\n🔥 72% OFF → por a partir de R$ 27,91\n⭐ Nota 4.9 · +2,1 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 23\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #modamasculina #estilomasculino",
+  "legenda": "👟 Achadinho do dia pra você: Carteira curta masculina\n\n🔥 72% OFF → por a partir de R$ 27,91\n⭐ Nota 4.9 · +2,1 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 23\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #modamasculina #estilomasculino",
   "gancho": [
    "72% OFF nesse achado",
    "por R$ 27,91"
@@ -150,7 +170,7 @@
   "categoria": "cuidado",
   "itemId": "58254510910",
   "nome": "DAGUAN Máquina de Cortar Pelos Cortador Aparador de Cabelos do Nariz e Ouvido Nose Ear Hair Trimmer",
-  "titulo": "Daguan máquina de cortar pelos",
+  "titulo": "Aparador de pelos do nariz",
   "link": "https://s.shopee.com.br/1BCWwvP9s",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-7rdwh-lxcp2u197hqiaf",
   "agenda": null,
@@ -160,7 +180,7 @@
   "pct": 62,
   "nota": 4.8,
   "vendidos": "+1 mil",
-  "legenda": "🧔 Esse aqui tá valendo a pena: Daguan máquina de cortar pelos\n\n🔥 62% OFF → por a partir de R$ 11,56\n⭐ Nota 4.8 · +1 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 22\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #barba #cuidadosmasculinos",
+  "legenda": "🧔 Esse aqui tá valendo a pena: Aparador de pelos do nariz\n\n🔥 62% OFF → por a partir de R$ 11,56\n⭐ Nota 4.8 · +1 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 22\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #barba #cuidadosmasculinos",
   "gancho": [
    "62% OFF nesse achado",
    "por R$ 11,56"
@@ -224,7 +244,7 @@
   "categoria": "cuidado",
   "itemId": "22498397212",
   "nome": "máquina de acabamento cortar cabelo barba barbeador pezinho profissional recarregável kemei KM-032",
-  "titulo": "Máquina de acabamento cortar",
+  "titulo": "Máquina de acabamento Kemei",
   "link": "https://s.shopee.com.br/6VOgGtWnQB",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-7reo6-m8c87ve63o9ued",
   "agenda": "reel",
@@ -234,7 +254,7 @@
   "pct": 61,
   "nota": 4.9,
   "vendidos": "+1,5 mil",
-  "legenda": "🧔 Achadinho do dia pra você: Máquina de acabamento cortar\n\n🔥 61% OFF → por R$ 38,60\n⭐ Nota 4.9 · +1,5 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 19\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #barba #cuidadosmasculinos",
+  "legenda": "🧔 Achadinho do dia pra você: Máquina de acabamento Kemei\n\n🔥 61% OFF → por R$ 38,60\n⭐ Nota 4.9 · +1,5 mil vendidos na Shopee\n\n🛒 Link na bio → procura o produto nº 19\n📩 Ou manda EU QUERO no direct que eu te mando o link!\n\nSalva pra não perder e marca aquele amigo que precisa disso 👇\n\nPreço sujeito a alteração.\n\n#achadosmasculinos #achadinhosshopee #shopee #achadinhos #ofertas #multimulti #barba #cuidadosmasculinos",
   "gancho": [
    "61% OFF nesse achado",
    "por R$ 38,60"
