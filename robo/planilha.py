@@ -40,7 +40,8 @@ TEMAS = {
 }
 # Produtos com estas palavras nunca entram.
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
-        "gato", "infantil", "crianca", "bebe"]
+        "gato", "infantil", "crianca", "bebe", "cilio", "unha", "maquiagem", "perler", "artesanato",
+        "bijuteria", "micanga", "croche", "trico", "boneca"]
 
 
 def sem_acento(t):
