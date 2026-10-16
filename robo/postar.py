@@ -51,18 +51,28 @@ def rotina():
     return config.ROTINA_ANTIGA if hoje().isoformat() <= "2026-10-14" else config.ROTINA
 
 
-def atrasados(lista, d, h, tipos):
-    """Feed/Reels de horários anteriores de hoje que não saíram (o GitHub às vezes pula uma execução)."""
-    extra = []
-    for tipo in ("feed", "reel"):
-        if tipo in tipos:
-            continue
+def postou(x, tipo):
+    """Saiu de verdade no Instagram (tem id). 'pulado' não conta."""
+    v = (x.get("postado") or {}).get(tipo)
+    return isinstance(v, dict) and bool(v.get("id"))
+
+
+def plano(lista, d, h):
+    """O que postar agora, pela CONTA do dia (não só pela hora): o GitHub atrasa ou pula execuções,
+    e às vezes roda 2 vezes na mesma hora. Posta só o que falta até esta hora:
+    feed/Reels 1 por vez; stories até 2 por vez (recupera hora perdida). Nunca passa do previsto."""
+    tipos = []
+    for tipo in ("feed", "reel", "story"):
         previstos = sum(1 for hh, ts in rotina().items() if hh <= h and tipo in ts)
-        feitos = sum(1 for x in lista if x["data"] == d and ja_postado(x, tipo))
-        if feitos < previstos and pendentes(lista, d, tipo):
+        if tipo == "story":
+            feitos = sum(int(x.get("stories") or 0) for x in lista if x["data"] == d)
+        else:
+            feitos = sum(1 for x in lista if x["data"] == d and postou(x, tipo))
+        falta = previstos - feitos
+        if falta > 0 and tipo != "story" and feitos < previstos - 1:
             print(f"Recuperando {tipo} atrasado ({feitos} de {previstos} previstos até agora).")
-            extra.append(tipo)
-    return extra
+        tipos += [tipo] * max(0, min(falta, 2 if tipo == "story" else 1))
+    return tipos
 
 
 def main():
@@ -80,8 +90,7 @@ def main():
 
     if args.tipo == "auto":
         h = args.hora if args.hora is not None else hora_da_rotina()
-        tipos = list(rotina().get(h, []))
-        tipos = atrasados(carregar(), hoje().isoformat(), h, tipos) + tipos
+        tipos = plano(carregar(), hoje().isoformat(), h)
         print(f"Rotina das {h:02d}h: {', '.join(tipos) or 'nada'}")
     else:
         tipos = [args.tipo]

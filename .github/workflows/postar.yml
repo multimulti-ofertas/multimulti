@@ -5,6 +5,9 @@ on:
     # das 07:50 às 21:50 em Cuiabá (11:50 a 01:50 UTC). O que postar em cada hora está em robo/config.py → ROTINA.
     - cron: "50 11-23 * * *"
     - cron: "50 0-1 * * *"
+    # 2ª chance a cada hora (o GitHub às vezes atrasa 1h ou pula): o robô conta o que já saiu e só posta o que falta
+    - cron: "20 12-23 * * *"
+    - cron: "20 0-1 * * *"
   workflow_dispatch:
     inputs:
       tipo:
