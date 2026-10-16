@@ -40,11 +40,11 @@ def pendentes(lista, d, tipo):
 
 
 def hora_da_rotina(agora=None):
-    """A rotina dispara às xx:50 para a hora seguinte, mas o GitHub costuma atrasar 20-60 min.
-    +10 min: 19:50 (no horário) → 20h; 20:40 (50 min de atraso) → continua 20h."""
+    """Hora atual em Cuiabá. O robô roda 4x por hora (xx:02, :17, :32, :47); o que é das 9h sai entre
+    9h00 e 9h20 mesmo se o GitHub atrasar ou pular uma execução (plano() conta o que já saiu)."""
     from .gerar import FUSO
     agora = agora or dt.datetime.now(FUSO)
-    return (agora + dt.timedelta(minutes=10)).hour
+    return agora.hour
 
 
 def rotina():

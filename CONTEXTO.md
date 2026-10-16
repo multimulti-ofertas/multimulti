@@ -35,7 +35,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 | Sábado 07:00 | "Top 3 da semana": vídeo dos 3 mais vendidos dos últimos 7 dias, música baixa, + roteiro e legenda.
   O João baixa em .../multimulti/semana/ e posta À MÃO com a narração dele | .github/workflows/semana.yml, robo/top3.py |
 | Segunda 06:00 | Renova o token do Instagram (só salva se existir o secret GH_PAT) | token.yml |
-- "Postar no Instagram" roda 2x por hora (xx:50 e xx:20; o GitHub atrasa/pula). Ele CONTA o que já saiu no dia
+- "Postar no Instagram" roda 4x por hora (xx:02, :17, :32, :47; o GitHub atrasa/pula). O post da hora sai entre hh:00 e ~hh:20. Ele CONTA o que já saiu no dia
   (robo/postar.py → plano) e só posta o que falta até aquela hora: rodar 2x não duplica, hora perdida é recuperada.
 - A tabela ROTINA (config.py) diz quantos de cada tipo saem até cada hora.
   São 16 publicações/dia no Instagram (+ as mesmas no Facebook); limite do Instagram é 100 por 24h.
