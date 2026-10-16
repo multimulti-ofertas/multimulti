@@ -18,6 +18,9 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   A partir de 16/out o robô busca sozinho: só +1 mil vendas (VENDAS_MINIMAS_API), nota ≥4.6, tema confirmado
   pelo nome (planilha.tema), 1 de cada tipo por dia (planilha.TIPOS/MESMO_TIPO). Planilhas viram reserva.
   Falta: trocar o e-mail de contato do painel de afiliados para o Gmail novo.
+  Dia de tema: 6 buscas do tema; se não der 12 produtos, completa com os outros temas.
+- 15/out: e-mails pessoais apagados de TODO o histórico do git (reescrito + force push). Nunca escrever e-mail aqui.
+  Falta o João: GitHub Settings → Emails (manter e-mail privado) e ruleset protegendo main (o proxy não deixa o Claude mexer em configurações).
 
 > Foco (15/out): só Instagram + Facebook; WhatsApp em breve. TikTok e Kwai CANCELADOS pelo João
 > (API do TikTok não aprova postar nas próprias contas; Kwai não tem API). Não reabrir sem ele pedir.
