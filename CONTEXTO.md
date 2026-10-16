@@ -50,7 +50,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Mandar o arquivo para o Claude colocar em `ofertas/`.
 - Regras: nunca repete produto (nem um muito parecido de outra loja), só 1 de cada tipo por dia,
   tira palmilhas/lentes/feminino.
-  Tipo "chave de precisão" (chave de fenda/precisão) conta 1 por dia; "brinquedo" e "rolo modelador" ficam fora (16/out).
+  Tipo "chave de precisão" (chave de fenda/precisão) conta 1 por dia; "brinquedo", "rolo modelador" e unha/penteado (polygel, manicure, esmalte, penteado) ficam fora (16/out).
   O tipo é a palavra de planilha.TIPOS que aparece PRIMEIRO no nome; palavras de FORA valem só no começo da palavra
   (antes "trico" barrava todo produto "elétrico"). A foto é pega na página da Shopee; o produto é recortado do fundo branco.
 - Nomes curtos e limpos: `texto.nome_curto` (acentos, sem "profissional/original/códigos"). Nome estranho → corrigir à mão em config.NOMES.
