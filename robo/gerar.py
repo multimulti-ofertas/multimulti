@@ -49,7 +49,7 @@ def categoria_do_dia(d):
 def palavras_do_dia(cat, rnd):
     if cat == "top":
         return [(c, w) for c, p in config.PALAVRAS.items() for w in rnd.sample(p, k=2)]  # 2 buscas por tema
-    return [(cat, w) for w in rnd.sample(config.PALAVRAS[cat], k=min(3, len(config.PALAVRAS[cat])))]
+    return [(cat, w) for w in rnd.sample(config.PALAVRAS[cat], k=min(6, len(config.PALAVRAS[cat])))]
 
 
 def pontuar(p):
@@ -260,6 +260,11 @@ def main():
         escolhidos = escolher(candidatos_demo(cat, rnd), usados)
     elif usa_api:
         escolhidos = escolher(candidatos_shopee(cat, rnd), usados)
+        if cat != "top":  # completa com os outros temas se o do dia não render 12 produtos
+            ids = ({str(p["itemId"]) for _, p in escolhidos} | usados[0],
+                   usados[1] + [planilha.chave_parecida(p["productName"]) for _, p in escolhidos])
+            outros = [(c, p) for c, p in candidatos_shopee("top", rnd) if c != cat]
+            escolhidos += escolher(outros, ids)
     else:
         do_tema, outros = planilha.candidatos(cat)
         print(f"Planilha: {len(do_tema)} produtos do tema, {len(outros)} de outros temas")
