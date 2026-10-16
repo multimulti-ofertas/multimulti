@@ -82,7 +82,7 @@ def parecido(a, b):
 TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "shampoo",
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
          "catraca", "soquete", "jogo de chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
-         "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda",
+         "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda", "meia", "par de meia", "pares de meia",
          "sabonete", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete"]
 
 
