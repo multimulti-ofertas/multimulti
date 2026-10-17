@@ -82,7 +82,16 @@
   "link": "https://s.shopee.com.br/5VWAfSZp9M",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-7rdwu-mdmxnzloetx812",
   "agenda": "reel",
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "18341182813280966",
+    "em": "2026-10-17T19:15:46.969413"
+   },
+   "fb_story": {
+    "id": "1135474942347872",
+    "em": "2026-10-17T19:15:52.744431"
+   }
+  },
   "preco": "R$ 37,98",
   "preco_curto": "R$ 37,98",
   "pct": 68,
@@ -96,7 +105,8 @@
   "feed": "media/36/feed.jpg",
   "story": "media/36/story.jpg",
   "recorte": "media/36/produto.webp",
-  "reel": "media/36/reel.mp4"
+  "reel": "media/36/reel.mp4",
+  "stories": 1
  },
  {
   "n": 35,
