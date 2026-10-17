@@ -19,6 +19,10 @@ TEMA_EM = {
 
 # Nomes escritos à mão quando o nome automático fica estranho (itemId → nome curto)
 NOMES = {
+    "23797686527": "Relógio digital masculino",
+    "22336506478": "Pincéis de limpeza automotiva",
+    "9310112081": "Nível a laser",
+    "23399440533": "Cheirinho de carro novo spray",
     "16280432664": "Borracha protetora de porta 10m",
     "57201143767": "Cola para tênis e sapatos",
     "22394340005": "Tinta para couro e sapato",

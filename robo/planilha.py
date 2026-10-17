@@ -42,7 +42,7 @@ TEMAS = {
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unha", "maquiagem", "perler", "artesanato",
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
-        "scrunchie", "presilha", "ferramenta tranca", "ferramentas de cabelo"]
+        "scrunchie", "presilha", "anzol", "ferramenta tranca", "ferramentas de cabelo"]
 
 
 def sem_acento(t):
@@ -84,7 +84,7 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
          "catraca", "soquete", "jogo de chave", "chave de fenda", "chaves de fenda", "precisao", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda", "meia", "par de meia", "pares de meia",
-         "sabonete", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete"]
+         "sabonete", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete", "flanela", "pano ", "panos"]
 
 
 def tipo(nome):
@@ -101,7 +101,7 @@ def tipo(nome):
     return MESMO_TIPO.get(t, t)
 
 
-MESMO_TIPO = {"soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "mochila": "bolsa",
+MESMO_TIPO = {"soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "mochila": "bolsa",
               "aparador": "maquina", "barbeador": "maquina",
               "chave de fenda": "chave de precisao", "chaves de fenda": "chave de precisao", "precisao": "chave de precisao"}
 
