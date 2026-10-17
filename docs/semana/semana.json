@@ -1,5 +1,5 @@
 {
- "data": "2026-10-14",
+ "data": "2026-10-17",
  "duracao": 26,
  "musica": "traka",
  "produtos": [
@@ -10,15 +10,15 @@
    "vendidos": "+100 mil"
   },
   {
-   "n": 4,
-   "titulo": "Mini barbeador elétrico",
-   "preco": "R$ 14,99",
-   "vendidos": "+100 mil"
-  },
-  {
    "n": 2,
    "titulo": "Navalha navalhete barbeiro",
    "preco": "R$ 12,99",
+   "vendidos": "+90 mil"
+  },
+  {
+   "n": 7,
+   "titulo": "Tônico UltraDlust cabelo barba",
+   "preco": "R$ 19,98",
    "vendidos": "+90 mil"
   }
  ],
@@ -32,14 +32,14 @@
   {
    "de": 3.0,
    "ate": 9.5,
-   "tela": "#3 Navalha navalhete barbeiro",
-   "fala": "Número 3: navalha navalhete barbeiro, por 12,99. Mais de 90 mil vendidos."
+   "tela": "#3 Tônico UltraDlust cabelo barba",
+   "fala": "Número 3: tônico ultradlust cabelo barba, por 19,98. Mais de 90 mil vendidos."
   },
   {
    "de": 9.5,
    "ate": 16.0,
-   "tela": "#2 Mini barbeador elétrico",
-   "fala": "Número 2: mini barbeador elétrico, por 14,99. Mais de 100 mil vendidos."
+   "tela": "#2 Navalha navalhete barbeiro",
+   "fala": "Número 2: navalha navalhete barbeiro, por 12,99. Mais de 90 mil vendidos."
   },
   {
    "de": 16.0,
