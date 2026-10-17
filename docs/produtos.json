@@ -81,7 +81,7 @@
   "titulo": "Parafusadeira elétrica sem fio",
   "link": "https://s.shopee.com.br/5VWAfSZp9M",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-7rdwu-mdmxnzloetx812",
-  "agenda": null,
+  "agenda": "reel",
   "postado": null,
   "preco": "R$ 37,98",
   "preco_curto": "R$ 37,98",
@@ -95,7 +95,8 @@
   ],
   "feed": "media/36/feed.jpg",
   "story": "media/36/story.jpg",
-  "recorte": "media/36/produto.webp"
+  "recorte": "media/36/produto.webp",
+  "reel": "media/36/reel.mp4"
  },
  {
   "n": 35,
@@ -205,7 +206,17 @@
   "link": "https://s.shopee.com.br/4qGTsEcMVQ",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-820lo-mr8tltcmk9ok15",
   "agenda": "reel",
-  "postado": null,
+  "postado": {
+   "feed": {
+    "pulado": "revisao"
+   },
+   "reel": {
+    "pulado": "revisao"
+   },
+   "story": {
+    "pulado": "revisao"
+   }
+  },
   "preco": "a partir de R$ 12,99",
   "preco_curto": "R$ 12,99",
   "pct": 50,
