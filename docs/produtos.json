@@ -268,7 +268,16 @@
   "link": "https://s.shopee.com.br/9064QpZ8Hh",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-820ml-mnet0a6097uq46",
   "agenda": "feed",
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "18117911633085464",
+    "em": "2026-10-18T13:21:55.514442"
+   },
+   "fb_story": {
+    "id": "4585195901807709",
+    "em": "2026-10-18T13:22:00.528722"
+   }
+  },
   "preco": "a partir de R$ 9,98",
   "preco_curto": "R$ 9,98",
   "pct": 80,
@@ -281,7 +290,8 @@
   ],
   "feed": "media/40/feed.jpg",
   "story": "media/40/story.jpg",
-  "recorte": "media/40/produto.webp"
+  "recorte": "media/40/produto.webp",
+  "stories": 1
  },
  {
   "n": 39,
