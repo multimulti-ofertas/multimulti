@@ -76,7 +76,11 @@ def parecido(a, b):
     if pa[:2] == pb[:2] and len(pa) >= 2:  # ex.: "gola higienica...", "mini barbeador..."
         return True
     sa, sb = _palavras(pa), _palavras(pb)
-    return len(sa & sb) / max(1, len(sa | sb)) >= 0.5
+    if len(sa & sb) / max(1, len(sa | sb)) >= 0.5:
+        return True
+    # mesmo tipo e a maioria das palavras do menor nome está no outro (3 jogos de catraca 46 peças, 18/out)
+    ta = tipo(a)
+    return bool(ta) and ta == tipo(b) and len(sa & sb) / max(1, min(len(sa), len(sb))) >= 0.6
 
 
 _QTD = re.compile(r"^(\d+|pecas?|pcs|unidades?|un)$")
@@ -109,7 +113,7 @@ def tipo(nome):
     return MESMO_TIPO.get(t, t)
 
 
-MESMO_TIPO = {"soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "mochila": "bolsa",
+MESMO_TIPO = {"soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "mochila": "bolsa", "par de meia": "meia", "pares de meia": "meia",
               "aparador": "maquina", "barbeador": "maquina",
               "chave de fenda": "chave de precisao", "chaves de fenda": "chave de precisao", "precisao": "chave de precisao"}
 
