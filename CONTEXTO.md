@@ -56,7 +56,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Acessório de cabelo feminino (scrunchie, presilha, "ferramenta trança", "ferramentas de cabelo") e anzol ficam fora (17/out).
   "Parecido" (planilha.parecido) ignora quantidade e plural ("40 peças ... chave" = "46 peças ... chaves") e compara até 120
   letras do nome; mesmo tipo + 60% das palavras do nome menor iguais também é "parecido"
-  (18/out: jogos de chave catraca de 46 peças de lojas diferentes voltavam todo dia). "Par/pares de meia" = tipo meia.
+  (18/out: jogos de chave catraca de 46 peças de lojas diferentes voltavam todo dia). "Par/pares de meia" = tipo meia; "pomada" virou tipo (1 por dia).
   Flanela/pano é um tipo só, pincel também (1 por dia). Nome com " | " é cortado ali ("Relógio digital wr | 100 % qualidade").
   O tipo é a palavra de planilha.TIPOS que aparece PRIMEIRO no nome; palavras de FORA valem só no começo da palavra
   (antes "trico" barrava todo produto "elétrico"). A foto é pega na página da Shopee; o produto é recortado do fundo branco.

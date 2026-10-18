@@ -21,6 +21,11 @@ TEMA_EM = {
 NOMES = {
     "54553190268": "Kit estética automotiva Vonixx",
     "58211739182": "Pomada modeladora em bastão",
+    "58261263365": "Capa de silicone para volante",
+    "23397749259": "Kit 3 meias esportivas",
+    "23998115427": "Par de faróis de milha LED",
+    "22193851388": "Chave de fenda testadora",
+    "58265705979": "Kit 3 pomadas modeladoras",
     "23797686527": "Relógio digital masculino",
     "22336506478": "Pincéis de limpeza automotiva",
     "9310112081": "Nível a laser",

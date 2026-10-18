@@ -96,7 +96,7 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
          "catraca", "soquete", "jogo de chave", "chave de fenda", "chaves de fenda", "precisao", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda", "meia", "par de meia", "pares de meia",
-         "sabonete", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete", "flanela", "pano ", "panos", "pincel", "pinceis"]
+         "sabonete", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete", "flanela", "pano ", "panos", "pincel", "pinceis", "pomada"]
 
 
 def tipo(nome):
