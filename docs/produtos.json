@@ -107,7 +107,7 @@
   "titulo": "Nível a laser",
   "link": "https://s.shopee.com.br/50ZvfTx5gz",
   "imagem": "https://cf.shopee.com.br/file/e0613704055b2747f2d82c41973a709b",
-  "agenda": null,
+  "agenda": "feed",
   "postado": null,
   "preco": "a partir de R$ 24,99",
   "preco_curto": "R$ 24,99",
@@ -233,7 +233,17 @@
   "link": "https://s.shopee.com.br/1W03V3AHHf",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-7ra3l-m50klgsa7rlg5e",
   "agenda": "feed",
-  "postado": null,
+  "postado": {
+   "feed": {
+    "pulado": "revisao"
+   },
+   "reel": {
+    "pulado": "revisao"
+   },
+   "story": {
+    "pulado": "revisao"
+   }
+  },
   "preco": "R$ 24,99",
   "preco_curto": "R$ 24,99",
   "pct": 72,

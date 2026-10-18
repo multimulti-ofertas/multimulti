@@ -54,6 +54,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   tira palmilhas/lentes/feminino.
   Tipo "chave de precisão" (chave de fenda/precisão) conta 1 por dia; "brinquedo", "rolo modelador" e unha/penteado (polygel, manicure, esmalte, penteado) e massinha/slime ficam fora (16/out).
   Acessório de cabelo feminino (scrunchie, presilha, "ferramenta trança", "ferramentas de cabelo") e anzol ficam fora (17/out).
+  "Parecido" (planilha.parecido) ignora quantidade e plural ("40 peças ... chave" = "46 peças ... chaves") e compara até 120
+  letras do nome (18/out: o jogo de chave catraca de 46 peças voltou um dia depois do de 40/46 peças).
   Flanela/pano é um tipo só, pincel também (1 por dia). Nome com " | " é cortado ali ("Relógio digital wr | 100 % qualidade").
   O tipo é a palavra de planilha.TIPOS que aparece PRIMEIRO no nome; palavras de FORA valem só no começo da palavra
   (antes "trico" barrava todo produto "elétrico"). A foto é pega na página da Shopee; o produto é recortado do fundo branco.

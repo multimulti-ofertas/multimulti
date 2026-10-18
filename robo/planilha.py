@@ -65,7 +65,7 @@ _RUIDO = re.compile(r"\b(kit|profissional|masculin[oa]s?|eletric[oa]|de|da|do|pa
 def chave_parecida(nome):
     """Texto simplificado para achar o mesmo produto vendido por lojas diferentes."""
     n = re.sub(r"[^a-z0-9 ]", " ", sem_acento(nome))
-    return re.sub(r"\s+", " ", _RUIDO.sub(" ", n)).strip()[:70]
+    return re.sub(r"\s+", " ", _RUIDO.sub(" ", n)).strip()[:120]
 
 
 def parecido(a, b):
@@ -75,8 +75,16 @@ def parecido(a, b):
     pa, pb = a.split(), b.split()
     if pa[:2] == pb[:2] and len(pa) >= 2:  # ex.: "gola higienica...", "mini barbeador..."
         return True
-    sa, sb = set(pa), set(pb)
+    sa, sb = _palavras(pa), _palavras(pb)
     return len(sa & sb) / max(1, len(sa | sb)) >= 0.5
+
+
+_QTD = re.compile(r"^(\d+|pecas?|pcs|unidades?|un)$")
+
+
+def _palavras(ps):
+    """Palavras sem quantidade e sem plural: "40 pecas ... chave" = "46 pecas ... chaves" (18/out)."""
+    return {w[:-1] if len(w) > 3 and w.endswith("s") else w for w in ps if not _QTD.match(w)}
 
 
 # Tipos de produto: no mesmo dia entra no máximo 1 de cada tipo (variedade).
