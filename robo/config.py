@@ -100,7 +100,7 @@ STORIES_POR_VEZ = 1           # stories postados a cada horário da rotina
 POSTAR_NO_INSTAGRAM = True
 
 # Narração dos Reels com voz de IA: "piper" (roda no GitHub), "edge" (Microsoft, não oficial) ou None (só música)
-VOZ = None
+VOZ = "edge"
 
 # Rotina diária (horário de Cuiabá). O robô de postagem roda de hora em hora e publica o que estiver
 # marcado para aquela hora. Limite do Instagram: 50 publicações por 24h (aqui são 19 por dia).

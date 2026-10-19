@@ -232,8 +232,12 @@ def montar(cat, p, n, d, papel, demo):
     except Exception as e:
         print(f"[aviso] recorte falhou: {e}")
     if papel == "reel":
-        reel(dict(cfg, hook=item["gancho"], numero=n),
+        from . import voz
+        v = voz.narrar(item, pasta / "voz.wav")
+        reel(dict(cfg, hook=item["gancho"], numero=n, voz=str(v) if v else None),
              str(pasta / "reel.mp4"))
+        if v:
+            v.unlink(missing_ok=True)
         item["reel"] = f"media/{n}/reel.mp4"
     return item
 
