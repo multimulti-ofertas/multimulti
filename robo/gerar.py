@@ -106,7 +106,7 @@ def candidatos_shopee(cat_dia, rnd):
                     if c:  # só entra se o nome confirmar o tema (corta bomba de aquário, infantil, feminino...)
                         out.append((c, p))
         except Exception as e:
-            print(f"[aviso] busca '{kw}' falhou: {e}")
+            print(f"::warning::busca '{kw}' falhou: {str(e)[:150]}")
     return out
 
 
@@ -167,6 +167,13 @@ def extra_de(item):
     if item["nota"]:
         return f"⭐ {item['nota']} · {item['vendidos']} vendidos"
     return f"{item['vendidos']} vendidos"
+
+
+def tipos_travados(lista, d):
+    """Tipos postados nos últimos TIPO_FOLGA_DIAS dias (não voltam ainda)."""
+    desde = d - dt.timedelta(days=config.TIPO_FOLGA_DIAS)
+    return {planilha.tipo(x["nome"]) for x in lista
+            if desde <= dt.date.fromisoformat(x["data"]) < d and not tirado(x)} - {None}
 
 
 def tirado(x):
@@ -289,16 +296,14 @@ def main():
                 if filas[c]:
                     misturados.append(filas[c].pop(0))
         escolhidos = misturados
-    print(f"{len(escolhidos)} candidatos novos (sem repetidos)")
+    print(f"::notice::{d} tema {cat}: {len(escolhidos)} candidatos novos (sem repetidos); tipos travados 7 dias: {len(tipos_travados(lista, d))}")
     if not escolhidos:
         raise SystemExit("Acabaram os produtos novos. Baixe outra planilha no painel da Shopee.")
 
     prox = max([x["n"] for x in lista], default=0) + 1
     papeis = ["feed", "feed", "reel", "reel"] + [None] * 20  # 2 no feed + 2 Reels por dia
     novos, tipos_dia = [], set()
-    desde = d - dt.timedelta(days=config.TIPO_FOLGA_DIAS)
-    tipos_recentes = {planilha.tipo(x["nome"]) for x in lista
-                      if desde <= dt.date.fromisoformat(x["data"]) < d and not tirado(x)} - {None}
+    tipos_recentes = tipos_travados(lista, d)
     for c, p in escolhidos:
         if len(novos) >= config.PRODUTOS_POR_DIA:
             break
