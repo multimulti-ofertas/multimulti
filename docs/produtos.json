@@ -9,7 +9,17 @@
   "link": "https://s.shopee.com.br/4fx6sEQXq4",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-820md-mr5x1ovc40lg6e",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "feed": {
+    "pulado": "fora-do-tema"
+   },
+   "reel": {
+    "pulado": "fora-do-tema"
+   },
+   "story": {
+    "pulado": "fora-do-tema"
+   }
+  },
   "preco": "a partir de R$ 57,05",
   "preco_curto": "R$ 57,05",
   "pct": 43,

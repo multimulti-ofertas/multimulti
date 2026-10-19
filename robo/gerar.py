@@ -279,18 +279,16 @@ def main():
         escolhidos = escolher(candidatos_demo(cat, rnd), usados)
     elif usa_api:
         escolhidos = escolher(candidatos_shopee(cat, rnd), usados)
-        if cat != "top":  # completa com os outros temas se o do dia não render 12 produtos
-            ids = ({str(p["itemId"]) for _, p in escolhidos} | usados[0],
-                   usados[1] + [planilha.chave_parecida(p["productName"]) for _, p in escolhidos])
-            outros = [(c, p) for c, p in candidatos_shopee("top", rnd) if c != cat]
-            escolhidos += escolher(outros, ids)
+        if cat != "top":  # dia de tema: SÓ produtos do tema (pedido do João); se faltar, sai menos story
+            escolhidos = [(c, p) for c, p in escolhidos if c == cat]
     else:
         do_tema, outros = planilha.candidatos(cat)
         print(f"Planilha: {len(do_tema)} produtos do tema, {len(outros)} de outros temas")
         escolhidos = escolher(do_tema, usados)
         ids = ({str(p["itemId"]) for _, p in escolhidos} | usados[0],
                usados[1] + [planilha.chave_parecida(p["productName"]) for _, p in escolhidos])
-        escolhidos += escolher(outros, ids)  # completa com outros temas se faltar
+        if cat == "top":
+            escolhidos += escolher(outros, ids)  # só o dia "top" mistura temas
     if cat == "top":  # dia "top": alterna os temas (o melhor de cada um, depois o 2º de cada um...)
         filas = {}
         for c, p in escolhidos:
