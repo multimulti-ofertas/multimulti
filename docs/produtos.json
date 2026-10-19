@@ -158,7 +158,17 @@
   "link": "https://s.shopee.com.br/5AtNT8lBIN",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-8262m-mlxhb9sl0rgod8",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "feed": {
+    "pulado": "tipo-7-dias"
+   },
+   "reel": {
+    "pulado": "tipo-7-dias"
+   },
+   "story": {
+    "pulado": "tipo-7-dias"
+   }
+  },
   "preco": "R$ 29,00",
   "preco_curto": "R$ 29,00",
   "pct": 52,
@@ -183,7 +193,17 @@
   "link": "https://s.shopee.com.br/9V2JUcQWlz",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-820lp-moo3d18b553955",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "feed": {
+    "pulado": "tipo-7-dias"
+   },
+   "reel": {
+    "pulado": "tipo-7-dias"
+   },
+   "story": {
+    "pulado": "tipo-7-dias"
+   }
+  },
   "preco": "a partir de R$ 16,88",
   "preco_curto": "R$ 16,88",
   "pct": 57,

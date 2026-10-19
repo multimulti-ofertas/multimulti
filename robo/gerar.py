@@ -168,6 +168,11 @@ def extra_de(item):
     return f"{item['vendidos']} vendidos"
 
 
+def tirado(x):
+    """Produto que a revisão tirou (não chegou a ser postado)."""
+    return any(isinstance(v, dict) and v.get("pulado") for v in (x.get("postado") or {}).values())
+
+
 def montar(cat, p, n, d, papel, demo):
     pasta = MIDIA / str(n)
     pasta.mkdir(parents=True, exist_ok=True)
@@ -290,11 +295,14 @@ def main():
     prox = max([x["n"] for x in lista], default=0) + 1
     papeis = ["feed", "feed", "reel", "reel"] + [None] * 20  # 2 no feed + 2 Reels por dia
     novos, tipos_dia = [], set()
+    desde = d - dt.timedelta(days=config.TIPO_FOLGA_DIAS)
+    tipos_recentes = {planilha.tipo(x["nome"]) for x in lista
+                      if desde <= dt.date.fromisoformat(x["data"]) < d and not tirado(x)} - {None}
     for c, p in escolhidos:
         if len(novos) >= config.PRODUTOS_POR_DIA:
             break
         tp = planilha.tipo(p["productName"])
-        if tp and tp in tipos_dia:  # variedade: 1 de cada tipo por dia
+        if tp and (tp in tipos_dia or tp in tipos_recentes):  # 1 de cada tipo por dia e o tipo só volta após 7 dias
             continue
         try:
             item = montar(c, p, prox + len(novos), d, papeis[len(novos)], args.demo)
