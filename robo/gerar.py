@@ -233,11 +233,13 @@ def montar(cat, p, n, d, papel, demo):
         print(f"[aviso] recorte falhou: {e}")
     if papel == "reel":
         from . import voz
-        v = voz.narrar(item, pasta / "voz.wav")
-        reel(dict(cfg, hook=item["gancho"], numero=n, voz=str(v) if v else None),
-             str(pasta / "reel.mp4"))
-        if v:
+        from .reel2 import reel_narrado
+        v, tempos = voz.roteiro(item, pasta / "voz.wav")
+        if v:  # Reels v2: narração + legenda animada
+            reel_narrado(dict(cfg, numero=n), str(pasta / "reel.mp4"), v, tempos)
             v.unlink(missing_ok=True)
+        else:  # sem voz (serviço fora do ar): o Reels de antes, só com música
+            reel(dict(cfg, hook=item["gancho"], numero=n), str(pasta / "reel.mp4"))
         item["reel"] = f"media/{n}/reel.mp4"
     return item
 

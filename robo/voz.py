@@ -121,11 +121,109 @@ def narrar(item, saida, motor=None):
     return None
 
 
+# ---------- roteiro em partes (Reels v2: legenda animada sincronizada) ----------
+
+GANCHOS = {
+    "carro": ["Todo dono de carro precisa disso", "Olha o que eu achei pro seu carro", "Seu carro merece esse achado"],
+    "ferramentas": ["Quem curte ferramenta vai querer", "Esse achado resolve na hora", "Ferramenta boa e barata existe"],
+    "cuidado": ["Achado pra quem se cuida", "Homem que se cuida vai gostar", "Olha esse achado de cuidado"],
+    "estilo": ["Achado de estilo baratinho", "Estilo gastando pouco", "Olha esse achado de estilo"],
+}
+
+
+def _valor(preco_curto):
+    m = re.search(r"([\d.]+),(\d{2})", preco_curto or "")
+    return float(m.group(1).replace(".", "") + "." + m.group(2)) if m else 0.0
+
+
+def gancho(item):
+    v, n = _valor(item.get("preco_curto")), int(item.get("n") or 0)
+    if 0 < v < 50 and n % 2 == 0:  # metade dos Reels baratos abre pelo preço
+        teto = int(v // 10 + 1) * 10
+        return f"Menos de {extenso(teto)} reais nisso aqui?", f"Menos de R$ {teto} nisso aqui?"
+    lista = GANCHOS.get(item.get("categoria"), ["Olha esse achado"])
+    g = lista[n % len(lista)]
+    return g + "!", g + "!"
+
+
+def _vendas_falado(txt):
+    """"+1,3 mil" → "mais de mil e trezentos"; "+914" → "mais de novecentos"."""
+    t = (txt or "").replace("+", "").strip().lower()
+    m = re.match(r"([\d.,]+)\s*(mil)?", t)
+    if not m:
+        return None
+    num = float(m.group(1).replace(".", "").replace(",", "."))
+    num = int(num * 1000) if m.group(2) else int(num)
+    if num < 100:
+        return None
+    redondo = (num // 1000) * 1000 if num >= 1000 else (num // 100) * 100
+    if num >= 1000 and num % 1000 >= 100 and num < 10000:
+        redondo = (num // 100) * 100
+    return f"mais de {extenso(redondo)}"
+
+
+def partes(item):
+    """Lista de (id, fala, legenda) na ordem do vídeo."""
+    g_fala, g_tela = gancho(item)
+    out = [("gancho", g_fala, g_tela),
+           ("nome", item.get("titulo") or "", item.get("titulo") or ""),
+           ("preco", f"Por {preco_falado(item.get('preco_curto'))}.", f"Por {item.get('preco_curto')}")]
+    vf = _vendas_falado(item.get("vendidos"))
+    if vf:
+        fala = f"{vf.capitalize()} vendidos"
+        tela = f"{item.get('vendidos')} vendidos"
+        if item.get("nota"):
+            a, b = str(item["nota"]).split(".") if "." in str(item["nota"]) else (str(item["nota"]), "0")
+            fala += f", nota {extenso(int(a))}{' vírgula ' + extenso(int(b)) if int(b) else ''}"
+            tela += f" · nota {str(item['nota']).replace('.', ',')}"
+        out.append(("prova", fala + ".", tela))
+    out.append(("cta", f"Link na bio, número {extenso(item['n'])}.", f"Link na bio · nº {item['n']}"))
+    return out
+
+
+def _tts(fala, saida):
+    subprocess.run(["edge-tts", "--voice", EDGE_VOZ, "--rate=+10%", "--text", fala, "--write-media", str(saida)],
+                   check=True, capture_output=True)
+
+
+def roteiro(item, saida, max_seg=13.5, pausa=0.12, atraso=0.25):
+    """Gera a narração em partes e devolve (wav, [{"id","tela","ini","fim"}]) com os tempos de cada parte
+    no vídeo. Se passar de max_seg, tira a "prova" (vendas/nota). Falha → (None, [])."""
+    if config.VOZ != "edge":
+        return None, []
+    saida = Path(saida)
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            lst = partes(item)
+            arqs = []
+            for i, (pid, fala, tela) in enumerate(lst):
+                a = Path(tmp) / f"{i}.mp3"
+                _tts(fala, a)
+                arqs.append((pid, tela, a, _duracao(a)))
+            if sum(d for *_, d in arqs) + pausa * len(arqs) > max_seg:
+                arqs = [x for x in arqs if x[0] != "prova"]
+            tempos, t = [], atraso
+            entradas, filtros = [], []
+            for i, (pid, tela, a, d) in enumerate(arqs):
+                tempos.append({"id": pid, "tela": tela, "ini": round(t, 3), "fim": round(t + d, 3)})
+                entradas += ["-i", str(a)]
+                filtros.append(f"[{i}:a]aresample=44100,apad=pad_dur={pausa}[s{i}]")
+                t += d + pausa
+            cadeia = ";".join(filtros) + ";" + "".join(f"[s{i}]" for i in range(len(arqs))) + \
+                f"concat=n={len(arqs)}:v=0:a=1,adelay={int(atraso*1000)}|{int(atraso*1000)},loudnorm=I=-16:TP=-1.5[a]"
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *entradas, "-filter_complex", cadeia,
+                            "-map", "[a]", "-ar", "44100", "-ac", "2", str(saida)], check=True)
+            return saida, tempos
+        except Exception as e:
+            print(f"::warning::narração falhou no nº {item.get('n')}: {str(e)[:200]}")
+            return None, []
+
+
 def main():
-    """Teste: gera Reels de produtos já existentes com as duas vozes, para ouvir antes de ligar."""
+    """Teste: gera Reels v2 (voz + legenda) de produtos já existentes em docs/teste-voz/, para ver antes de ligar."""
     import json
     from .gerar import DOCS
-    from .reel import reel
+    from .reel2 import reel_narrado
     ap = argparse.ArgumentParser()
     ap.add_argument("--teste", nargs="+", type=int, required=True, help="números dos produtos")
     args = ap.parse_args()
@@ -135,14 +233,12 @@ def main():
     pasta.mkdir(parents=True)
     for n in args.teste:
         it = next(x for x in lista if x["n"] == n)
-        foto = DOCS / "media" / str(n) / "foto.jpg"
-        cfg = {"photo": str(foto), "hook": it.get("gancho"), "title": it["titulo"], "new": it["preco_curto"],
-               "extra": f"{it.get('vendidos')} vendidos", "numero": n}
-        for motor in ("piper", "edge"):
-            v = narrar(it, pasta / f"{n}-{motor}.wav", motor)
-            print(f"nº {n} {motor}: {texto(it)!r} → {v} ({_duracao(v) if v else 0:.1f}s)")
-            if v:
-                reel(dict(cfg, voz=str(v)), str(pasta / f"reel-{n}-{motor}.mp4"))
+        v, tempos = roteiro(it, pasta / f"{n}.wav")
+        print(f"nº {n}: {tempos}")
+        if v:
+            cfg = {"photo": str(DOCS / "media" / str(n) / "foto.jpg"), "numero": n, "new": it["preco_curto"]}
+            reel_narrado(cfg, str(pasta / f"reel-{n}.mp4"), v, tempos)
+            v.unlink()
 
 
 if __name__ == "__main__":

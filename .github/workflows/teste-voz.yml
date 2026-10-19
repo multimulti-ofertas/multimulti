@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
-      - run: pip install -r requirements.txt piper-tts edge-tts
+      - run: pip install -r requirements.txt
       - run: python -m robo.voz --teste ${{ inputs.numeros }}
       - name: Guardar no ramo "previa" (não aparece na vitrine)
         run: |
