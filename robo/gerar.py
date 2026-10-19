@@ -304,20 +304,27 @@ def main():
     papeis = ["feed", "feed", "reel", "reel"] + [None] * 20  # 2 no feed + 2 Reels por dia
     novos, tipos_dia = [], set()
     tipos_recentes = tipos_travados(lista, d)
+    pulos = {}
     for c, p in escolhidos:
         if len(novos) >= config.PRODUTOS_POR_DIA:
             break
         tp = planilha.tipo(p["productName"])
-        if tp and (tp in tipos_dia or tp in tipos_recentes):  # 1 de cada tipo por dia e o tipo só volta após 7 dias
+        if tp and tp in tipos_dia:  # 1 de cada tipo por dia
+            pulos["mesmo tipo no dia"] = pulos.get("mesmo tipo no dia", 0) + 1
+            continue
+        if tp and tp in tipos_recentes:  # o tipo só volta depois de TIPO_FOLGA_DIAS
+            pulos[f"tipo recente"] = pulos.get("tipo recente", 0) + 1
             continue
         try:
             item = montar(c, p, prox + len(novos), d, papeis[len(novos)], args.demo)
         except SemFoto as e:
             print(f"  [pulado, sem foto] {e}")
+            pulos["sem foto"] = pulos.get("sem foto", 0) + 1
             continue
         novos.append(item)
         tipos_dia.add(tp)
         print(f"  nº {item['n']}: {item['titulo']} ({item['preco']}) [{item['agenda'] or 'vitrine'}]")
+    print(f"::notice::{len(novos)} produtos escolhidos; pulados: {pulos}")
     if not novos:
         raise SystemExit("Nenhum produto com foto. Confira ofertas/imagens.json.")
     if len(novos) == 1:  # só 1 produto: ele também vira Reels
