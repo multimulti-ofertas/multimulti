@@ -36,7 +36,7 @@ TEMAS = {
         "ferramenta", "chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
         "multimetro", "catraca", "nivel a laser", "cola ", "esmerilhadeira", "lixadeira", "serra ", "soquete",
         "martelo", "estilete", "pistola de cola", "soprador", "solda", "morsa", "grampeador", "broca",
-        "fita isolante", "macaco hidraulico", "detector",
+        "fita isolante", "macaco hidraulico", "detector", "disco", "bits", "puncao",
     ],
     "estilo": [
         "camiseta", "camisa", "relogio", "tenis", "carteira", "bermuda", "oculos", "mochila", "meia",
@@ -49,7 +49,7 @@ TEMAS = {
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unhas", "unha postica", "unha de gel", "maquiagem", "perler", "artesanato",
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
-        "scrunchie", "presilha", "cuticula", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo"]
+        "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo"]
 
 
 def sem_acento(t):
