@@ -108,7 +108,7 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
          "catraca", "soquete", "jogo de chave", "chave de fenda", "chaves de fenda", "precisao", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda", "meia", "par de meia", "pares de meia",
-         "sabonete", "cheirinho", "cinto", "chinelo", "polo", "calca", "moletom", "bota ", "botas", "sandalia",
+         "sabonete", "disco", "chapinha", "cheirinho", "cinto", "chinelo", "polo", "calca", "moletom", "bota ", "botas", "sandalia",
          "corrente", "pulseira", "anel ", "shorts", "regata", "gorro", "chapeu", "necessaire", "gravata",
          "pijama", "jaqueta", "sapato", "tapete", "capa de banco", "cera ", "ceras", "lavadora", "sensor", "transmissor",
          "calibrador", "lixeira", "encosto", "almofada", "espelho", "pretinho", "capacete", "luva", "cadeado",

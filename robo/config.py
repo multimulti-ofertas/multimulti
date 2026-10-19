@@ -91,8 +91,8 @@ PALAVRAS = {
 # Regras de seleção
 NOTA_MINIMA = 4.6
 VENDAS_MINIMAS = 100
-VENDAS_MINIMAS_API = 1000     # com a API dá para ser exigente: só produto com +1 mil vendas
-DESCONTO_MINIMO = 10          # % OFF
+VENDAS_MINIMAS_API = 500      # com a API: só produto com +500 vendas (1000 deixava o dia de cuidado com 6 produtos)
+DESCONTO_MINIMO = 0           # % OFF mínimo (0 = não exige; o que importa é preço bom + vendas + nota)
 PRODUTOS_POR_DIA = 12         # por dia: 2 no feed + 2 em Reels + 8 só nos stories = 12 stories sem repetir
 STORIES_POR_VEZ = 1           # stories postados a cada horário da rotina
 
