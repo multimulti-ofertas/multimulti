@@ -48,8 +48,8 @@ def categoria_do_dia(d):
 
 def palavras_do_dia(cat, rnd):
     if cat == "top":
-        return [(c, w) for c, p in config.PALAVRAS.items() for w in rnd.sample(p, k=2)]  # 2 buscas por tema
-    return [(cat, w) for w in rnd.sample(config.PALAVRAS[cat], k=min(6, len(config.PALAVRAS[cat])))]
+        return [(c, w) for c, p in config.PALAVRAS.items() for w in rnd.sample(p, k=4)]  # 4 buscas por tema
+    return [(cat, w) for w in rnd.sample(config.PALAVRAS[cat], k=len(config.PALAVRAS[cat]))]  # todas do tema
 
 
 def pontuar(p):
@@ -100,10 +100,11 @@ def candidatos_shopee(cat_dia, rnd):
     out = []
     for cat, kw in palavras_do_dia(cat_dia, rnd):
         try:
-            for p in shopee.buscar(kw, limite=50, ordem=2):
-                c = planilha.tema(p.get("productName"))
-                if c:  # só entra se o nome confirmar o tema (corta bomba de aquário, infantil, feminino...)
-                    out.append((c, p))
+            for pagina in (1, 2):  # 100 mais vendidos por palavra (a trava de 7 dias por tipo pede mais opções)
+                for p in shopee.buscar(kw, limite=50, ordem=2, pagina=pagina):
+                    c = planilha.tema(p.get("productName"))
+                    if c:  # só entra se o nome confirmar o tema (corta bomba de aquário, infantil, feminino...)
+                        out.append((c, p))
         except Exception as e:
             print(f"[aviso] busca '{kw}' falhou: {e}")
     return out
