@@ -24,23 +24,30 @@ TEMAS = {
         "barbe", "barba", "cabelo", "aparador", "lamina", "navalha", "tonico", "shampoo",
         "perfume", "body splash", "pomada", "pasta modeladora", "depil", "pelos", "gola higienica",
         "gillette", "minoxi", "grecin", "oneblade", "kemei", "sobrancelha", "sabonete", "facial",
-        "protetor solar", "hidratante", "desodorante",
+        "protetor solar", "hidratante", "desodorante", "oleo para barba", "balm", "pente", "escova de cabelo",
+        "esfoliante", "mascara facial", "espuma de barbear", "gel de barbear", "pos barba", "colonia",
+        "skincare", "cera para cabelo", "cera modeladora", "creme para pentear",
     ],
     "carro": [
         "carro", "automotiv", "veicular", "porta malas", "volante", "farol", "pneu", "moto ", "motocicl", "12v",
+        "parabrisa", "estacionamento", "retrovisor", "capacete", "motociclista", "veiculo", "automovel",
     ],
     "ferramentas": [
         "ferramenta", "chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
         "multimetro", "catraca", "nivel a laser", "cola ", "esmerilhadeira", "lixadeira", "serra ", "soquete",
+        "martelo", "estilete", "pistola de cola", "soprador", "solda", "morsa", "grampeador", "broca",
+        "fita isolante", "macaco hidraulico", "detector",
     ],
     "estilo": [
         "camiseta", "camisa", "relogio", "tenis", "carteira", "bermuda", "oculos", "mochila", "meia",
-        "cueca", "bone", "cadarc", "jaqueta", "couro", "sapato", "limpa tenis",
+        "cueca", "bone", "cadarc", "jaqueta", "couro", "sapato", "limpa tenis", "cinto", "chinelo", "polo",
+        "calca", "moletom", "bota ", "botas", "sandalia", "corrente", "pulseira", "anel ", "bolsa", "shorts",
+        "regata", "dry fit", "gorro", "chapeu", "bucket", "porta cartao", "necessaire", "gravata", "pijama",
     ],
 }
 # Produtos com estas palavras nunca entram.
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
-        "gato", "infantil", "crianca", "bebe", "cilio", "unha", "maquiagem", "perler", "artesanato",
+        "gato", "infantil", "crianca", "bebe", "cilio", "unhas", "unha postica", "unha de gel", "maquiagem", "perler", "artesanato",
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
         "scrunchie", "presilha", "anzol", "ferramenta tranca", "ferramentas de cabelo"]
 
@@ -96,7 +103,14 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
          "depil", "maquina", "aparador", "barbeador", "aparelho de barbear", "tenis", "compressor",
          "catraca", "soquete", "jogo de chave", "chave de fenda", "chaves de fenda", "precisao", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda", "meia", "par de meia", "pares de meia",
-         "sabonete", "cheirinho", "aromatizante", "body splash", "desodorante", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete", "flanela", "pano ", "panos", "pincel", "pinceis", "pomada"]
+         "sabonete", "cheirinho", "cinto", "chinelo", "polo", "calca", "moletom", "bota ", "botas", "sandalia",
+         "corrente", "pulseira", "anel ", "shorts", "regata", "gorro", "chapeu", "necessaire", "gravata",
+         "pijama", "jaqueta", "sapato", "tapete", "capa de banco", "cera", "lavadora", "sensor", "transmissor",
+         "calibrador", "lixeira", "encosto", "almofada", "espelho", "pretinho", "capacete", "luva", "cadeado",
+         "serra", "esmerilhadeira", "lixadeira", "caixa organizadora", "fita isolante", "chave de impacto",
+         "broca", "martelo", "estilete", "pistola de cola", "soprador", "ferro de solda", "morsa", "grampeador",
+         "chave inglesa", "macaco", "multimetro", "nivel", "oleo", "balm", "pente", "escova", "esfoliante",
+         "mascara", "gel ", "espuma", "pos barba", "colonia", "minoxidil", "creme", "aromatizante", "body splash", "desodorante", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete", "flanela", "pano ", "panos", "pincel", "pinceis", "pomada"]
 
 
 def tipo(nome):
@@ -113,7 +127,7 @@ def tipo(nome):
     return MESMO_TIPO.get(t, t)
 
 
-MESMO_TIPO = {"aromatizante": "cheirinho", "soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "mochila": "bolsa", "par de meia": "meia", "pares de meia": "meia",
+MESMO_TIPO = {"botas": "bota ", "aromatizante": "cheirinho", "soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "mochila": "bolsa", "par de meia": "meia", "pares de meia": "meia",
               "aparador": "maquina", "barbeador": "maquina",
               "chave de fenda": "chave de precisao", "chaves de fenda": "chave de precisao", "precisao": "chave de precisao"}
 
