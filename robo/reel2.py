@@ -6,6 +6,7 @@ reel_narrado(cfg, saida, voz_wav, tempos)
   tempos: [{"id": gancho|nome|preco|prova|cta, "tela": texto, "ini": s, "fim": s}] (robo/voz.roteiro)
 """
 import math
+import re
 import subprocess
 
 from PIL import Image, ImageFilter
@@ -48,7 +49,8 @@ def _sombra(lay, raio=10, forca=200):
 
 def _blocos(texto, max_palavras=3, max_chars=16):
     """Divide a legenda em pedaços curtos (como os Reels com legenda que aparece aos poucos)."""
-    ws, out, cur = texto.split(), [], []
+    texto = re.sub(r"R\$\s+", "R$\u00a0", texto)  # "R$ 40" nunca se separa
+    ws, out, cur = texto.split(" "), [], []
     for w in ws:
         if cur and (len(cur) >= max_palavras or len(" ".join(cur + [w])) > max_chars):
             out.append(cur)
