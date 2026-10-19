@@ -102,7 +102,7 @@ def candidatos_shopee(cat_dia, rnd):
         try:
             for pagina in (1, 2):  # 100 mais vendidos por palavra (a trava de 7 dias por tipo pede mais opções)
                 for p in shopee.buscar(kw, limite=50, ordem=2, pagina=pagina):
-                    c = planilha.tema(p.get("productName"))
+                    c = planilha.tema(p.get("productName"), preferir=cat)
                     if c:  # só entra se o nome confirmar o tema (corta bomba de aquário, infantil, feminino...)
                         out.append((c, p))
         except Exception as e:

@@ -49,7 +49,7 @@ TEMAS = {
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unhas", "unha postica", "unha de gel", "maquiagem", "perler", "artesanato",
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
-        "scrunchie", "presilha", "anzol", "ferramenta tranca", "ferramentas de cabelo"]
+        "scrunchie", "presilha", "cuticula", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo"]
 
 
 def sem_acento(t):
@@ -57,13 +57,18 @@ def sem_acento(t):
     return re.sub(r"\s+", " ", t.lower()).strip()
 
 
-def tema(nome):
+def tema(nome, preferir=None):
+    """Tema pelo nome. Empate (ex.: estilete com "lâmina") fica com `preferir` (o tema da busca), se estiver no empate."""
     n = sem_acento(nome)
     if any(re.search(r"\b" + re.escape(w), n) for w in FORA):  # começo de palavra: "trico" não pega "elétrico"
         return None
     pontos = {c: sum(bool(re.search(r"\b" + re.escape(w), n)) for w in ws) for c, ws in TEMAS.items()}
     melhor = max(pontos, key=pontos.get)
-    return melhor if pontos[melhor] else None
+    if not pontos[melhor]:
+        return None
+    if preferir and pontos.get(preferir) == pontos[melhor]:
+        return preferir
+    return melhor
 
 
 _RUIDO = re.compile(r"\b(kit|profissional|masculin[oa]s?|eletric[oa]|de|da|do|para|com|e|em|o|a)\b")
@@ -105,7 +110,7 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
          "camis", "relogio", "carteira", "perfume", "bone", "oculos", "mochila", "cueca", "bermuda", "meia", "par de meia", "pares de meia",
          "sabonete", "cheirinho", "cinto", "chinelo", "polo", "calca", "moletom", "bota ", "botas", "sandalia",
          "corrente", "pulseira", "anel ", "shorts", "regata", "gorro", "chapeu", "necessaire", "gravata",
-         "pijama", "jaqueta", "sapato", "tapete", "capa de banco", "cera", "lavadora", "sensor", "transmissor",
+         "pijama", "jaqueta", "sapato", "tapete", "capa de banco", "cera ", "ceras", "lavadora", "sensor", "transmissor",
          "calibrador", "lixeira", "encosto", "almofada", "espelho", "pretinho", "capacete", "luva", "cadeado",
          "serra", "esmerilhadeira", "lixadeira", "caixa organizadora", "fita isolante", "chave de impacto",
          "broca", "martelo", "estilete", "pistola de cola", "soprador", "ferro de solda", "morsa", "grampeador",
