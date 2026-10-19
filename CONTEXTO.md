@@ -18,7 +18,9 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   A partir de 16/out o robô busca sozinho: só +1 mil vendas (VENDAS_MINIMAS_API), nota ≥4.6, tema confirmado
   pelo nome (planilha.tema), 1 de cada tipo por dia (planilha.TIPOS/MESMO_TIPO). Planilhas viram reserva.
   Falta: trocar o e-mail de contato do painel de afiliados para o Gmail novo.
-  Dia de tema: 6 buscas do tema; se não der 12 produtos, completa com os outros temas.
+  Dia de tema: todas as palavras do tema (2 páginas cada); se não der 12 produtos, completa com os outros temas.
+  Trava de tipo (19/out, pedido do João): o mesmo tipo (compressor, capa de volante, meia...) evita voltar por 7 dias
+  (config.TIPO_FOLGA_DIAS). Feed/Reels pegam tipos novos; se faltar produto pra fechar 12, os stories aceitam tipo recente.
 - 15/out: e-mails pessoais apagados de TODO o histórico do git (reescrito + force push). Nunca escrever e-mail aqui.
   Falta o João: GitHub Settings → Emails (manter e-mail privado) e ruleset protegendo main (o proxy não deixa o Claude mexer em configurações).
 
