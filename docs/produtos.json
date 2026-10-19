@@ -133,7 +133,16 @@
   "link": "https://s.shopee.com.br/5q94GMZm74",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-7rens-m8p66bx62oiv86",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "18108138740609335",
+    "em": "2026-10-19T17:14:07.386613"
+   },
+   "fb_story": {
+    "id": "2352372031971202",
+    "em": "2026-10-19T17:14:13.840358"
+   }
+  },
   "preco": "R$ 29,78",
   "preco_curto": "R$ 29,78",
   "pct": 39,
@@ -146,7 +155,8 @@
   ],
   "feed": "media/57/feed.jpg",
   "story": "media/57/story.jpg",
-  "recorte": "media/57/produto.webp"
+  "recorte": "media/57/produto.webp",
+  "stories": 1
  },
  {
   "n": 56,
