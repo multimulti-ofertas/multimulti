@@ -1,0 +1,29 @@
+name: Teste de voz (Reels narrados)
+on:
+  workflow_dispatch:
+    inputs:
+      numeros:
+        description: "Números dos produtos (separados por espaço)"
+        default: "53 54"
+permissions:
+  contents: write
+concurrency:
+  group: teste-voz
+jobs:
+  voz:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+      - run: pip install -r requirements.txt piper-tts edge-tts
+      - run: python -m robo.voz --teste ${{ inputs.numeros }}
+      - name: Guardar no ramo "previa" (não aparece na vitrine)
+        run: |
+          git config user.name "robo-multimulti"
+          git config user.email "robo@users.noreply.github.com"
+          git checkout -B previa
+          git add -A docs/teste-voz
+          git commit -m "Teste de voz $(TZ=America/Cuiaba date '+%F %H:%M')"
+          git push -f origin previa

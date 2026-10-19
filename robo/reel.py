@@ -78,10 +78,17 @@ def reel(cfg, out, segundos=10.0):
     n = int(segundos * FPS)
     som = musica.escolher(numero)
     audio = ["-i", str(som)] if som else ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100"]
+    voz = cfg.get("voz")
+    if voz:  # narração por cima, música baixa por baixo
+        audio += ["-i", voz]
+        mapa = ["-filter_complex", "[1:a]volume=0.22[m];[2:a]adelay=250|250,apad[v];"
+                "[m][v]amix=inputs=2:duration=first:normalize=0[a]", "-map", "0:v", "-map", "[a]"]
+    else:
+        mapa = ["-map", "0:v", "-map", "1:a"]
     proc = subprocess.Popen(
         ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
          "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", *audio,
-         "-map", "0:v", "-map", "1:a", "-t", str(segundos), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "medium",
+         *mapa, "-t", str(segundos), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "medium",
          "-crf", "20", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", out],
         stdin=subprocess.PIPE)
 
