@@ -92,7 +92,7 @@ ROTINA[20] = ["reel", "story"]   # Reels: 20h Cuiabá = 21h Brasília
 ROTINA_ANTIGA = {h: ["story"] for h in range(8, 23)}
 ROTINA_ANTIGA.update({8: ["feed", "story"], 20: ["feed", "story"], 12: ["reel", "story"], 21: ["reel", "story"]})
 NAO_REPETIR_DIAS = None       # None = nunca repete o mesmo produto (nem um muito parecido)
-TIPO_FOLGA_DIAS = 4           # o mesmo TIPO (compressor, capa de volante, meia...) só volta depois de 4 dias (7 deixava o dia sem produto)
+TIPO_FOLGA_DIAS = 7           # o mesmo TIPO só volta depois de 7 dias; se faltar produto pra fechar o dia, completa com tipo recente (só stories)
 GUARDAR_MIDIA_DIAS = 10       # apaga vídeos/imagens antigos para o repositório não crescer demais
 
 # Endereços
