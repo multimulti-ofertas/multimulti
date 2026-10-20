@@ -135,19 +135,18 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   "robo-renovar-instagram", sem vencimento, só repo multimulti, só Secrets read/write). Testado em 14/out.
 
 ## Falta
-1. João vai trocar o nome de exibição do app da Meta de "MultiMulti Robo" para "MultiMulti Ofertas" (Configurações do app
-   → Básico), porque o Facebook mostra "Postado por MultiMulti Robo". Não quebra tokens.
-2. Destaques do Instagram: "Sobre" pronto e no ar (capa quadrada MULTI/MULTI + 4 stories). Próximo: "Avaliações" com
+1. Destaques do Instagram: "Sobre" pronto e no ar (capa quadrada MULTI/MULTI + 4 stories). Próximo: "Avaliações" com
    prints de AVALIAÇÕES REAIS da Shopee que o João vai mandar (montar no visual da marca, esconder nome de quem avaliou,
    linha "Avaliação real de quem comprou na Shopee"). Depoimento inventado: não fazer.
-3. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
-4. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
+2. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
+3. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
    histórico guarda). O GitHub recomenda até 1 GB → resolver antes de ~jan/2027 (ex.: mídias num ramo separado recriado do zero).
 
 ## Já configurado
 - Bio do Instagram (14/out): "📩 Manda EU QUERO no direct" + link da vitrine em Links (conferido)
 - GitHub Pages ligado (Source: GitHub Actions); link da vitrine na bio do Instagram
 - Secret `IGTOKEN` (app da Meta "MultiMulti Robo", modo desenvolvimento, empresa MultiMulti.Ofertas)
+- Nome do app "MultiMulti Robo" fica como está (João, 20/out: não precisa trocar). Não sugerir de novo.
 - O ID da conta do Instagram é descoberto pelo próprio token (não precisa de IGUSERID)
 - Verificação em duas etapas no GitHub; acesso do Claude limitado a este repositório
 
