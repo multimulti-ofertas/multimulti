@@ -178,3 +178,14 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Produtos nunca repetidos
 - Antes de ligar algo novo: revisar tudo e testar primeiro
 - Ao chegar no limite da sessão, abrir conversa nova com a frase do topo deste arquivo
+
+## Atualização 19/out (fim do dia)
+- Reels v2 (robo/reel2.py + robo/voz.py): narração com voz da Microsoft (edge-tts, pt-BR-AntonioNeural, config.VOZ="edge"),
+  legenda animada sincronizada, produto com zoom/balanço, preço entra junto com a voz, ~12 s. Sem voz → Reels antigo.
+- 19/out ~19h: feed nº 52 saiu ~10x (Instagram publicava e devolvia "action is blocked" 2207051; o robô repetia).
+  João apagou os repetidos. Correção: instagram.checar_antes() roda ANTES de todo post (limite, arquivo, legenda,
+  produto já no perfil, intervalo de 12 min); erro de bloqueio → docs/pausa.json pausa 24h; vigia avisa.
+  Teste sem postar: workflow "Postar" com so_testar=true. Postagem religada pelo João às 22h.
+- Dia de tema só com produtos do tema; +500 vendas, sem exigir desconto; trava de 7 dias por tipo (preferência).
+- A tarefa agendada "Revisão diária 07h40" não existe mais (sumiu da lista); recriar só se o João pedir.
+- Ideias em espera: 2º Instagram feminino (esperar 2–3 semanas de números); apresentador de IA (testar no CapCut à mão).
