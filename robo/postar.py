@@ -96,11 +96,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tipo", choices=["auto", "feed", "reel", "story"], required=True)
     ap.add_argument("--teste", action="store_true")
+    ap.add_argument("--so-testar", action="store_true",
+                    help="faz o teste antes de postar (perfil, limite, arquivo, legenda) e NÃO posta nada")
     ap.add_argument("--hora", type=int, help="só para teste: finge que é essa hora (0-23)")
     ap.add_argument("--so-facebook", action="store_true",
                     help="não posta no Instagram; só põe na Página o que já saiu no Instagram hoje")
     args = ap.parse_args()
 
+    if args.so_testar:
+        return so_testar(args)
     if not config.POSTAR_NO_INSTAGRAM and not args.teste:
         print("Postagem no Instagram desligada (config.POSTAR_NO_INSTAGRAM = False). Nada a fazer.")
         return
@@ -142,10 +146,11 @@ def main():
                     return instagram.postar_reels(url, texto.com_publi(alvo["legenda"]))
                 return instagram.postar_story(url)
             # feed/Reels: se já está no perfil (publicou mas deu erro antes), só registra — NUNCA posta de novo
-            try:
-                mid = instagram.ja_no_ar(alvo["n"]) if tipo != "story" else None
-            except Exception as e:  # não deu pra conferir o perfil: na dúvida NÃO posta (evita repetido)
-                print(f"::error::Não consegui conferir o perfil antes do {tipo} do nº {alvo['n']}: {str(e)[:200]}")
+            legenda = texto.com_publi(alvo["legenda"]) if tipo != "story" else None
+            try:  # TESTE antes de postar (pedido do João): na dúvida, não posta
+                ok, motivo, mid = instagram.checar_antes(tipo, alvo["n"], url, legenda)
+            except Exception as e:
+                print(f"::error::Teste antes do {tipo} do nº {alvo['n']} falhou (não postei): {str(e)[:200]}")
                 erros += 1
                 if instagram.bloqueado(e):
                     pausar(24, str(e))
@@ -153,6 +158,9 @@ def main():
                 continue
             if mid:
                 print(f"::warning::{tipo} do nº {alvo['n']} já estava no perfil (id {mid}); só registrei, não repostei.")
+            elif not ok:
+                print(f"::warning::Não postei o {tipo} do nº {alvo['n']}: {motivo}. Tenta de novo na próxima rodada.")
+                continue
             else:
                 try:
                     mid = publicar()
@@ -216,6 +224,27 @@ def main():
             print(f"Publicado no Facebook! id {mid}")
     if tentou and erros == tentou and not args.teste:
         raise SystemExit("Nenhuma publicação deu certo.")
+
+def so_testar(args):
+    """Roda o teste de antes de postar para o que sairia agora, sem publicar nada."""
+    lista, d = carregar(), hoje().isoformat()
+    h = args.hora if args.hora is not None else hora_da_rotina()
+    tipos = plano(lista, d, h) if args.tipo == "auto" else [args.tipo]
+    print(f"::notice::Teste ({h:02d}h): sairia {', '.join(tipos) or 'nada'}. Postagem ligada: {config.POSTAR_NO_INSTAGRAM}. Pausa: {em_pausa()}")
+    vistos = set()
+    for tipo in tipos:
+        for alvo in pendentes(lista, d, tipo):
+            if (tipo, alvo["n"]) in vistos:
+                continue
+            vistos.add((tipo, alvo["n"]))
+            url = f"{config.PAGES_URL}/{alvo[tipo]}"
+            leg = texto.com_publi(alvo["legenda"]) if tipo != "story" else None
+            try:
+                ok, motivo, mid = instagram.checar_antes(tipo, alvo["n"], url, leg)
+                print(f"::notice::{tipo} nº {alvo['n']} ({alvo['titulo']}): {'PODE POSTAR' if ok else 'NÃO POSTA'} — {motivo}{f' (id {mid})' if mid else ''}")
+            except Exception as e:
+                print(f"::error::{tipo} nº {alvo['n']}: teste falhou — {str(e)[:250]}")
+
 
 if __name__ == "__main__":
     main()

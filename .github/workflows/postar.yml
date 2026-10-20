@@ -19,6 +19,11 @@ on:
         required: false
         default: false
         type: boolean
+      so_testar:
+        description: "Só testar (confere perfil, limite, arquivo e legenda; NÃO posta nada)"
+        required: false
+        default: false
+        type: boolean
 permissions:
   contents: write
 concurrency:
@@ -38,7 +43,7 @@ jobs:
           IG_TOKEN: ${{ secrets.IGTOKEN || secrets.IG_TOKEN }}
           FB_PAGE_TOKEN: ${{ secrets.FBPAGETOKEN }}
         run: |
-          python -m robo.postar --tipo "${{ inputs.tipo || 'auto' }}" ${{ inputs.so_facebook && '--so-facebook' || '' }}
+          python -m robo.postar --tipo "${{ inputs.tipo || 'auto' }}" ${{ inputs.so_facebook && '--so-facebook' || '' }} ${{ inputs.so_testar && '--so-testar' || '' }}
       - name: Marcar como postado
         if: always()   # mesmo se algo falhar, salva o que já foi publicado (evita post repetido)
         run: |

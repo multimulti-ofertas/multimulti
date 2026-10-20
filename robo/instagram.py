@@ -76,6 +76,39 @@ def ja_no_ar(n, horas=36):
     return None
 
 
+def checar_antes(tipo, n, url, legenda=None, folga_min=12):
+    """Teste ANTES de cada publicação. Devolve (pode_postar, motivo, id_ja_no_ar).
+    Confere: token ok, Instagram não bloqueou (limite de publicação), arquivo no ar, legenda certa,
+    o produto ainda não está no perfil e nada do mesmo tipo saiu nos últimos `folga_min` minutos."""
+    import datetime as dt
+    import re
+    uid, tok = _cred()
+    lim = _req("GET", f"{BASE}/{uid}/content_publishing_limit",
+               params={"fields": "quota_usage,config", "access_token": tok}).get("data") or [{}]
+    uso = int(lim[0].get("quota_usage") or 0)
+    total = int((lim[0].get("config") or {}).get("quota_total") or 100)
+    if uso >= total - 5:
+        return False, f"limite de publicação quase no fim ({uso}/{total})", None
+    esperar_url(url, tentativas=4)
+    agora = dt.datetime.now(dt.timezone.utc)
+    if tipo == "story":
+        r = _req("GET", f"{BASE}/{uid}/stories", params={"fields": "id,timestamp", "access_token": tok})
+        ts = [dt.datetime.strptime(m["timestamp"], "%Y-%m-%dT%H:%M:%S%z") for m in r.get("data", []) if m.get("timestamp")]
+        if ts and (agora - max(ts)).total_seconds() < folga_min * 60:
+            return False, f"já saiu story há menos de {folga_min} min", None
+        return True, "ok", None
+    if not legenda or not re.search(rf"nº {int(n)}\b", legenda) or "#publi" not in legenda.lower():
+        return False, "legenda sem o nº do produto ou sem #publi", None
+    existente = ja_no_ar(n)
+    if existente:
+        return False, "esse produto já está no perfil", existente
+    r = _req("GET", f"{BASE}/{uid}/media", params={"fields": "id,timestamp", "limit": 5, "access_token": tok})
+    ts = [dt.datetime.strptime(m["timestamp"], "%Y-%m-%dT%H:%M:%S%z") for m in r.get("data", []) if m.get("timestamp")]
+    if ts and (agora - max(ts)).total_seconds() < folga_min * 60:
+        return False, f"já saiu post no feed há menos de {folga_min} min", None
+    return True, "ok", None
+
+
 def bloqueado(erro):
     """O Instagram bloqueou a conta/app por excesso (não adianta tentar de novo agora)."""
     s = str(erro)
