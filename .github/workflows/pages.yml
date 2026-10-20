@@ -21,6 +21,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { ref: main }
+      - name: Baixar mídias (ramo midia)
+        run: bash .github/midia.sh baixar
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: docs }

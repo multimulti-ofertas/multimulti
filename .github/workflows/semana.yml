@@ -19,6 +19,8 @@ jobs:
         with: { python-version: "3.12" }
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
       - run: pip install -r requirements.txt
+      - name: Baixar mídias (ramo midia)
+        run: bash .github/midia.sh baixar
       - name: Montar o vídeo
         run: python -m robo.top3
       - name: Salvar

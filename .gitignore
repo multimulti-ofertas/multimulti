@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 novo_token.txt
 *.tmp.png
+docs/media/
