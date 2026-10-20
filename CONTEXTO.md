@@ -56,6 +56,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   tira palmilhas/lentes/feminino.
   Tipo "chave de precisão" (chave de fenda/precisão) conta 1 por dia; "brinquedo", "rolo modelador" e unha/penteado (polygel, manicure, esmalte, penteado) e massinha/slime ficam fora (16/out).
   Acessório de cabelo feminino (scrunchie, presilha, "ferramenta trança", "ferramentas de cabelo") e anzol ficam fora (17/out).
+  Chapinha fica fora (20/out, João). Body splash masculino pode.
   "Parecido" (planilha.parecido) ignora quantidade e plural ("40 peças ... chave" = "46 peças ... chaves") e compara até 120
   letras do nome; mesmo tipo + 60% das palavras do nome menor iguais também é "parecido"
   (18/out: jogos de chave catraca de 46 peças de lojas diferentes voltavam todo dia). "Par/pares de meia" = tipo meia; "pomada" virou tipo (1 por dia).

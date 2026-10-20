@@ -49,7 +49,7 @@ TEMAS = {
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unhas", "unha postica", "unha de gel", "maquiagem", "perler", "artesanato",
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
-        "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo"]
+        "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha"]
 
 
 def sem_acento(t):
