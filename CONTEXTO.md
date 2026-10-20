@@ -15,7 +15,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   As planilhas de carro/ferramentas vieram fracas: 191 itens, só 15 com 100+ vendas (resto: peça CNC chinesa, pingente, 0 vendas).
   Dica para o João: no painel, ordenar por "Mais vendidos" e buscar termos específicos (ex.: "kit chave catraca", "suporte celular carro").
 - **API da Shopee LIBERADA em 15/out** (secrets SHOPEEAPPID/SHOPEESECRET salvos; prévia de 16/out testada OK).
-  A partir de 16/out o robô busca sozinho: só +1 mil vendas (VENDAS_MINIMAS_API), nota ≥4.6, tema confirmado
+  A partir de 16/out o robô busca sozinho: só +500 vendas (VENDAS_MINIMAS_API; era 1 mil até 19/out), nota ≥4.6, sem exigir desconto, tema confirmado
   pelo nome (planilha.tema), 1 de cada tipo por dia (planilha.TIPOS/MESMO_TIPO). Planilhas viram reserva.
   Falta: trocar o e-mail de contato do painel de afiliados para o Gmail novo.
   Dia de tema: 15 palavras sorteadas das ~35 do tema (config.PALAVRAS, 2 páginas cada). SÓ produtos do tema (João, 19/out):
@@ -47,7 +47,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Chave geral: `POSTAR_NO_INSTAGRAM` em robo/config.py (False = só monta produtos e vitrine, não posta).
 - Se uma publicação falhar no meio, o que já saiu fica marcado (não repete post). Falha do Instagram tenta de novo 1x após 30s.
 - Temas: segunda carro · terça ferramentas · quarta cuidado · quinta estilo · sexta a domingo top (mistura).
-  Se a planilha não tem o tema do dia, completa com outros temas.
+  Dia de tema usa SÓ produtos do tema (se faltar, saem menos stories); só o "top" mistura.
 
 ## De onde vêm os produtos
 - **Sem a API da Shopee (ainda):** planilhas .csv na pasta `ofertas/`. Como baixar: painel de afiliados →
@@ -136,10 +136,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   "robo-renovar-instagram", sem vencimento, só repo multimulti, só Secrets read/write). Testado em 14/out.
 
 ## Falta
-1. Shopee: cadastro de afiliado APROVADO em 13/out; informações fiscais em "Avaliação Pendente";
-   pedido "Quero ativar a API" enviado em 13/out (resposta no Outlook, até 3 dias úteis).
-   Depois: pegar AppID e Secret em "Abrir API" e salvar como secrets `SHOPEEAPPID` e `SHOPEESECRET`
-   (no GitHub: primeiro cole o valor na caixa Secret, depois digite o nome).
+1. Shopee: API liberada em 15/out (secrets salvos). Só falta trocar o e-mail de contato do painel de afiliados
+   do Outlook para o Gmail novo.
 2. João vai trocar o nome de exibição do app da Meta de "MultiMulti Robo" para "MultiMulti Ofertas" (Configurações do app
    → Básico), porque o Facebook mostra "Postado por MultiMulti Robo". Não quebra tokens.
 3. Destaques do Instagram: "Sobre" pronto e no ar (capa quadrada MULTI/MULTI + 4 stories). Próximo: "Avaliações" com
