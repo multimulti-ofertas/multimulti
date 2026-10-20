@@ -149,7 +149,16 @@ def estoque():
         ok(f"Produtos para ~{dias} dias ({resumo})")
 
 
-for etapa in (instagram, pagina, vitrine, posts, repetidos, falhas, estoque):
+def pausa():
+    from .postar import em_pausa
+    p = em_pausa()
+    if p:
+        erro(f"Robô PAUSADO até {p['ate'][:16]} UTC porque o Instagram bloqueou ações: {p.get('motivo', '')[:150]}")
+    if not config.POSTAR_NO_INSTAGRAM:
+        atencao("Postagem desligada (config.POSTAR_NO_INSTAGRAM = False).")
+
+
+for etapa in (pausa, instagram, pagina, vitrine, posts, repetidos, falhas, estoque):
     try:
         etapa()
     except Exception as e:

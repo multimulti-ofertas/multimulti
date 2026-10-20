@@ -60,6 +60,28 @@ def _esperar_container(cid, tok, limite=600):
     raise InstagramErro("Tempo esgotado processando a mídia no Instagram.")
 
 
+def ja_no_ar(n, horas=36):
+    """Id do post (feed ou Reels) do produto nº n que JÁ está no perfil (procura "nº n" na legenda dos
+    últimos posts). Evita post repetido quando o Instagram publica mas devolve erro."""
+    import datetime as dt
+    import re
+    uid, tok = _cred()
+    r = _req("GET", f"{BASE}/{uid}/media", params={"fields": "id,caption,timestamp", "limit": 30,
+                                                   "access_token": tok})
+    limite = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=horas)
+    for m in r.get("data", []):
+        quando = dt.datetime.strptime(m["timestamp"], "%Y-%m-%dT%H:%M:%S%z")
+        if quando >= limite and re.search(rf"nº {int(n)}\b", m.get("caption") or ""):
+            return m["id"]
+    return None
+
+
+def bloqueado(erro):
+    """O Instagram bloqueou a conta/app por excesso (não adianta tentar de novo agora)."""
+    s = str(erro)
+    return "2207051" in s or "action is blocked" in s or "request limit reached" in s.lower()
+
+
 def _publicar(uid, tok, cid):
     return _req("POST", f"{BASE}/{uid}/media_publish", data={"creation_id": cid, "access_token": tok})["id"]
 

@@ -16,7 +16,24 @@ import datetime as dt
 import time
 
 from . import config, facebook, instagram, texto
-from .gerar import carregar, salvar, hoje
+from .gerar import DOCS, carregar, salvar, hoje
+
+PAUSA = DOCS / "pausa.json"   # se o Instagram bloquear, o robô para sozinho até a data gravada aqui
+
+
+def em_pausa():
+    import json
+    if not PAUSA.exists():
+        return None
+    p = json.loads(PAUSA.read_text(encoding="utf-8"))
+    return p if dt.datetime.utcnow().isoformat() < p.get("ate", "") else None
+
+
+def pausar(horas, motivo):
+    import json
+    ate = (dt.datetime.utcnow() + dt.timedelta(hours=horas)).isoformat()
+    PAUSA.write_text(json.dumps({"ate": ate, "motivo": motivo[:300]}, ensure_ascii=False), encoding="utf-8")
+    print(f"::error::Instagram bloqueou ações: robô PAUSADO por {horas}h (até {ate} UTC). Motivo: {motivo[:200]}")
 
 
 def ja_postado(x, tipo):
@@ -87,6 +104,9 @@ def main():
     if not config.POSTAR_NO_INSTAGRAM and not args.teste:
         print("Postagem no Instagram desligada (config.POSTAR_NO_INSTAGRAM = False). Nada a fazer.")
         return
+    if em_pausa() and not args.teste:
+        print(f"::warning::Robô em pausa (Instagram bloqueou): {em_pausa()}")
+        return
 
     if args.tipo == "auto":
         h = args.hora if args.hora is not None else hora_da_rotina()
@@ -121,18 +141,37 @@ def main():
                 if tipo == "reel":
                     return instagram.postar_reels(url, texto.com_publi(alvo["legenda"]))
                 return instagram.postar_story(url)
+            # feed/Reels: se já está no perfil (publicou mas deu erro antes), só registra — NUNCA posta de novo
             try:
+                mid = instagram.ja_no_ar(alvo["n"]) if tipo != "story" else None
+            except Exception as e:  # não deu pra conferir o perfil: na dúvida NÃO posta (evita repetido)
+                print(f"::error::Não consegui conferir o perfil antes do {tipo} do nº {alvo['n']}: {str(e)[:200]}")
+                erros += 1
+                if instagram.bloqueado(e):
+                    pausar(24, str(e))
+                    raise SystemExit("Instagram bloqueou: robô pausado por 24h.")
+                continue
+            if mid:
+                print(f"::warning::{tipo} do nº {alvo['n']} já estava no perfil (id {mid}); só registrei, não repostei.")
+            else:
                 try:
                     mid = publicar()
-                except Exception as e1:  # o Instagram às vezes "perde" a mídia; tenta de novo 1 vez
-                    print(f"[aviso] instagram {tipo} do nº {alvo['n']}: {str(e1)[:200]} — tentando de novo em 30s")
-                    time.sleep(30)
-                    mid = publicar()
-            except Exception as e:  # qualquer falha: registra e segue (o que já saiu fica marcado)
-                print(f"[erro] instagram {tipo} do nº {alvo['n']}: {e}")
-                print(f"::error::Instagram: {tipo} do nº {alvo['n']} falhou: {str(e)[:300]}")
-                erros += 1
-                continue
+                except Exception as e:
+                    print(f"[erro] instagram {tipo} do nº {alvo['n']}: {e}")
+                    if tipo != "story":  # às vezes o Instagram publica e mesmo assim devolve erro
+                        time.sleep(20)
+                        try:
+                            mid = instagram.ja_no_ar(alvo["n"])
+                        except Exception:
+                            mid = None
+                    if not mid:
+                        print(f"::error::Instagram: {tipo} do nº {alvo['n']} falhou: {str(e)[:300]}")
+                        erros += 1
+                        if instagram.bloqueado(e):
+                            pausar(24, str(e))
+                            salvar(lista)
+                            raise SystemExit("Instagram bloqueou: robô pausado por 24h.")
+                        continue
             agora = dt.datetime.utcnow().isoformat()
             alvo["postado"] = dict(alvo.get("postado") or {}, **{tipo: {"id": mid, "em": agora}})
             if tipo == "story":
