@@ -17,7 +17,6 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - **API da Shopee LIBERADA em 15/out** (secrets SHOPEEAPPID/SHOPEESECRET salvos; prévia de 16/out testada OK).
   A partir de 16/out o robô busca sozinho: só +500 vendas (VENDAS_MINIMAS_API; era 1 mil até 19/out), nota ≥4.6, sem exigir desconto, tema confirmado
   pelo nome (planilha.tema), 1 de cada tipo por dia (planilha.TIPOS/MESMO_TIPO). Planilhas viram reserva.
-  Falta: trocar o e-mail de contato do painel de afiliados para o Gmail novo.
   Dia de tema: 15 palavras sorteadas das ~35 do tema (config.PALAVRAS, 2 páginas cada). SÓ produtos do tema (João, 19/out):
   se não der 12, saem menos stories. Só sexta–domingo ("top") misturam temas.
   Trava de tipo (19/out, pedido do João): o mesmo tipo (compressor, capa de volante, meia...) evita voltar por 7 dias
@@ -136,15 +135,13 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   "robo-renovar-instagram", sem vencimento, só repo multimulti, só Secrets read/write). Testado em 14/out.
 
 ## Falta
-1. Shopee: API liberada em 15/out (secrets salvos). Só falta trocar o e-mail de contato do painel de afiliados
-   do Outlook para o Gmail novo.
-2. João vai trocar o nome de exibição do app da Meta de "MultiMulti Robo" para "MultiMulti Ofertas" (Configurações do app
+1. João vai trocar o nome de exibição do app da Meta de "MultiMulti Robo" para "MultiMulti Ofertas" (Configurações do app
    → Básico), porque o Facebook mostra "Postado por MultiMulti Robo". Não quebra tokens.
-3. Destaques do Instagram: "Sobre" pronto e no ar (capa quadrada MULTI/MULTI + 4 stories). Próximo: "Avaliações" com
+2. Destaques do Instagram: "Sobre" pronto e no ar (capa quadrada MULTI/MULTI + 4 stories). Próximo: "Avaliações" com
    prints de AVALIAÇÕES REAIS da Shopee que o João vai mandar (montar no visual da marca, esconder nome de quem avaliou,
    linha "Avaliação real de quem comprou na Shopee"). Depoimento inventado: não fazer.
-4. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
-5. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
+3. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
+4. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
    histórico guarda). O GitHub recomenda até 1 GB → resolver antes de ~jan/2027 (ex.: mídias num ramo separado recriado do zero).
 
 ## Já configurado
@@ -156,15 +153,12 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 
 ## Contas e e-mails
 - GitHub: usuário multimulti-ofertas, entra com o Google (Gmail pessoal do João); e-mail principal = Gmail novo do negócio.
-- Contato do Shopee Afiliados e a resposta da API: ainda no Outlook do João.
-  ATENÇÃO: o João NÃO sabe a senha do Outlook e ele não tem recuperação (só abre no app do celular).
-  Plano (14/out): migrar tudo para um Gmail novo só do negócio (criado 14/out, com 2FA + celular + códigos;
+- Contato do Shopee Afiliados → Gmail novo (trocado em 19/out). O Outlook antigo (sem senha, sem recuperação) não é mais usado em nada.
+  Migração (14/out): migrar tudo para um Gmail novo só do negócio (criado 14/out, com 2FA + celular + códigos;
   endereço com o João, não escrever aqui). Feito (14/out): Shopee → Gmail novo; GitHub e-mail principal → Gmail novo
   (avisos do Vigia chegam lá); ManyChat → e-mail Gmail novo + login pelo Google. Conta Meta (Facebook + Instagram): contato =
   Gmail novo + celular, Outlook removido, 2FA ligado (14/out). developers.facebook.com ainda mostrava
   "No contact email set" (conferir se atualiza sozinho).
-  Falta: contato do Shopee Afiliados → Gmail novo
-  (SÓ depois que chegar a resposta da API no Outlook).
 - Senhas: gerenciador do Google (Google pessoal tem 2FA completo). Nunca em arquivo .txt.
 - Este repositório é PÚBLICO (exigência do GitHub Pages grátis): nunca escrever e-mails, senhas, tokens ou dados pessoais aqui.
 
