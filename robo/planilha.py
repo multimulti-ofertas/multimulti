@@ -27,7 +27,7 @@ TEMAS = {
         "protetor solar", "hidratante", "desodorante", "oleo para barba", "balm", "pente", "escova de cabelo",
         "esfoliante", "mascara facial", "espuma de barbear", "gel de barbear", "pos barba", "colonia",
         "skincare", "cera para cabelo", "cera modeladora", "creme para pentear",
-        "serum", "vitamina c", "olheira", "protetor labial", "condicionador", "gel fixador", "spray fixador", "po modelador", "matte", "shaver", "acabamento", "cortador de unha", "antitranspirante", "talco", "creme para pes", "contratipo", "esponja de banho", "escova de dente", "irrigador oral", "clareador dental", "hidratante corporal",
+        "serum", "vitamina c", "protetor labial", "condicionador", "gel fixador", "spray fixador", "po modelador", "matte", "shaver", "maquina de acabamento", "cortador de unha", "antitranspirante", "talco", "creme para pes", "contratipo", "esponja de banho", "escova de dente", "irrigador oral", "clareador dental", "hidratante corporal",
     ],
     "carro": [
         "carro", "automotiv", "veicular", "porta malas", "volante", "farol", "pneu", "moto ", "motocicl", "12v",
@@ -53,7 +53,9 @@ TEMAS = {
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unhas", "unha postica", "unha de gel", "maquiagem", "perler", "artesanato",
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
-        "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha", "antropometric", "medicao corporal"]
+        "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha", "antropometric", "medicao corporal",
+        "corretiv", "corretor", "batom", "animais", "animal", "sutia", "cabide", "pipoca", "salgad", "varizes",
+        "pos-cirurg", "pos cirurg", "overlock", "patchwork", "maquina de costura", "casamento", "noivo"]
 
 
 def sem_acento(t):

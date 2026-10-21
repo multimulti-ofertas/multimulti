@@ -90,7 +90,7 @@ PALAVRAS = {
         "espuma de barbear", "pos barba", "perfume arabe masculino", "body splash masculino",
         "colonia masculina", "shampoo para barba", "kit skincare masculino", "cera para cabelo masculino",
         "creme para pentear masculino", "tinta para barba", "aparador de sobrancelha masculino",
-        "serum facial masculino", "vitamina c facial", "creme para olheiras", "protetor labial",
+        "serum facial masculino", "vitamina c facial", "protetor labial",
         "condicionador masculino", "kit shampoo e condicionador masculino", "tonico capilar", "gel fixador cabelo",
         "spray fixador cabelo", "po modelador cabelo", "pomada efeito matte", "navalha de barbear",
         "laminas de barbear", "aparador de nariz", "maquina de acabamento", "shaver masculino", "cortador de unha",
