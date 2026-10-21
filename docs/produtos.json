@@ -232,7 +232,16 @@
   "link": "https://s.shopee.com.br/W7aDzA5I6",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-820li-mqexg5yect1ceb",
   "agenda": "feed",
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "18137357161633362",
+    "em": "2026-10-21T14:26:10.819113"
+   },
+   "fb_story": {
+    "id": "2782094675646691",
+    "em": "2026-10-21T14:26:16.422393"
+   }
+  },
   "preco": "a partir de R$ 20,19",
   "preco_curto": "R$ 20,19",
   "pct": 67,
@@ -245,7 +254,8 @@
   ],
   "feed": "media/76/feed.jpg",
   "story": "media/76/story.jpg",
-  "recorte": "media/76/produto.webp"
+  "recorte": "media/76/produto.webp",
+  "stories": 1
  },
  {
   "n": 75,
