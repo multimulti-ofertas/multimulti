@@ -56,7 +56,13 @@ FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aqua
         "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha", "antropometric", "medicao corporal",
         "corretiv", "corretor", "batom", "animais", "animal", "sutia", "cabide", "pipoca", "salgad", "varizes",
         "pos-cirurg", "pos cirurg", "baby masculin", "infantil", "buco", "overlock", "patchwork", "maquina de costura", "casamento", "noivo",
-        "virilha", "clareador de axila", "clareador axila", "clareador para axila", "clareador intimo"]
+        "virilha", "clareador de axila", "clareador axila", "clareador para axila", "clareador intimo",
+        # coisas de mulher (cabelo, roupa) que passavam pelo tema "cuidado"/"estilo"
+        "mulher", "dama ", "damas ", "menina", "garota", "moca ", "lady", "ladies", "woman", "women", "girl",
+        "baby hair", "bastao de cera", "coque ", "rabo de cavalo", "touca de cetim", "babyliss",
+        "escova secadora", "modelador de cachos", "laque ", "mega hair", "megahair", "aplique", "peruca", "tiara",
+        "piranha de cabelo", "lingerie", "calcinha", "vestido", "saia ", "saias ", "biquini", "legging", "cropped",
+        "rasteirinha", "gestante"]
 
 
 def sem_acento(t):
@@ -67,7 +73,7 @@ def sem_acento(t):
 def tema(nome, preferir=None):
     """Tema pelo nome. Empate (ex.: estilete com "lâmina") fica com `preferir` (o tema da busca), se estiver no empate."""
     n = sem_acento(nome)
-    if any(re.search(r"\b" + re.escape(w), n) for w in FORA):  # começo de palavra: "trico" não pega "elétrico"
+    if any(re.search(r"\b" + re.escape(w), n + " ") for w in FORA):  # começo de palavra: "trico" não pega "elétrico"; espaço no fim pega "coque " no fim do nome
         return None
     pontos = {c: sum(bool(re.search(r"\b" + re.escape(w), n)) for w in ws) for c, ws in TEMAS.items()}
     melhor = max(pontos, key=pontos.get)
