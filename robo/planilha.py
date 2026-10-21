@@ -55,7 +55,7 @@ FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aqua
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
         "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha", "antropometric", "medicao corporal",
         "corretiv", "corretor", "batom", "animais", "animal", "sutia", "cabide", "pipoca", "salgad", "varizes",
-        "pos-cirurg", "pos cirurg", "overlock", "patchwork", "maquina de costura", "casamento", "noivo"]
+        "pos-cirurg", "pos cirurg", "baby", "buco", "overlock", "patchwork", "maquina de costura", "casamento", "noivo"]
 
 
 def sem_acento(t):

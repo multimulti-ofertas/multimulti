@@ -49,7 +49,7 @@ def categoria_do_dia(d):
 def palavras_do_dia(cat, rnd):
     if cat == "top":
         return [(c, w) for c, p in config.PALAVRAS.items() for w in rnd.sample(p, k=4)]  # 4 buscas por tema
-    return [(cat, w) for w in rnd.sample(config.PALAVRAS[cat], k=min(15, len(config.PALAVRAS[cat])))]  # 15 sorteadas do tema
+    return [(cat, w) for w in rnd.sample(config.PALAVRAS[cat], k=min(25, len(config.PALAVRAS[cat])))]  # 25 sorteadas do tema
 
 
 def pontuar(p):
