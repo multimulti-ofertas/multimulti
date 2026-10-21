@@ -55,7 +55,7 @@ FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aqua
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
         "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha", "antropometric", "medicao corporal",
         "corretiv", "corretor", "batom", "animais", "animal", "sutia", "cabide", "pipoca", "salgad", "varizes",
-        "pos-cirurg", "pos cirurg", "baby", "buco", "overlock", "patchwork", "maquina de costura", "casamento", "noivo"]
+        "pos-cirurg", "pos cirurg", "baby masculin", "infantil", "buco", "overlock", "patchwork", "maquina de costura", "casamento", "noivo"]
 
 
 def sem_acento(t):
@@ -144,7 +144,7 @@ def tipo(nome):
     return MESMO_TIPO.get(t, t)
 
 
-MESMO_TIPO = {"botas": "bota ", "aromatizante": "cheirinho", "soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "ponteira": "bits", "fita metrica": "trena", "mochila": "bolsa", "par de meia": "meia", "pares de meia": "meia",
+MESMO_TIPO = {"botas": "bota ", "aromatizante": "cheirinho", "soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "ponteira": "bits", "fita metrica": "trena", "vitamina c": "serum", "navalha": "aparelho de barbear", "mochila": "bolsa", "par de meia": "meia", "pares de meia": "meia",
               "aparador": "maquina", "barbeador": "maquina",
               "chave de fenda": "chave de precisao", "chaves de fenda": "chave de precisao", "precisao": "chave de precisao"}
 
