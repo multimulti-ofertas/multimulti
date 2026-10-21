@@ -17,7 +17,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - **API da Shopee LIBERADA em 15/out** (secrets SHOPEEAPPID/SHOPEESECRET salvos; prévia de 16/out testada OK).
   A partir de 16/out o robô busca sozinho: só +500 vendas (VENDAS_MINIMAS_API; era 1 mil até 19/out), nota ≥4.6, sem exigir desconto, tema confirmado
   pelo nome (planilha.tema), 1 de cada tipo por dia (planilha.TIPOS/MESMO_TIPO). Planilhas viram reserva.
-  Dia de tema: 15 palavras sorteadas das ~35 do tema (config.PALAVRAS, 2 páginas cada). SÓ produtos do tema (João, 19/out):
+  Dia de tema: 25 palavras sorteadas das ~60–75 do tema (config.PALAVRAS, 2 páginas cada; ampliado 21/out). SÓ produtos do tema (João, 19/out):
   se não der 12, saem menos stories. Só sexta–domingo ("top") misturam temas.
   Trava de tipo (19/out, pedido do João): o mesmo tipo (compressor, capa de volante, meia...) evita voltar por 7 dias
   (config.TIPO_FOLGA_DIAS). Feed/Reels pegam tipos novos; se faltar produto pra fechar 12, os stories aceitam tipo recente.
@@ -57,6 +57,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Tipo "chave de precisão" (chave de fenda/precisão) conta 1 por dia; "brinquedo", "rolo modelador" e unha/penteado (polygel, manicure, esmalte, penteado) e massinha/slime ficam fora (16/out).
   Acessório de cabelo feminino (scrunchie, presilha, "ferramenta trança", "ferramentas de cabelo") e anzol ficam fora (17/out).
   Chapinha fica fora (20/out, João). Body splash masculino pode.
+  21/out: fora também maquiagem (corretivo/corretor/batom), pet/animais, cabide, sutiã, pipoca/salgado, meia médica (varizes, pós-cirurgia),
+  costura/overlock, casamento/noivo, baby masculino, buço. Tipos novos: bits (=ponteira), fita métrica (=trena), caneta, adesivo, sérum (=vitamina C), navalha (=aparelho de barbear) etc.
   "Parecido" (planilha.parecido) ignora quantidade e plural ("40 peças ... chave" = "46 peças ... chaves") e compara até 120
   letras do nome; mesmo tipo + 60% das palavras do nome menor iguais também é "parecido"
   (18/out: jogos de chave catraca de 46 peças de lojas diferentes voltavam todo dia). "Par/pares de meia" = tipo meia; "pomada" virou tipo (1 por dia).
