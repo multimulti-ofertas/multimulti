@@ -9,7 +9,16 @@
   "link": "https://s.shopee.com.br/AKbVw2YuoT",
   "imagem": "https://cf.shopee.com.br/file/sg-11134201-8259f-mrc3esutpp1cdc",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "17937077241402916",
+    "em": "2026-10-21T23:18:37.564013"
+   },
+   "fb_story": {
+    "id": "2006637840029271",
+    "em": "2026-10-21T23:18:43.362875"
+   }
+  },
   "preco": "R$ 22,99",
   "preco_curto": "R$ 22,99",
   "pct": 30,
@@ -21,7 +30,8 @@
    "por R$ 22,99"
   ],
   "feed": "media/85/feed.jpg",
-  "story": "media/85/story.jpg"
+  "story": "media/85/story.jpg",
+  "stories": 1
  },
  {
   "n": 84,
@@ -328,6 +338,14 @@
    "fb_story": {
     "id": "2782094675646691",
     "em": "2026-10-21T14:26:16.422393"
+   },
+   "feed": {
+    "id": "17908434978580764",
+    "em": "2026-10-21T23:18:15.949839"
+   },
+   "fb_feed": {
+    "id": "122111581011502855",
+    "em": "2026-10-21T23:18:20.739239"
    }
   },
   "preco": "a partir de R$ 20,19",
