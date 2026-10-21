@@ -27,22 +27,26 @@ TEMAS = {
         "protetor solar", "hidratante", "desodorante", "oleo para barba", "balm", "pente", "escova de cabelo",
         "esfoliante", "mascara facial", "espuma de barbear", "gel de barbear", "pos barba", "colonia",
         "skincare", "cera para cabelo", "cera modeladora", "creme para pentear",
+        "serum", "vitamina c", "olheira", "protetor labial", "condicionador", "gel fixador", "spray fixador", "po modelador", "matte", "shaver", "acabamento", "cortador de unha", "antitranspirante", "talco", "creme para pes", "contratipo", "esponja de banho", "escova de dente", "irrigador oral", "clareador dental", "hidratante corporal",
     ],
     "carro": [
         "carro", "automotiv", "veicular", "porta malas", "volante", "farol", "pneu", "moto ", "motocicl", "12v",
         "parabrisa", "estacionamento", "retrovisor", "capacete", "motociclista", "veiculo", "automovel",
+        "aromatizante carro", "camera de re", "alarme automotivo", "politriz", "boina de polimento", "reboque", "bau ", "intercomunicador", "balaclava", "multimidia",
     ],
     "ferramentas": [
         "ferramenta", "chave", "parafusadeira", "furadeira", "alicate", "trena", "lanterna",
         "multimetro", "catraca", "nivel a laser", "cola ", "esmerilhadeira", "lixadeira", "serra ", "soquete",
         "martelo", "estilete", "pistola de cola", "soprador", "solda", "morsa", "grampeador", "broca",
         "fita isolante", "macaco hidraulico", "detector", "disco", "bits", "puncao",
+        "allen", "torx", "amperimetro", "testador", "retifica", "multiferramenta", "paquimetro", "esquadro", "nivel de bolha", "talhadeira", "grampo sargento", "rebitadeira", "torquimetro", "saca polia", "pe de cabra", "serrote", "plaina", "tupia", "pistola de pintura", "aplicador de silicone", "abracadeira", "luva de protecao", "oculos de protecao", "protetor auricular", "tesoura de poda", "fita metrica",
     ],
     "estilo": [
         "camiseta", "camisa", "relogio", "tenis", "carteira", "bermuda", "oculos", "mochila", "meia",
         "cueca", "bone", "cadarc", "jaqueta", "couro", "sapato", "limpa tenis", "cinto", "chinelo", "polo",
         "calca", "moletom", "bota ", "botas", "sandalia", "corrente", "pulseira", "anel ", "bolsa", "shorts",
         "regata", "dry fit", "gorro", "chapeu", "bucket", "porta cartao", "necessaire", "gravata", "pijama",
+        "colete", "blazer", "sueter", "cardigan", "jogger", "alfaiataria", "sunga", "mocassim", "sapatenis", "papete", "smartwatch", "colar ", "polarizado", "pochete", "mala de viagem", "suspensorio", "abotoadura", "samba cancao", "short ",
     ],
 }
 # Produtos com estas palavras nunca entram.
