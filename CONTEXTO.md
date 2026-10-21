@@ -1,6 +1,6 @@
 # Contexto do projeto MultiMulti (para continuar em outra conversa)
 
-Atualizado em 14/out/2026, 16:45 (Cuiabá). Ao abrir uma conversa nova com o Claude, diga:
+Atualizado em 21/out/2026, 08:55 (Cuiabá). Ao abrir uma conversa nova com o Claude, diga:
 "Leia o CONTEXTO.md do repositório multimulti-ofertas/multimulti e vamos continuar."
 
 ## O que é
@@ -190,3 +190,11 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Dia de tema só com produtos do tema; +500 vendas, sem exigir desconto; trava de 7 dias por tipo (preferência).
 - A tarefa agendada "Revisão diária 07h40" não existe mais (sumiu da lista); recriar só se o João pedir.
 - Ideias em espera: 2º Instagram feminino (esperar 2–3 semanas de números); apresentador de IA (testar no CapCut à mão).
+
+## Atualização 20–21/out
+- Segurança conferida (20/out): nenhum .env nem chave no código ou nos 215 commits; chaves só nos Secrets; novo_token.txt no .gitignore.
+- Nome do app da Meta fica "MultiMulti Robo" (João não quer trocar). E-mail de contato do Shopee Afiliados → Gmail novo (feito 19/out); Outlook não é mais usado.
+- Mídias no ramo `midia` (ver seção "Mídias"). 1ª geração real (21/out) OK: 11 produtos, arquivos no ar, so_testar "PODE POSTAR".
+  Limpeza do histórico antigo NÃO feita (ruleset bloqueia force push); repositório parado em ~62 MB.
+- Chapinha fora (20/out). Vocabulário ampliado (21/out): ~60–75 buscas por tema, 25 sorteadas por dia; prévias de 26–29/out deram 12 produtos em cada tema.
+- Em aberto: João decidir se "clareador de virilhas e axilas" fica fora (apareceu na prévia de cuidado de 28/out).
