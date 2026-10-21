@@ -197,4 +197,4 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Mídias no ramo `midia` (ver seção "Mídias"). 1ª geração real (21/out) OK: 11 produtos, arquivos no ar, so_testar "PODE POSTAR".
   Limpeza do histórico antigo NÃO feita (ruleset bloqueia force push); repositório parado em ~62 MB.
 - Chapinha fora (20/out). Vocabulário ampliado (21/out): ~60–75 buscas por tema, 25 sorteadas por dia; prévias de 26–29/out deram 12 produtos em cada tema.
-- Em aberto: João decidir se "clareador de virilhas e axilas" fica fora (apareceu na prévia de cuidado de 28/out).
+- Clareador de virilha/axila/íntimo FORA (21/out, decisão do João). Clareador dental continua. Sem gastos por enquanto: nada de ANTHROPIC_API_KEY nem ManyChat PRO (21/out).
