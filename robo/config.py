@@ -78,8 +78,8 @@ PALAVRAS = {
         "micro retifica", "multiferramenta", "paquimetro digital", "esquadro", "nivel de bolha", "talhadeira",
         "grampo sargento", "rebitadeira", "torquimetro", "saca polia", "pe de cabra", "serrote", "arco de serra",
         "plaina eletrica", "tupia", "pistola de pintura", "aplicador de silicone", "abracadeira nylon",
-        "luva de protecao", "oculos de protecao", "protetor auricular", "cinto porta ferramentas",
-        "bolsa de ferramentas", "extensao soquete", "kit bits parafusadeira", "tesoura de poda", "fita metrica",
+        "luva de protecao", "oculos de protecao", "cinto porta ferramentas",
+        "bolsa de ferramentas", "extensao soquete", "kit bits parafusadeira", "tesoura de poda",
     ],
     "cuidado": [
         "barbeador masculino", "aparador de pelos masculino", "kit barba", "perfume masculino",

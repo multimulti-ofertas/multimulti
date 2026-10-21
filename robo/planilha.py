@@ -39,7 +39,7 @@ TEMAS = {
         "multimetro", "catraca", "nivel a laser", "cola ", "esmerilhadeira", "lixadeira", "serra ", "soquete",
         "martelo", "estilete", "pistola de cola", "soprador", "solda", "morsa", "grampeador", "broca",
         "fita isolante", "macaco hidraulico", "detector", "disco", "bits", "puncao",
-        "allen", "torx", "amperimetro", "testador", "retifica", "multiferramenta", "paquimetro", "esquadro", "nivel de bolha", "talhadeira", "grampo sargento", "rebitadeira", "torquimetro", "saca polia", "pe de cabra", "serrote", "plaina", "tupia", "pistola de pintura", "aplicador de silicone", "abracadeira", "luva de protecao", "oculos de protecao", "protetor auricular", "tesoura de poda", "fita metrica",
+        "allen", "torx", "amperimetro", "testador", "retifica", "multiferramenta", "paquimetro", "esquadro", "nivel de bolha", "talhadeira", "grampo sargento", "rebitadeira", "torquimetro", "saca polia", "pe de cabra", "serrote", "plaina", "tupia", "pistola de pintura", "aplicador de silicone", "abracadeira", "luva de protecao", "oculos de protecao", "tesoura de poda",
     ],
     "estilo": [
         "camiseta", "camisa", "relogio", "tenis", "carteira", "bermuda", "oculos", "mochila", "meia",
@@ -53,7 +53,7 @@ TEMAS = {
 FORA = ["feminin", "lente", "lentes de contato", "palmilha", "salto alto", "aquario", "pet ", "cachorro",
         "gato", "infantil", "crianca", "bebe", "cilio", "unhas", "unha postica", "unha de gel", "maquiagem", "perler", "artesanato",
         "bijuteria", "micanga", "croche", "trico", "boneca", "brinquedo", "rolo modelador", "polygel", "manicure", "esmalte", "penteado", "massinha", "slime", "massa de modelar",
-        "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha"]
+        "scrunchie", "presilha", "cuticula", "nail", "cirurgico", "cirugico", "scrub", "anzol", "ferramenta tranca", "ferramentas de cabelo", "chapinha", "antropometric", "medicao corporal"]
 
 
 def sem_acento(t):
@@ -119,7 +119,13 @@ TIPOS = ["nariz", "cadarc", "tonico", "gola higienica", "navalha", "lamina", "sh
          "serra", "esmerilhadeira", "lixadeira", "caixa organizadora", "fita isolante", "chave de impacto",
          "broca", "martelo", "estilete", "pistola de cola", "soprador", "ferro de solda", "morsa", "grampeador",
          "chave inglesa", "macaco", "multimetro", "nivel", "oleo", "balm", "pente", "escova", "esfoliante",
-         "mascara", "gel ", "espuma", "pos barba", "colonia", "minoxidil", "creme", "aromatizante", "body splash", "desodorante", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete", "flanela", "pano ", "panos", "pincel", "pinceis", "pomada"]
+         "mascara", "gel ", "espuma", "pos barba", "colonia", "minoxidil", "creme", "aromatizante", "body splash", "desodorante", "suporte", "aspirador", "carregador", "camera", "volante", "farol", "bolsa", "pochete", "flanela", "pano ", "panos", "pincel", "pinceis", "pomada",
+         "bits", "ponteira", "fita metrica", "caneta", "adesivo", "politriz", "multimidia", "alto falante", "bau ",
+         "intercomunicador", "balaclava", "alarme", "paquimetro", "torquimetro", "esquadro", "talhadeira", "rebitadeira",
+         "tupia", "plaina", "retifica", "multiferramenta", "serrote", "abracadeira", "pistola de pintura", "serum",
+         "vitamina c", "condicionador", "fixador", "talco", "irrigador", "clareador", "cortador de unha", "protetor labial",
+         "hidratante", "colete", "blazer", "sueter", "cardigan", "sunga", "mocassim", "sapatenis", "papete", "smartwatch",
+         "colar ", "suspensorio", "abotoadura", "mala ", "quebra sol", "guarda chuva", "lampada"]
 
 
 def tipo(nome):
@@ -136,7 +142,7 @@ def tipo(nome):
     return MESMO_TIPO.get(t, t)
 
 
-MESMO_TIPO = {"botas": "bota ", "aromatizante": "cheirinho", "soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "mochila": "bolsa", "par de meia": "meia", "pares de meia": "meia",
+MESMO_TIPO = {"botas": "bota ", "aromatizante": "cheirinho", "soquete": "catraca", "jogo de chave": "catraca", "pochete": "bolsa", "pano ": "flanela", "panos": "flanela", "pinceis": "pincel", "ponteira": "bits", "fita metrica": "trena", "mochila": "bolsa", "par de meia": "meia", "pares de meia": "meia",
               "aparador": "maquina", "barbeador": "maquina",
               "chave de fenda": "chave de precisao", "chaves de fenda": "chave de precisao", "precisao": "chave de precisao"}
 
