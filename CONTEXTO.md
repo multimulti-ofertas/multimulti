@@ -22,7 +22,7 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Trava de tipo (19/out, pedido do João): o mesmo tipo (compressor, capa de volante, meia...) evita voltar por 7 dias
   (config.TIPO_FOLGA_DIAS). Feed/Reels pegam tipos novos; se faltar produto pra fechar 12, os stories aceitam tipo recente.
 - 15/out: e-mails pessoais apagados de TODO o histórico do git (reescrito + force push). Nunca escrever e-mail aqui.
-  Falta o João: GitHub Settings → Emails (manter e-mail privado) e ruleset protegendo main (o proxy não deixa o Claude mexer em configurações).
+  Ruleset "Proteger main" ATIVO (bloqueia force push e apagar o main; não cobre o ramo midia). Falta conferir: GitHub Settings → Emails (manter e-mail privado).
 
 > Foco (15/out): só Instagram + Facebook; WhatsApp em breve. TikTok e Kwai CANCELADOS pelo João
 > (API do TikTok não aprova postar nas próprias contas; Kwai não tem API). Não reabrir sem ele pedir.
@@ -85,6 +85,13 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
 - Histórico de tentativas de visual em 14/out (não usar de novo): cartaz laranja/preto da taste-skill,
   cartão branco estilo mydealz, fundo laranja. O João escolheu o escuro com produto flutuando.
 
+## Mídias (desde 20/out)
+- Fotos, artes e Reels NÃO ficam no main (docs/media está no .gitignore). Ficam no ramo `midia`, com 1 commit só,
+  recriado do zero a cada "Gerar ofertas do dia" (só os últimos 10 dias, config.GUARDAR_MIDIA_DIAS).
+- .github/midia.sh: `baixar` (ramo → docs/media) e `enviar` (docs/media → recria o ramo). gerar.yml baixa, gera e
+  envia o ramo ANTES de salvar o main; pages.yml, semana.yml e teste-voz.yml baixam antes de rodar. Prévia usa `git add -f`.
+- Postar não precisa dos arquivos: usa as URLs da vitrine.
+
 ## Vitrine (link da bio)
 - https://multimulti-ofertas.github.io/multimulti (v6, docs/index.html)
 - v6 (14/out): "modo leve" no navegador do Instagram/Facebook e em celular — sem partículas, sem 3D, sem blur, animações só
@@ -140,8 +147,8 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
    prints de AVALIAÇÕES REAIS da Shopee que o João vai mandar (montar no visual da marca, esconder nome de quem avaliou,
    linha "Avaliação real de quem comprou na Shopee"). Depoimento inventado: não fazer.
 2. Opcional: `ANTHROPIC_API_KEY` para legendas por IA; ManyChat PRO.
-3. Tamanho do repositório: as mídias somam ~10 MB/dia no histórico do git (apagadas da vitrine após 10 dias, mas o
-   histórico guarda). O GitHub recomenda até 1 GB → resolver antes de ~jan/2027 (ex.: mídias num ramo separado recriado do zero).
+3. (Resolvido 20/out) Tamanho do repositório: mídias saíram do main (ver "Mídias" abaixo); o crescimento parou em ~62 MB.
+   Limpar o histórico antigo (cairia para ~6 MB) exige force push no main, bloqueado pelo ruleset. Não vale o risco; só se o João pedir.
 
 ## Já configurado
 - Bio do Instagram (14/out): "📩 Manda EU QUERO no direct" + link da vitrine em Links (conferido)
