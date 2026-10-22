@@ -136,6 +136,9 @@ POSTAR_NO_INSTAGRAM = True
 # Narração dos Reels com voz de IA: "piper" (roda no GitHub), "edge" (Microsoft, não oficial) ou None (só música)
 VOZ = "edge"
 
+# Zé Multi (personagem 2D, robo/personagem.py) apresentando os Reels narrados. False = Reels sem o Zé.
+PERSONAGEM = True
+
 # Rotina diária (horário de Cuiabá). O robô de postagem roda de hora em hora e publica o que estiver
 # marcado para aquela hora. Limite do Instagram: 50 publicações por 24h (aqui são 19 por dia).
 # Horários em CUIABÁ (Brasília = +1h). Escolhidos em 14/out pelos estudos de 2026 (almoço e noite).
