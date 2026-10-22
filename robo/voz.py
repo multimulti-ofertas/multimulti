@@ -238,6 +238,9 @@ def main():
         if v:
             cfg = {"photo": str(DOCS / "media" / str(n) / "foto.jpg"), "numero": n, "new": it["preco_curto"]}
             reel_narrado(cfg, str(pasta / f"reel-{n}.mp4"), v, tempos)
+            if config.PERSONAGEM:
+                from .personagem import aplicar
+                aplicar(pasta / f"reel-{n}.mp4", v, tempos)
             v.unlink()
 
 
