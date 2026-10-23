@@ -139,7 +139,11 @@ def main():
     args = ap.parse_args()
 
     fim = dt.datetime.now(FUSO)
-    nodes = conversoes(fim - dt.timedelta(days=DIAS), fim)
+    try:
+        nodes = conversoes(fim - dt.timedelta(days=DIAS), fim)
+    except Exception as e:  # mostra o motivo nos avisos (o registro não abre de fora)
+        print(f"::error::Relatório da Shopee falhou: {str(e)[:600]}")
+        raise
     if args.testar:  # repositório público: o registro mostra só quantidades
         com_marca = sum(1 for c in nodes if marcas(c.get("utmContent"))[0])
         print(f"::notice::Shopee respondeu: {len(nodes)} conversões em {DIAS} dias ({com_marca} com marca de canal).")
