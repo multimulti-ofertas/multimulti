@@ -138,6 +138,9 @@ VOZ = "edge"
 
 # Zé Multi (personagem 2D, robo/personagem.py) apresentando os Reels narrados. False = Reels sem o Zé.
 PERSONAGEM = True
+# Teste A/B até esta data (inclusive): metade dos Reels sai sem o Zé, alternando horário a cada dia.
+# O produtos.json marca "ze": true/false em cada Reels para comparar as visualizações depois.
+TESTE_ZE_ATE = "2026-10-31"
 
 # Rotina diária (horário de Cuiabá). O robô de postagem roda 4x por hora e publica o que estiver
 # marcado até aquela hora. Limite do Instagram: 100 publicações por 24h (aqui são 13 por dia).

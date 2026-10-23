@@ -243,11 +243,14 @@ def montar(cat, p, n, d, papel, demo):
         v, tempos = voz.roteiro(item, pasta / "voz.wav")
         if v:  # Reels v2: narração + legenda animada
             reel_narrado(dict(cfg, numero=n), str(pasta / "reel.mp4"), v, tempos)
-            if config.PERSONAGEM:
+            com_ze = config.PERSONAGEM and (d.isoformat() > config.TESTE_ZE_ATE or (n + d.toordinal()) % 2 == 0)
+            item["ze"] = com_ze
+            if com_ze:
                 try:
                     from .personagem import aplicar
                     aplicar(pasta / "reel.mp4", v, tempos)
                 except Exception as e:  # sem o Zé, fica o Reels narrado normal
+                    item["ze"] = False
                     print(f"::warning::Zé falhou no nº {n}: {str(e)[:200]}")
             v.unlink(missing_ok=True)
         else:  # sem voz (serviço fora do ar): o Reels de antes, só com música
