@@ -1,0 +1,44 @@
+name: Relatório de vendas
+on:
+  schedule:
+    - cron: "40 10 * * *"   # 06:40 em Cuiabá (depois do "Gerar ofertas do dia")
+  workflow_dispatch:
+    inputs:
+      testar:
+        description: "Só testar (confere se a Shopee responde; não salva nada)"
+        required: false
+        default: false
+        type: boolean
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: robo
+  cancel-in-progress: false
+jobs:
+  relatorio:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install requests cryptography
+      - name: Puxar comissões da Shopee
+        env:
+          SHOPEE_APP_ID: ${{ secrets.SHOPEEAPPID || secrets.SHOPEE_APP_ID }}
+          SHOPEE_SECRET: ${{ secrets.SHOPEESECRET || secrets.SHOPEE_SECRET }}
+          RELATORIO_SENHA: ${{ secrets.RELATORIO_SENHA }}
+        run: python -m robo.relatorio ${{ inputs.testar && '--testar' || '' }}
+      - name: Salvar no repositório
+        if: ${{ !inputs.testar }}
+        run: |
+          git config user.name "robo-multimulti"
+          git config user.email "robo@users.noreply.github.com"
+          git add docs/relatorio.json
+          git diff --cached --quiet || git commit -m "Relatório de vendas $(TZ=America/Cuiaba date +%F)"
+          git pull --rebase && git push
+  vitrine:
+    needs: relatorio
+    if: ${{ !inputs.testar }}
+    uses: ./.github/workflows/pages.yml

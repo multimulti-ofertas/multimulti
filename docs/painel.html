@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel MultiMulti</title>
+<style>
+@font-face{font-family:"BC";src:url("fontes/BarlowCondensed-Black.ttf")}
+@font-face{font-family:"B";src:url("fontes/Barlow-Medium.ttf")}
+:root{--fundo:#0a0a0c;--cartao:#141418;--linha:#26262c;--texto:#f2f2f2;--fraco:#9a9aa4;--lar:#ff6b1a}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--fundo);color:var(--texto);font:16px/1.45 "B",system-ui,sans-serif;padding:24px 16px 48px}
+main{max-width:760px;margin:0 auto}
+h1,h2,.grande{font-family:"BC",Impact,sans-serif;text-transform:uppercase;letter-spacing:.02em;margin:0}
+h1{font-size:34px}h1 b{color:var(--lar)}
+h2{font-size:20px;margin:28px 0 10px;color:var(--fraco)}
+.sub{color:var(--fraco);font-size:14px;margin:4px 0 20px}
+form{display:flex;flex-direction:column;gap:12px;background:var(--cartao);border:1px solid var(--linha);border-radius:14px;padding:20px}
+input[type=password]{font:inherit;padding:12px 14px;border-radius:10px;border:1px solid var(--linha);background:#0e0e11;color:var(--texto)}
+button{font:inherit;font-weight:600;padding:12px;border:0;border-radius:10px;background:var(--lar);color:#111;cursor:pointer}
+label{font-size:14px;color:var(--fraco);display:flex;gap:8px;align-items:center}
+.erro{color:#ff8a8a;font-size:14px;min-height:1em;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--cartao);border:1px solid var(--linha);border-radius:14px;padding:14px}
+.kpi small{color:var(--fraco);font-size:13px}.kpi .grande{font-size:30px;display:block}
+.kpi.lar .grande{color:var(--lar)}
+.tab{width:100%;border-collapse:collapse;background:var(--cartao);border-radius:14px;overflow:hidden;font-size:15px}
+.tab td,.tab th{padding:10px 12px;border-bottom:1px solid var(--linha);text-align:right}
+.tab td:first-child,.tab th:first-child{text-align:left}
+.tab th{color:var(--fraco);font-weight:500;font-size:13px}
+.barra{height:6px;border-radius:3px;background:var(--lar);margin-top:4px}
+.vazio{color:var(--fraco);background:var(--cartao);border-radius:14px;padding:16px}
+.sair{background:none;color:var(--fraco);border:1px solid var(--linha);margin-top:28px;width:100%}
+</style>
+</head>
+<body>
+<main>
+  <h1>Painel <b>MultiMulti</b></h1>
+  <p class="sub">Vendas e comissões da Shopee. Só abre com a sua senha.</p>
+  <form id="entrar">
+    <input id="senha" type="password" placeholder="Senha do relatório" autocomplete="current-password" required>
+    <label><input id="lembrar" type="checkbox" checked> Lembrar neste aparelho</label>
+    <button>Abrir</button>
+    <p class="erro" id="erro"></p>
+  </form>
+  <section id="painel" hidden></section>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const brl = v => v.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const guardado = {get(){ try { return localStorage.getItem("mm-senha"); } catch { return null; } },
+  set(v){ try { v ? localStorage.setItem("mm-senha", v) : localStorage.removeItem("mm-senha"); } catch {} }};
+
+async function abrir(senha){
+  const r = await fetch("relatorio.json?v=" + Date.now());
+  if (!r.ok) throw new Error("O robô ainda não gerou o primeiro relatório.");
+  const t = await r.json();
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(senha), "PBKDF2", false, ["deriveKey"]);
+  const chave = await crypto.subtle.deriveKey({name: "PBKDF2", hash: "SHA-256", salt: b64(t.sal), iterations: t.voltas},
+    base, {name: "AES-GCM", length: 256}, false, ["decrypt"]);
+  try {
+    const claro = await crypto.subtle.decrypt({name: "AES-GCM", iv: b64(t.iv)}, chave, b64(t.dados));
+    return JSON.parse(new TextDecoder().decode(claro));
+  } catch { throw new Error("Senha errada."); }
+}
+
+function tabela(titulo, linhas){
+  if (!linhas.length) return `<h2>${titulo}</h2><div class="vazio">Nenhuma venda ainda.</div>`;
+  const max = Math.max(...linhas.map(l => l.comissao), 0.01);
+  return `<h2>${titulo}</h2><table class="tab"><tr><th>Nome</th><th>Itens</th><th>Comissão</th></tr>` +
+    linhas.map(l => `<tr><td>${esc(l.nome)}<div class="barra" style="width:${l.comissao / max * 100}%"></div></td>
+      <td>${l.itens}</td><td>${brl(l.comissao)}</td></tr>`).join("") + "</table>";
+}
+
+function mostrar(d){
+  const t = d.total;
+  const dias = d.dias.map(x => ({...x, nome: x.nome.split("-").reverse().slice(0, 2).join("/")})).reverse();
+  $("#painel").innerHTML = `
+    <p class="sub">Atualizado em ${esc(d.atualizado)} · ${esc(d.periodo)}</p>
+    <div class="kpis">
+      <div class="kpi lar"><small>Comissão</small><span class="grande">${brl(t.comissao)}</span></div>
+      <div class="kpi"><small>Vendido pelos seus links</small><span class="grande">${brl(t.vendido)}</span></div>
+      <div class="kpi"><small>Itens vendidos</small><span class="grande">${t.itens}</span></div>
+      <div class="kpi"><small>Cancelados</small><span class="grande">${t.cancelados}</span></div>
+    </div>
+    ${tabela("De onde veio", d.canais)}
+    ${tabela("Que tipo de post vendeu", d.papeis)}
+    ${tabela("Produtos que mais renderam", d.produtos)}
+    ${tabela("Por dia", dias)}
+    <p class="sub">"Sem marca" = venda de link antigo, de antes da medição. Comissão é a estimada pela Shopee e pode mudar até o pedido ser concluído.</p>
+    <button class="sair" id="sair">Sair deste aparelho</button>`;
+  $("#entrar").hidden = true;
+  $("#painel").hidden = false;
+  $("#sair").onclick = () => { guardado.set(null); location.reload(); };
+}
+
+async function tentar(senha, lembrar){
+  $("#erro").textContent = "";
+  try {
+    mostrar(await abrir(senha));
+    if (lembrar) guardado.set(senha);
+  } catch (e) { $("#erro").textContent = e.message; guardado.set(null); }
+}
+$("#entrar").addEventListener("submit", e => { e.preventDefault(); tentar($("#senha").value, $("#lembrar").checked); });
+const s = guardado.get(); if (s) tentar(s, true);
+</script>
+</body>
+</html>
