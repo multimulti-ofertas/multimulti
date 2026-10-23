@@ -317,7 +317,7 @@ def main():
         raise SystemExit("Acabaram os produtos novos. Baixe outra planilha no painel da Shopee.")
 
     prox = max([x["n"] for x in lista], default=0) + 1
-    papeis = ["feed", "feed", "reel", "reel"] + [None] * 20  # 2 no feed + 2 Reels por dia
+    papeis = ["reel"] * config.REELS_POR_DIA + ["feed"] * config.FEEDS_POR_DIA + [None] * 20  # Reels primeiro: ficam com os melhores
     novos, tipos_dia = [], set()
     tipos_recentes = tipos_travados(lista, d)
     pulos = {}

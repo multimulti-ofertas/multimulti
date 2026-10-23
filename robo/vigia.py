@@ -79,11 +79,12 @@ def posts():
         return
     conta = {k: sum(1 for x in do_dia if (x.get("postado") or {}).get(k))
              for k in ("feed", "reel", "fb_feed", "fb_reel")}
-    falta = [f"{k} {v}/2" for k, v in conta.items() if v < 2]
+    previsto = {k: config.FEEDS_POR_DIA if "feed" in k else config.REELS_POR_DIA for k in conta}
+    falta = [f"{k} {v}/{previsto[k]}" for k, v in conta.items() if v < previsto[k]]
     if falta:
         atencao(f"Ontem saiu menos que o previsto: {', '.join(falta)}")
     else:
-        ok("Ontem: 2 feeds e 2 Reels no Instagram e no Facebook")
+        ok(f"Ontem: {config.FEEDS_POR_DIA} feed e {config.REELS_POR_DIA} Reels no Instagram e no Facebook")
     repetidos = [f"nº {x['n']}" for x in do_dia if int(x.get("stories") or 0) > 1
                  and ontem > "2026-10-15"]  # até 15/out repetir era a regra antiga (já corrigida)
     if repetidos:
