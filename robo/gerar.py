@@ -53,11 +53,13 @@ def palavras_do_dia(cat, rnd):
 
 
 def pontuar(p):
-    pct = float(p.get("priceDiscountRate") or 0)
+    """Nota do produto: o que mais pesa é quanto ele paga por venda (preço x comissão) e quanto vende.
+    O "% OFF" quase não conta: na Shopee o preço cheio costuma ser inflado (antes valia até 80 pontos)."""
+    pct = min(float(p.get("priceDiscountRate") or 0), 40)
     vendas = float(p.get("sales") or 0)
     nota = float(p.get("ratingStar") or 4.5)  # planilha não traz nota
-    comissao = float(p.get("commissionRate") or 0)
-    return pct + 10 * math.log10(vendas + 1) + (nota - 4.5) * 20 + comissao * 50
+    ganho = float(p.get("priceMin") or 0) * float(p.get("commissionRate") or 0)  # R$ por venda
+    return 12 * math.log2(1 + ganho) + 10 * math.log10(vendas + 1) + (nota - 4.5) * 20 + pct * 0.2
 
 
 def passa_filtro(p):
