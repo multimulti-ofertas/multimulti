@@ -2,8 +2,6 @@ name: Relatório de vendas
 on:
   schedule:
     - cron: "40 10 * * *"   # 06:40 em Cuiabá (depois do "Gerar ofertas do dia")
-  push:
-    branches: [medicao]     # TEMPORÁRIO: teste no ramo, sai antes de juntar no main
   workflow_dispatch:
     inputs:
       testar:
@@ -26,31 +24,14 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: pip install requests cryptography
-      - name: Testar links marcados
-        if: ${{ github.event_name == 'push' }}
-        continue-on-error: true
-        env:
-          SHOPEE_APP_ID: ${{ secrets.SHOPEEAPPID || secrets.SHOPEE_APP_ID }}
-          SHOPEE_SECRET: ${{ secrets.SHOPEESECRET || secrets.SHOPEE_SECRET }}
-        run: |
-          python - <<'PY'
-          from robo import shopee
-          try:
-              p = shopee.buscar("martelo", limite=1)[0]
-              links = shopee.links_por_canal(p["productLink"], 999)
-              print(f"::notice::Links por canal OK: {sorted(links)} -> {list(links.values())}")
-          except Exception as e:
-              print(f"::error::Links por canal falharam: {str(e)[:600]}")
-              raise
-          PY
       - name: Puxar comissões da Shopee
         env:
           SHOPEE_APP_ID: ${{ secrets.SHOPEEAPPID || secrets.SHOPEE_APP_ID }}
           SHOPEE_SECRET: ${{ secrets.SHOPEESECRET || secrets.SHOPEE_SECRET }}
           RELATORIO_SENHA: ${{ secrets.RELATORIO_SENHA }}
-        run: python -m robo.relatorio ${{ (inputs.testar || github.event_name == 'push') && '--testar' || '' }}
+        run: python -m robo.relatorio ${{ inputs.testar && '--testar' || '' }}
       - name: Salvar no repositório
-        if: ${{ github.event_name != 'push' && !inputs.testar }}
+        if: ${{ !inputs.testar }}
         run: |
           git config user.name "robo-multimulti"
           git config user.email "robo@users.noreply.github.com"
@@ -59,5 +40,5 @@ jobs:
           git pull --rebase && git push
   vitrine:
     needs: relatorio
-    if: ${{ github.event_name != 'push' && !inputs.testar }}
+    if: ${{ !inputs.testar }}
     uses: ./.github/workflows/pages.yml
