@@ -318,7 +318,7 @@ def main():
 
     prox = max([x["n"] for x in lista], default=0) + 1
     papeis = ["feed", "feed", "reel", "reel"] + [None] * 20  # 2 no feed + 2 Reels por dia
-    novos, tipos_dia = [], set()
+    novos, tipos_dia, chaves_dia = [], set(), []
     tipos_recentes = tipos_travados(lista, d)
     pulos = {}
     # 1ª passada: só tipos que não saíram nos últimos TIPO_FOLGA_DIAS (feed e Reels ficam com estes, que vêm primeiro).
@@ -329,6 +329,9 @@ def main():
             if len(novos) >= config.PRODUTOS_POR_DIA:
                 break
             if str(p["itemId"]) in usados_ids:
+                continue
+            chave = planilha.chave_parecida(p["productName"])
+            if any(planilha.parecido_no_dia(chave, c) for c in chaves_dia):
                 continue
             tp = planilha.tipo(p["productName"])
             if tp and tp in tipos_dia:
@@ -345,6 +348,7 @@ def main():
                 usados_ids.add(str(p["itemId"]))
                 continue
             novos.append(item)
+            chaves_dia.append(chave)
             usados_ids.add(str(p["itemId"]))
             tipos_dia.add(tp)
             if passada == 2 and tp in tipos_recentes:

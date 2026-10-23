@@ -92,7 +92,8 @@ _RUIDO_NOME = {
     "fabricado", "brasil", "bivolt", "usb", "new", "lindo", "linda", "incrivel", "incrível",
 }
 _CORTE = {"para", "pra", "com", "e", "de", "-", "–", "|", "+", "/"}  # onde o nome principal costuma acabar
-_SOLTAS_FIM = {"e", "de", "do", "da", "dos", "das", "com", "para", "pra", "em", "a", "o", "-", "–", "+", "sem", "c", "modelo"}
+_SOLTAS_FIM = {"e", "de", "do", "da", "dos", "das", "com", "para", "pra", "em", "a", "o", "-", "–", "+", "sem", "c", "modelo",
+               "kg", "g", "ml", "l", "cm", "mm", "m", "v", "w"}  # unidade solta no fim ("Macaco universal kg", 23/out)
 
 
 def _acentua(w):
@@ -129,7 +130,7 @@ def _nome_curto(nome, limite, cortar_traco):
     t = re.sub(r"[|*#!•]+", " ", t)
     if cortar_traco:
         t = re.sub(r"\s[-–]\s.*$", "", t)
-    t = re.sub(r"\b[A-Za-z]{1,4}[- ]?\d{3,5}\b", " ", t)        # códigos de modelo (KM-6511, QP2510)
+    t = re.sub(r"\b(?:[A-Za-z]{1,4}-?|[A-Z]{2,4} )\d{3,5}\b", " ", t)  # códigos de modelo (KM-6511, QP2510, KM 2027); "de 1500 kg" fica
     t = re.sub(r"\b\d+(,\d+)?\s?(ml|g|cm|mm|m|v|w)\b", lambda m: m.group(0), t, flags=re.I)
     t = re.sub(r"\s+", " ", t).strip(" -–,.")
     destaque = re.search(r"\b\d+\s?em\s?\d+\b", t, re.I)       # "3 em 1"
