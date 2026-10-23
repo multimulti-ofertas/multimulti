@@ -198,3 +198,14 @@ Mercado Livre foi descartado. Grupo/canal do WhatsApp pausado até ter um chip s
   Limpeza do histórico antigo NÃO feita (ruleset bloqueia force push); repositório parado em ~62 MB.
 - Chapinha fora (20/out). Vocabulário ampliado (21/out): ~60–75 buscas por tema, 25 sorteadas por dia; prévias de 26–29/out deram 12 produtos em cada tema.
 - Clareador de virilha/axila/íntimo FORA (21/out, decisão do João). Clareador dental continua. Sem gastos por enquanto: nada de ANTHROPIC_API_KEY nem ManyChat PRO (21/out).
+
+## Atualização 23/out (análise e melhorias)
+- Números de 30 dias (prints do dono): 5 seguidores, 2.669 visualizações, 4 toques no link da bio, **9 cliques na Shopee e 0 vendas**.
+  Único Reels que furou a bolha: farol LED nº 54 (19/out, ~1,9 mil). Stories só chegam a quem segue. Gargalo = alcance.
+- **Rotina nova (PR #4):** 4 Reels (09h, 12h, 17h, 20h Cuiabá) + 1 foto no feed (19h) + 8 stories; 8 produtos por dia.
+  Teste com e sem o Zé até 31/out (`config.TESTE_ZE_ATE`): metade dos Reels sem ele, marcado com `"ze"` no produtos.json. Comparar em 01/nov.
+- **Medição (PR #2):** cada produto novo tem 3 links marcados (`ig`, `fb`, `web` + `nNNN`); a vitrine escolhe pelo navegador (`?o=fb` no Facebook).
+  "Relatório de vendas" (relatorio.yml, 06:40) puxa as comissões da Shopee e salva **criptografado** em docs/relatorio.json
+  (senha no secret `RELATORIO_SENHA`, só o dono sabe). Ver em .../multimulti/painel.html.
+- **Escolha de produto (PR #3):** nota = quanto paga por venda (preço x comissão) + vendas + nota; "% OFF" quase não conta; acima de R$ 120 perde pontos.
+- **Repetidos (PR #5):** mesmo tipo + mesmo nº de peças = parecido; no mesmo dia, nomes com o mesmo par de palavras fortes não entram juntos.
