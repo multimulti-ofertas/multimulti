@@ -105,7 +105,26 @@ def parecido(a, b):
         return True
     # mesmo tipo e a maioria das palavras do menor nome está no outro (3 jogos de catraca 46 peças, 18/out)
     ta = tipo(a)
+    if ta and ta == tipo(b) and _pecas(a) & _pecas(b):  # mesmo tipo e mesmo nº de peças: kit catraca 46 peças voltou 3x (23/out)
+        return True
     return bool(ta) and ta == tipo(b) and len(sa & sb) / max(1, min(len(sa), len(sb))) >= 0.6
+
+
+def _pecas(chave):
+    return set(re.findall(r"\b(\d+) ?(?:pecas?|pcs)\b", chave))
+
+
+_GENERICAS = {"peca", "pecas", "unidade", "unidades", "banhado", "banhada", "prata", "ouro", "carro", "moto",
+              "celular", "notebook", "litros", "original", "novo", "nova", "masculino", "masculina", "preto", "preta"}
+
+
+def parecido_no_dia(a, b):
+    """Regra mais larga, só dentro do mesmo dia: dois nomes com o mesmo par de palavras fortes seguidas
+    ("creme pedreiro" em dois produtos no mesmo dia, 23/out)."""
+    def pares(k):
+        ws = [w for w in k.split() if len(w) >= 4 and w.isalpha() and w not in _GENERICAS]
+        return {(x, y) for x, y in zip(ws, ws[1:])}
+    return bool(pares(a) & pares(b))
 
 
 _QTD = re.compile(r"^(\d+|pecas?|pcs|unidades?|un)$")
