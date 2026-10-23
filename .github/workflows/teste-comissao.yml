@@ -17,7 +17,8 @@ jobs:
           SHOPEE_SECRET: ${{ secrets.SHOPEESECRET || secrets.SHOPEE_SECRET }}
         run: |
           python - <<'PY'
-          import json, math, random
+          import json, math, random, traceback, sys
+          sys.excepthook = lambda t, e, tb: print('::error::' + ''.join(traceback.format_exception(t, e, tb))[-900:].replace(chr(10), ' | '))
           from robo import gerar
           def velho(p):
               return (float(p.get("priceDiscountRate") or 0) + 10 * math.log10(float(p.get("sales") or 0) + 1)
@@ -30,7 +31,7 @@ jobs:
               for nome, f in (("ANTES", velho), ("DEPOIS", gerar.pontuar)):
                   gerar.pontuar_orig = gerar.pontuar
                   esc = sorted({p["itemId"]: (c, p) for c, p in cands if gerar.passa_filtro(p)}.values(), key=lambda cp: f(cp[1]), reverse=True)[:12]
-                  ganho = [float(p["priceMin"]) * float(p["commissionRate"]) for _, p in esc]
-                  linhas = [f'{p["productName"][:38]} R${float(p["priceMin"]):.0f} com{float(p["commissionRate"])*100:.0f}% off{p.get("priceDiscountRate")} v{p["sales"]}' for _, p in esc]
-                  print(f"::notice title={tema} {nome}::ganho médio por venda R$ {sum(ganho)/len(ganho):.2f} | preço médio R$ {sum(float(p['priceMin']) for _, p in esc)/len(esc):.0f} || " + " ; ".join(linhas))
+                  ganho = [float(p["priceMin"]) * float(p.get("commissionRate") or 0) for _, p in esc]
+                  linhas = [f'{p["productName"][:38]} R${float(p["priceMin"]):.0f} com{float(p.get("commissionRate") or 0)*100:.0f}% off{p.get("priceDiscountRate")} v{p["sales"]}' for _, p in esc]
+                  print(f"::notice title={tema} {nome}::ganho médio por venda R$ {sum(ganho)/max(len(ganho),1):.2f} | preço médio R$ {sum(float(p['priceMin']) for _, p in esc)/max(len(esc),1):.0f} || " + " ; ".join(linhas))
           PY
