@@ -55,7 +55,7 @@ def buscar(palavra, limite=30, ordem=2, pagina=1):
 
 
 def link_curto(url_produto, sub_ids=None):
-    q = """mutation($url:String!,$subs:[String]){
+    q = """mutation($url:String!,$subs:[String!]){
       generateShortLink(input:{originUrl:$url, subIds:$subs}){ shortLink }
     }"""
     d = _chamar(q, {"url": url_produto, "subs": sub_ids or ["instagram"]})

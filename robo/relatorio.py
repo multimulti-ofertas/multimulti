@@ -29,8 +29,8 @@ DIAS = 30
 CANAIS = {"ig": "Instagram", "fb": "Facebook", "web": "Navegador", "": "Sem marca"}
 CANCELADO = ("cancel", "unpaid", "invalid", "fail")
 
-CONSULTA = """query($ini:Int64,$fim:Int64,$scroll:String){
-  conversionReport(purchaseTimeStart:$ini, purchaseTimeEnd:$fim, limit:500, scrollId:$scroll){
+CONSULTA = """{
+  conversionReport(purchaseTimeStart:%d, purchaseTimeEnd:%d, limit:500%s){
     nodes{
       purchaseTime utmContent
       orders{ orderId orderStatus items{ itemId itemName qty actualAmount itemTotalCommission displayItemStatus } }
@@ -44,7 +44,8 @@ def conversoes(ini, fim):
     """Todas as conversões entre ini e fim (datetime). A Shopee pagina com scrollId."""
     out, scroll = [], None
     while True:
-        d = shopee._chamar(CONSULTA, {"ini": int(ini.timestamp()), "fim": int(fim.timestamp()), "scroll": scroll})
+        extra = f", scrollId:{json.dumps(scroll)}" if scroll else ""  # valores direto na consulta (variável dava "wrong type")
+        d = shopee._chamar(CONSULTA % (int(ini.timestamp()), int(fim.timestamp()), extra))
         r = d["conversionReport"]
         out += r.get("nodes") or []
         info = r.get("pageInfo") or {}
