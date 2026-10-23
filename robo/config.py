@@ -127,7 +127,7 @@ NOTA_MINIMA = 4.6
 VENDAS_MINIMAS = 100
 VENDAS_MINIMAS_API = 500      # com a API: só produto com +500 vendas (1000 deixava o dia de cuidado com 6 produtos)
 DESCONTO_MINIMO = 0           # % OFF mínimo (0 = não exige; o que importa é preço bom + vendas + nota)
-PRODUTOS_POR_DIA = 12         # por dia: 2 no feed + 2 em Reels + 8 só nos stories = 12 stories sem repetir
+PRODUTOS_POR_DIA = 8          # por dia: 4 Reels + 1 feed + 3 só nos stories = 8 stories sem repetir
 STORIES_POR_VEZ = 1           # stories postados a cada horário da rotina
 
 # Chave geral: False = o robô continua montando os produtos e a vitrine, mas não publica nada no Instagram.
@@ -138,15 +138,22 @@ VOZ = "edge"
 
 # Zé Multi (personagem 2D, robo/personagem.py) apresentando os Reels narrados. False = Reels sem o Zé.
 PERSONAGEM = True
+# Teste A/B até esta data (inclusive): metade dos Reels sai sem o Zé, alternando horário a cada dia.
+# O produtos.json marca "ze": true/false em cada Reels para comparar as visualizações depois.
+TESTE_ZE_ATE = "2026-10-31"
 
-# Rotina diária (horário de Cuiabá). O robô de postagem roda de hora em hora e publica o que estiver
-# marcado para aquela hora. Limite do Instagram: 50 publicações por 24h (aqui são 19 por dia).
-# Horários em CUIABÁ (Brasília = +1h). Escolhidos em 14/out pelos estudos de 2026 (almoço e noite).
-ROTINA = {h: ["story"] for h in range(9, 21)}   # 1 story por hora: 09h–20h Cuiabá = 10h–21h Brasília (12 por dia)
-ROTINA[11] = ["feed", "story"]   # feed: 11h Cuiabá = 12h Brasília
-ROTINA[19] = ["feed", "story"]   # feed: 19h Cuiabá = 20h Brasília
-ROTINA[12] = ["reel", "story"]   # Reels: 12h Cuiabá = 13h Brasília
-ROTINA[20] = ["reel", "story"]   # Reels: 20h Cuiabá = 21h Brasília
+# Rotina diária (horário de Cuiabá). O robô de postagem roda 4x por hora e publica o que estiver
+# marcado até aquela hora. Limite do Instagram: 100 publicações por 24h (aqui são 13 por dia).
+# 23/out: foco em Reels. Com 5 seguidores, story e foto só chegam a quem já segue; quem traz gente
+# nova é o Reels (o do farol LED, 19/out, teve ~1,9 mil visualizações e trouxe os cliques de 20/out).
+ROTINA = {h: ["story"] for h in (10, 11, 13, 14, 15, 16, 18, 21)}  # 8 stories (1 por produto do dia)
+ROTINA[9] = ["reel"]              # Reels: 09h Cuiabá = 10h Brasília
+ROTINA[12] = ["reel"]             # 12h Cuiabá = 13h Brasília
+ROTINA[17] = ["reel"]             # 17h Cuiabá = 18h Brasília
+ROTINA[20] = ["reel"]             # 20h Cuiabá = 21h Brasília
+ROTINA[19] = ["feed"]             # 1 foto no feed: 19h Cuiabá = 20h Brasília
+REELS_POR_DIA = sum(t.count("reel") for t in ROTINA.values())
+FEEDS_POR_DIA = sum(t.count("feed") for t in ROTINA.values())
 
 # Rotina antiga, só para terminar o dia 14/out sem juntar dois posts no mesmo horário (pode apagar depois)
 ROTINA_ANTIGA = {h: ["story"] for h in range(8, 23)}
