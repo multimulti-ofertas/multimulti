@@ -318,9 +318,10 @@ def main():
 
     prox = max([x["n"] for x in lista], default=0) + 1
     papeis = ["feed", "feed", "reel", "reel"] + [None] * 20  # 2 no feed + 2 Reels por dia
-    novos, tipos_dia, chaves_dia = [], set(), []
+    novos, tipos_dia = [], set()
     tipos_recentes = tipos_travados(lista, d)
     pulos = {}
+    chaves_dia = []  # nomes já escolhidos hoje (parecido_no_dia)
     # 1ª passada: só tipos que não saíram nos últimos TIPO_FOLGA_DIAS (feed e Reels ficam com estes, que vêm primeiro).
     # 2ª passada: se faltar produto para fechar o dia, aceita tipo recente (mas nunca 2 do mesmo tipo no dia).
     usados_ids = set()
