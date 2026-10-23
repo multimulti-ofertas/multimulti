@@ -207,6 +207,12 @@ def montar(cat, p, n, d, papel, demo):
         "link": link, "imagem": p["imageUrl"] if not demo else f"media/{n}/foto.jpg",
         "agenda": papel, "postado": None,
     }
+    if not demo and p.get("productLink"):
+        try:
+            from . import shopee
+            item["links"] = shopee.links_por_canal(p["productLink"], n)
+        except Exception as e:  # sem os links marcados, a vitrine usa o link normal
+            print(f"::warning::links por canal falharam no nº {n}: {str(e)[:150]}")
     item.update(texto.dados_basicos(p))
     texto.com_ia(item)
 

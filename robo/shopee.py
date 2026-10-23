@@ -60,3 +60,12 @@ def link_curto(url_produto, sub_ids=None):
     }"""
     d = _chamar(q, {"url": url_produto, "subs": sub_ids or ["instagram"]})
     return d["generateShortLink"]["shortLink"]
+
+
+CANAIS = ("ig", "fb", "web")  # de onde a pessoa abriu a vitrine: Instagram, Facebook ou navegador comum
+
+
+def links_por_canal(url_produto, n):
+    """Um link curto por canal, marcado com o canal e o nº do produto (subIds).
+    O relatório da Shopee devolve essas marcas, e assim dá pra saber o que vendeu e por onde."""
+    return {c: link_curto(url_produto, [c, f"n{n}"]) for c in CANAIS}

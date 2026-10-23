@@ -48,7 +48,7 @@ def legenda(texto, n):
         if ln.startswith("📩"):
             continue
         if ln.startswith("🛒"):
-            ln = f"🛒 Link direto: {config.PAGES_URL}/?n={n}"
+            ln = f"🛒 Link direto: {config.PAGES_URL}/?n={n}&o=fb"
         linhas.append(ln)
     return "\n".join(linhas).replace("\n\n\n", "\n\n").strip()
 

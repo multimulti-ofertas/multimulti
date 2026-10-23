@@ -248,6 +248,10 @@
 const $ = s => document.querySelector(s);
 const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* modo leve: navegador de dentro do Instagram/Facebook e celulares mais fracos (evita a página travar e recarregar) */
+/* link marcado por canal (o relatório da Shopee mostra de onde veio a venda) */
+const canal = (() => { const o = new URLSearchParams(location.search).get("o"); if (["ig", "fb", "web"].includes(o)) return o;
+  const ua = navigator.userAgent; return /Instagram/i.test(ua) ? "ig" : /FBAN|FBAV|FB_IAB|FBIOS/i.test(ua) ? "fb" : "web"; })();
+const linkDe = x => (x.links && x.links[canal]) || x.link;
 const leve = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\/|musical_ly|BytedanceWebview|TikTok/i.test(navigator.userAgent) || (navigator.deviceMemory || 8) <= 4 || matchMedia("(hover: none)").matches;
 if (leve) document.documentElement.classList.add("leve");
 let itens = [], filtro = "todos";
@@ -313,7 +317,7 @@ function destaque(){
       <span class="hud caps"><span>${esc(rotulo(x))}</span><span class="cont">${dois(i + 1)} / ${dois(total)}</span></span>
       <h2>${esc(x.titulo)}</h2>
       <div class="linha"><span class="preco">${precoHTML(x.preco)}</span><span class="vend">${esc(vendas(x))}</span></div>
-      <div class="acoes"><a class="btn" href="${esc(x.link)}" target="_blank" rel="noopener sponsored">Ver na Shopee ${seta}</a>
+      <div class="acoes"><a class="btn" href="${esc(linkDe(x))}" target="_blank" rel="noopener sponsored">Ver na Shopee ${seta}</a>
         <span class="num" aria-label="Número ${x.n}"><span><small>Nº</small><b>${x.n}</b></span></span></div>
     </div></article>`).join("");
   trilho.firstElementChild?.classList.add("ativo");
@@ -378,7 +382,7 @@ function render(){
   for (const x of lista){
     if (x.data !== dia){ if (dia) html += "</div>"; dia = x.data; html += `<div class="dia caps">${esc(fmtDia(dia))}</div><div class="grade">`; }
     const alvo = soNumero && String(x.n) === String(Number(q));
-    html += `<a class="card${alvo ? " alvo" : ""}" style="animation-delay:${Math.min(i++, 10) * 50}ms" href="${esc(x.link)}" target="_blank" rel="noopener sponsored">
+    html += `<a class="card${alvo ? " alvo" : ""}" style="animation-delay:${Math.min(i++, 10) * 50}ms" href="${esc(linkDe(x))}" target="_blank" rel="noopener sponsored">
       <div class="mini">${imgHTML(x)}<span class="n">${x.n}</span></div>
       <h4>${esc(x.titulo)}</h4><div class="p">${esc(x.preco)}</div><div class="v">${esc(vendas(x))}</div>
       <span class="ir">Ver na Shopee ${seta}</span></a>`;
