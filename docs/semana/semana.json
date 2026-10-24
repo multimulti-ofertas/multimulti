@@ -1,25 +1,25 @@
 {
- "data": "2026-10-17",
+ "data": "2026-10-24",
  "duracao": 26,
- "musica": "traka",
+ "musica": "tropa-do-phonk",
  "produtos": [
   {
-   "n": 1,
-   "titulo": "Máquina de barbear 3 em 1",
-   "preco": "R$ 48,47",
-   "vendidos": "+100 mil"
+   "n": 115,
+   "titulo": "Cola transparente para reparo",
+   "preco": "R$ 15,98",
+   "vendidos": "+6 mil"
   },
   {
-   "n": 2,
-   "titulo": "Navalha navalhete barbeiro",
+   "n": 42,
+   "titulo": "Relógio digital masculino",
    "preco": "R$ 12,99",
-   "vendidos": "+90 mil"
+   "vendidos": "+5,3 mil"
   },
   {
-   "n": 7,
-   "titulo": "Tônico UltraDlust cabelo barba",
-   "preco": "R$ 19,98",
-   "vendidos": "+90 mil"
+   "n": 95,
+   "titulo": "Calça jogger poliamida elastano",
+   "preco": "R$ 39,97",
+   "vendidos": "+5,2 mil"
   }
  ],
  "roteiro": [
@@ -32,20 +32,20 @@
   {
    "de": 3.0,
    "ate": 9.5,
-   "tela": "#3 Tônico UltraDlust cabelo barba",
-   "fala": "Número 3: tônico ultradlust cabelo barba, por 19,98. Mais de 90 mil vendidos."
+   "tela": "#3 Calça jogger poliamida elastano",
+   "fala": "Número 3: calça jogger poliamida elastano, por 39,97. Mais de 5,2 mil vendidos."
   },
   {
    "de": 9.5,
    "ate": 16.0,
-   "tela": "#2 Navalha navalhete barbeiro",
-   "fala": "Número 2: navalha navalhete barbeiro, por 12,99. Mais de 90 mil vendidos."
+   "tela": "#2 Relógio digital masculino",
+   "fala": "Número 2: relógio digital masculino, por 12,99. Mais de 5,3 mil vendidos."
   },
   {
    "de": 16.0,
    "ate": 22.5,
-   "tela": "#1 Máquina de barbear 3 em 1",
-   "fala": "E o número 1: máquina de barbear 3 em 1, por 48,47. Mais de 100 mil vendidos."
+   "tela": "#1 Cola transparente para reparo",
+   "fala": "E o número 1: cola transparente para reparo, por 15,98. Mais de 6 mil vendidos."
   },
   {
    "de": 22.5,
