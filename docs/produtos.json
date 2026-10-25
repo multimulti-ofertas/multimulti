@@ -9,7 +9,16 @@
   "link": "https://s.shopee.com.br/8KqXD8dJeg",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-820mf-mr0gg7y3tddydc",
   "agenda": null,
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "17915120694514716",
+    "em": "2026-10-25T01:43:49.118463"
+   },
+   "fb_story": {
+    "id": "1787848945798984",
+    "em": "2026-10-25T01:43:55.999779"
+   }
+  },
   "links": {
    "ig": "https://s.shopee.com.br/2BFts4cKHT",
    "fb": "https://s.shopee.com.br/60ScR7Nnm2",
@@ -26,7 +35,8 @@
    "por R$ 15,00"
   ],
   "feed": "media/117/feed.jpg",
-  "story": "media/117/story.jpg"
+  "story": "media/117/story.jpg",
+  "stories": 1
  },
  {
   "n": 116,
