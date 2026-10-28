@@ -221,7 +221,16 @@
   "link": "https://s.shopee.com.br/40heRiWatY",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-820lb-mpjt1s1uztvnee",
   "agenda": "reel",
-  "postado": null,
+  "postado": {
+   "reel": {
+    "id": "17880999786627968",
+    "em": "2026-10-28T13:39:20.960431"
+   },
+   "fb_reel": {
+    "id": "4365482353664310",
+    "em": "2026-10-28T13:39:31.279782"
+   }
+  },
   "links": {
    "ig": "https://s.shopee.com.br/70LG1M0cJO",
    "fb": "https://s.shopee.com.br/7fawoZy4yd",
