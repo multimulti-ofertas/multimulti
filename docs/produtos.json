@@ -221,7 +221,16 @@
   "link": "https://s.shopee.com.br/50aDEYM03f",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-81ztc-mk2n95zd40eab1",
   "agenda": "reel",
-  "postado": null,
+  "postado": {
+   "reel": {
+    "id": "17963659158231250",
+    "em": "2026-10-29T13:42:00.405854"
+   },
+   "fb_reel": {
+    "id": "1585955736910833",
+    "em": "2026-10-29T13:42:08.606367"
+   }
+  },
   "links": {
    "ig": "https://s.shopee.com.br/4LKWRaILeU",
    "fb": "https://s.shopee.com.br/3LRzFkM9hX",
