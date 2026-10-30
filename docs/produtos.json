@@ -191,7 +191,16 @@
   "link": "https://s.shopee.com.br/60Sm10yhB3",
   "imagem": "https://cf.shopee.com.br/file/br-11134207-820ma-mlw2qbc5qolgdc",
   "agenda": "reel",
-  "postado": null,
+  "postado": {
+   "story": {
+    "id": "18020774774949303",
+    "em": "2026-10-30T15:29:42.958134"
+   },
+   "fb_story": {
+    "id": "1684759559656977",
+    "em": "2026-10-30T15:29:50.797857"
+   }
+  },
   "links": {
    "ig": "https://s.shopee.com.br/4fxOQfnoV5",
    "fb": "https://s.shopee.com.br/8VA6ziZ9SB",
@@ -211,7 +220,8 @@
   "story": "media/159/story.jpg",
   "recorte": "media/159/produto.webp",
   "ze": true,
-  "reel": "media/159/reel.mp4"
+  "reel": "media/159/reel.mp4",
+  "stories": 1
  },
  {
   "n": 158,
