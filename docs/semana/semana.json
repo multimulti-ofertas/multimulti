@@ -1,25 +1,25 @@
 {
- "data": "2026-10-24",
+ "data": "2026-10-31",
  "duracao": 26,
- "musica": "tropa-do-phonk",
+ "musica": "cataclysm",
  "produtos": [
   {
-   "n": 115,
-   "titulo": "Cola transparente para reparo",
-   "preco": "R$ 15,98",
-   "vendidos": "+6 mil"
+   "n": 130,
+   "titulo": "Capa de chuva moto motoqueiro",
+   "preco": "R$ 34,99",
+   "vendidos": "+5,7 mil"
   },
   {
-   "n": 42,
-   "titulo": "Relógio digital masculino",
-   "preco": "R$ 12,99",
-   "vendidos": "+5,3 mil"
+   "n": 162,
+   "titulo": "Kit 3 shorts dryfit 2 em 1",
+   "preco": "R$ 58,99",
+   "vendidos": "+4,1 mil"
   },
   {
-   "n": 95,
-   "titulo": "Calça jogger poliamida elastano",
-   "preco": "R$ 39,97",
-   "vendidos": "+5,2 mil"
+   "n": 120,
+   "titulo": "Esfoliante corpo e rosto",
+   "preco": "R$ 18,89",
+   "vendidos": "+3,8 mil"
   }
  ],
  "roteiro": [
@@ -32,20 +32,20 @@
   {
    "de": 3.0,
    "ate": 9.5,
-   "tela": "#3 Calça jogger poliamida elastano",
-   "fala": "Número 3: calça jogger poliamida elastano, por 39,97. Mais de 5,2 mil vendidos."
+   "tela": "#3 Esfoliante corpo e rosto",
+   "fala": "Número 3: esfoliante corpo e rosto, por 18,89. Mais de 3,8 mil vendidos."
   },
   {
    "de": 9.5,
    "ate": 16.0,
-   "tela": "#2 Relógio digital masculino",
-   "fala": "Número 2: relógio digital masculino, por 12,99. Mais de 5,3 mil vendidos."
+   "tela": "#2 Kit 3 shorts dryfit 2 em 1",
+   "fala": "Número 2: kit 3 shorts dryfit 2 em 1, por 58,99. Mais de 4,1 mil vendidos."
   },
   {
    "de": 16.0,
    "ate": 22.5,
-   "tela": "#1 Cola transparente para reparo",
-   "fala": "E o número 1: cola transparente para reparo, por 15,98. Mais de 6 mil vendidos."
+   "tela": "#1 Capa de chuva moto motoqueiro",
+   "fala": "E o número 1: capa de chuva moto motoqueiro, por 34,99. Mais de 5,7 mil vendidos."
   },
   {
    "de": 22.5,
