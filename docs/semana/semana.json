@@ -1,25 +1,25 @@
 {
- "data": "2026-10-31",
+ "data": "2026-11-07",
  "duracao": 26,
- "musica": "cataclysm",
+ "musica": "cracker-jacks",
  "produtos": [
   {
-   "n": 130,
-   "titulo": "Capa de chuva moto motoqueiro",
-   "preco": "R$ 34,99",
-   "vendidos": "+5,7 mil"
+   "n": 192,
+   "titulo": "Pistola de cola quente 10w",
+   "preco": "R$ 20,49",
+   "vendidos": "+8,3 mil"
   },
   {
-   "n": 162,
-   "titulo": "Kit 3 shorts dryfit 2 em 1",
-   "preco": "R$ 58,99",
-   "vendidos": "+4,1 mil"
+   "n": 214,
+   "titulo": "Capa moto térmica banco",
+   "preco": "R$ 16,00",
+   "vendidos": "+5,9 mil"
   },
   {
-   "n": 120,
-   "titulo": "Esfoliante corpo e rosto",
-   "preco": "R$ 18,89",
-   "vendidos": "+3,8 mil"
+   "n": 223,
+   "titulo": "Kit de 6 pares meias cano",
+   "preco": "R$ 47,50",
+   "vendidos": "+4,9 mil"
   }
  ],
  "roteiro": [
@@ -32,20 +32,20 @@
   {
    "de": 3.0,
    "ate": 9.5,
-   "tela": "#3 Esfoliante corpo e rosto",
-   "fala": "Número 3: esfoliante corpo e rosto, por 18,89. Mais de 3,8 mil vendidos."
+   "tela": "#3 Kit de 6 pares meias cano",
+   "fala": "Número 3: kit de 6 pares meias cano, por 47,50. Mais de 4,9 mil vendidos."
   },
   {
    "de": 9.5,
    "ate": 16.0,
-   "tela": "#2 Kit 3 shorts dryfit 2 em 1",
-   "fala": "Número 2: kit 3 shorts dryfit 2 em 1, por 58,99. Mais de 4,1 mil vendidos."
+   "tela": "#2 Capa moto térmica banco",
+   "fala": "Número 2: capa moto térmica banco, por 16,00. Mais de 5,9 mil vendidos."
   },
   {
    "de": 16.0,
    "ate": 22.5,
-   "tela": "#1 Capa de chuva moto motoqueiro",
-   "fala": "E o número 1: capa de chuva moto motoqueiro, por 34,99. Mais de 5,7 mil vendidos."
+   "tela": "#1 Pistola de cola quente 10w",
+   "fala": "E o número 1: pistola de cola quente 10w, por 20,49. Mais de 8,3 mil vendidos."
   },
   {
    "de": 22.5,
