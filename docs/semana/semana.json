@@ -1,25 +1,25 @@
 {
- "data": "2026-11-07",
+ "data": "2026-11-14",
  "duracao": 26,
- "musica": "cracker-jacks",
+ "musica": "desce-desce",
  "produtos": [
   {
-   "n": 192,
-   "titulo": "Pistola de cola quente 10w",
-   "preco": "R$ 20,49",
-   "vendidos": "+8,3 mil"
+   "n": 243,
+   "titulo": "Quebrador sol painel guarda sol",
+   "preco": "R$ 16,80",
+   "vendidos": "+6 mil"
   },
   {
-   "n": 214,
-   "titulo": "Capa moto térmica banco",
-   "preco": "R$ 16,00",
+   "n": 240,
+   "titulo": "Fita de vedação",
+   "preco": "R$ 19,99",
    "vendidos": "+5,9 mil"
   },
   {
-   "n": 223,
-   "titulo": "Kit de 6 pares meias cano",
-   "preco": "R$ 47,50",
-   "vendidos": "+4,9 mil"
+   "n": 254,
+   "titulo": "Mochila grande resistente",
+   "preco": "R$ 59,90",
+   "vendidos": "+4,2 mil"
   }
  ],
  "roteiro": [
@@ -32,20 +32,20 @@
   {
    "de": 3.0,
    "ate": 9.5,
-   "tela": "#3 Kit de 6 pares meias cano",
-   "fala": "Número 3: kit de 6 pares meias cano, por 47,50. Mais de 4,9 mil vendidos."
+   "tela": "#3 Mochila grande resistente",
+   "fala": "Número 3: mochila grande resistente, por 59,90. Mais de 4,2 mil vendidos."
   },
   {
    "de": 9.5,
    "ate": 16.0,
-   "tela": "#2 Capa moto térmica banco",
-   "fala": "Número 2: capa moto térmica banco, por 16,00. Mais de 5,9 mil vendidos."
+   "tela": "#2 Fita de vedação",
+   "fala": "Número 2: fita de vedação, por 19,99. Mais de 5,9 mil vendidos."
   },
   {
    "de": 16.0,
    "ate": 22.5,
-   "tela": "#1 Pistola de cola quente 10w",
-   "fala": "E o número 1: pistola de cola quente 10w, por 20,49. Mais de 8,3 mil vendidos."
+   "tela": "#1 Quebrador sol painel guarda sol",
+   "fala": "E o número 1: quebrador sol painel guarda sol, por 16,80. Mais de 6 mil vendidos."
   },
   {
    "de": 22.5,
